@@ -4,18 +4,29 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-
 import '../api/request.dart';
 import '../api/url.dart';
 import '../model/HomeModel.dart';
+import '../model/registermodel.dart';
+import '../model/stockmodel.dart';
+import '../model/studentmodel.dart';
+import '../utils/constant.dart';
+import '../utils/pref_manager.dart';
 
 class HomeController extends GetxController {
   var isLoading = false.obs;
   var approvedfranchiselist = List<FMData>.empty(growable: true).obs;
   var nonapprovedfranchiselist = List<FMData>.empty(growable: true).obs;
+  var studentList = List<SData>.empty(growable: true).obs;
+  var stockList = List<StData>.empty(growable: true).obs;
+  var count = ''.obs;
 
+  @override
   void onInit() {
+    bool admin = Prefs.getBoolen(SHARED_ADMIN);
     getFranchiseList();
+    admin ? getStockList() : Container();
+    admin ? getStudentList() : getFranchiseStudentList();
     super.onInit();
   }
 
@@ -97,6 +108,207 @@ class HomeController extends GetxController {
       isLoading.value = false;
     });
     update();
+  }
+
+  void getStudentList() async {
+    isLoading.value = true;
+    if (kDebugMode) {
+      print(getallstudentsUrl);
+    }
+    RequestDio request = RequestDio(url: getallstudentsUrl);
+    request.post().then((response) async {
+      if (response.statusCode == 200) {
+        StudentListModel student = StudentListModel.fromJson(response.data);
+        if (student.status == true) {
+          for (var element in student.data!) {
+            studentList.add(element);
+          }
+          isLoading.value = false;
+          update();
+        } else {
+          Get.snackbar("Error", "Fetching error",
+              colorText: Colors.white,
+              backgroundColor: Colors.red,
+              snackPosition: SnackPosition.TOP);
+        }
+      } else if (response.statusCode == 201) {
+        StudentListModel student = StudentListModel.fromJson(response.data);
+        if (student.status == true) {
+          for (var element in student.data!) {
+            studentList.add(element);
+          }
+          isLoading.value = false;
+          update();
+        } else {
+          Get.snackbar("Error", "Fetching error",
+              colorText: Colors.white,
+              backgroundColor: Colors.red,
+              snackPosition: SnackPosition.TOP);
+        }
+      } else {
+        Get.snackbar("Error", "Fetching error",
+            colorText: Colors.white,
+            backgroundColor: Colors.red,
+            snackPosition: SnackPosition.TOP);
+      }
+    }).onError((error, stackTrace) {
+      Get.snackbar("Error", "$error",
+          colorText: Colors.white,
+          backgroundColor: Colors.red,
+          snackPosition: SnackPosition.TOP);
+      isLoading.value = false;
+    });
+    update();
+  }
+
+  void getFranchiseStudentList() async {
+    isLoading.value = true;
+    Map<String, dynamic> requestData = {
+      "username": "${Prefs.getString(USERNAME)}",
+    };
+    if (kDebugMode) {
+      print(getfranchisestudentUrl);
+    }
+    RequestDio request =
+        RequestDio(url: getfranchisestudentUrl, body: requestData);
+    request.post().then((response) async {
+      if (response.statusCode == 200) {
+        StudentListModel student = StudentListModel.fromJson(response.data);
+        if (student.status == true) {
+          for (var element in student.data!) {
+            studentList.add(element);
+          }
+          isLoading.value = false;
+          update();
+        } else {
+          Get.snackbar("Error", "Fetching error",
+              colorText: Colors.white,
+              backgroundColor: Colors.red,
+              snackPosition: SnackPosition.TOP);
+        }
+      } else if (response.statusCode == 201) {
+        StudentListModel student = StudentListModel.fromJson(response.data);
+        if (student.status == true) {
+          for (var element in student.data!) {
+            studentList.add(element);
+          }
+          isLoading.value = false;
+          update();
+        } else {
+          Get.snackbar("Error", "Fetching error",
+              colorText: Colors.white,
+              backgroundColor: Colors.red,
+              snackPosition: SnackPosition.TOP);
+        }
+      } else {
+        Get.snackbar("Error", "Fetching error",
+            colorText: Colors.white,
+            backgroundColor: Colors.red,
+            snackPosition: SnackPosition.TOP);
+      }
+    }).onError((error, stackTrace) {
+      Get.snackbar("Error", "$error",
+          colorText: Colors.white,
+          backgroundColor: Colors.red,
+          snackPosition: SnackPosition.TOP);
+      isLoading.value = false;
+    });
+    update();
+  }
+
+  void getStockList() async {
+    isLoading.value = true;
+    if (kDebugMode) {
+      print(getallitemsUrl);
+    }
+    RequestDio request = RequestDio(url: getallitemsUrl);
+    request.post().then((response) async {
+      if (response.statusCode == 200) {
+        StockModel stock = StockModel.fromJson(response.data);
+        if (stock.status == true) {
+          for (var element in stock.data!) {
+            stockList.add(element);
+          }
+          isLoading.value = false;
+          update();
+        } else {
+          Get.snackbar("Error", "Fetching error",
+              colorText: Colors.white,
+              backgroundColor: Colors.red,
+              snackPosition: SnackPosition.TOP);
+        }
+      } else if (response.statusCode == 201) {
+        StudentListModel student = StudentListModel.fromJson(response.data);
+        if (student.status == true) {
+          for (var element in student.data!) {
+            studentList.add(element);
+          }
+          isLoading.value = false;
+          update();
+        } else {
+          Get.snackbar("Error", "Fetching error",
+              colorText: Colors.white,
+              backgroundColor: Colors.red,
+              snackPosition: SnackPosition.TOP);
+        }
+      } else {
+        Get.snackbar("Error", "Fetching error",
+            colorText: Colors.white,
+            backgroundColor: Colors.red,
+            snackPosition: SnackPosition.TOP);
+      }
+    }).onError((error, stackTrace) {
+      Get.snackbar("Error", "$error",
+          colorText: Colors.white,
+          backgroundColor: Colors.red,
+          snackPosition: SnackPosition.TOP);
+      isLoading.value = false;
+    });
+    update();
+  }
+
+  void updateStock(int count, String id) async {
+    isLoading.value = true;
+    Map<String, dynamic> requestData = {"id": "${id}", "count": "${count}"};
+
+    if (kDebugMode) {
+      print(requestData);
+      print(getallitemsUrl);
+    }
+    RequestDio request = RequestDio(url: editItemUrl, body: requestData);
+    request.post().then((response) async {
+      if (kDebugMode) {
+        print(response.data);
+      }
+      if (response.statusCode == 200) {
+        registrationsuccessmodel stock =
+            registrationsuccessmodel.fromJson(jsonDecode(response.data));
+        if (stock.status == true) {
+          Fluttertoast.showToast(msg: stock.message!);
+          getStockList();
+          Get.back();
+          isLoading.value = false;
+          update();
+        } else {
+          Get.snackbar("Error", "Fetching error",
+              colorText: Colors.white,
+              backgroundColor: Colors.red,
+              snackPosition: SnackPosition.TOP);
+        }
+      } else if (response.statusCode == 201) {
+        registrationsuccessmodel stock =
+            registrationsuccessmodel.fromJson(response.data);
+        Fluttertoast.showToast(msg: stock.message!);
+        Get.back();
+        isLoading.value = false;
+        update();
+      } else {
+        Get.snackbar("Error", "Fetching error",
+            colorText: Colors.white,
+            backgroundColor: Colors.red,
+            snackPosition: SnackPosition.TOP);
+      }
+    });
   }
 
   void approve(String ID) {

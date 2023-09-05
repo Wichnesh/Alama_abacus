@@ -1,9 +1,11 @@
+import 'package:alama_eorder_app/utils/ImageUtils.dart';
 import 'package:alama_eorder_app/utils/constant.dart';
 import 'package:alama_eorder_app/utils/pref_manager.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/DialogboxDesign.dart';
 import 'TabScreen/ApprovedFranchiseScreen.dart';
+import 'TabScreen/StockScreen.dart';
 import 'TabScreen/StudentList.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -34,7 +36,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Dash Board"),
+        leading: Row(
+          children: [
+            SizedBox(
+              width: 10,
+            ),
+            Container(height: 30, child: Image.asset(logo)),
+          ],
+        ),
+        title: const Text("Alama Abacus"),
         centerTitle: true,
         actions: [
           IconButton(
@@ -62,16 +72,16 @@ class _HomeScreenState extends State<HomeScreen> {
         case 0:
           return const ApprovedFranchiseScreen();
         case 1:
-          return const Center(child: Text("Profile Page"));
+          return const StudentList();
         case 2:
-          return const Center(child: Text("Menu Page"));
+          return const StockScreen();
       }
     } else {
       switch (page) {
         case 0:
           return const StudentList();
         case 1:
-          return const Center(child: Text("Profile Page"));
+          return const Center(child: Text("Order Page"));
         case 2:
           return const Center(child: Text("Menu Page"));
       }
@@ -102,28 +112,32 @@ class AnimatedBottomNav extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(
-            child: InkWell(
-              onTap: () => onChange!(1),
-              child: BottomNavItem(
-                icon: admin
-                    ? Icons.person
-                    : Icons.local_convenience_store_rounded,
-                title: admin ? "Students" : 'Order',
-                isActive: currentIndex == 1,
-              ),
-            ),
-          ),
-          Expanded(
-            child: InkWell(
-              onTap: () => onChange!(2),
-              child: BottomNavItem(
-                icon: Icons.menu,
-                title: admin ? "Stock" : 'Extra Tab',
-                isActive: currentIndex == 2,
-              ),
-            ),
-          ),
+          admin
+              ? Expanded(
+                  child: InkWell(
+                    onTap: () => onChange!(1),
+                    child: BottomNavItem(
+                      icon: admin
+                          ? Icons.person
+                          : Icons.local_convenience_store_rounded,
+                      title: "Students",
+                      isActive: currentIndex == 1,
+                    ),
+                  ),
+                )
+              : Container(),
+          admin
+              ? Expanded(
+                  child: InkWell(
+                    onTap: () => onChange!(2),
+                    child: BottomNavItem(
+                      icon: Icons.menu,
+                      title: admin ? "Stock" : 'Extra Tab',
+                      isActive: currentIndex == 2,
+                    ),
+                  ),
+                )
+              : Container()
         ],
       ),
     );

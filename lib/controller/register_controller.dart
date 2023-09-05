@@ -24,6 +24,120 @@ class RegisterController extends GetxController {
   DateTime? date;
   var Id = "".obs;
   var isLoading = true.obs;
+  var selectedState = "Tamil Nadu".obs;
+  var selectedDistrict = "Chennai".obs;
+
+  final stateData = [
+    "USA",
+    "Tamil Nadu",
+    "Karnataka",
+    "Telangana",
+    "Madhya pradesh",
+    "Maharashtra",
+    "New Delhi",
+    "Pondicherry",
+    "Gujarat",
+    "Goa",
+    "Andhra pradesh",
+    "Chandigarh"
+  ];
+  final districtData = {
+    "Tamil Nadu": [
+      "Ariyalur",
+      "Chengalpattu",
+      "Chennai",
+      "Coimbatore",
+      "Cuddalore",
+      "Dharmapuri",
+      "Dindigul",
+      "Erode",
+      "Kallakurichi",
+      "Kancheepuram",
+      "Karur",
+      "Krishnagiri",
+      "Madurai",
+      "Mayiladuthurai",
+      "Nagapattinam",
+      "Kanniyakumari",
+      "Namakkal",
+      "Perambalur",
+      "Pudukottai",
+      "Ramanathapuram",
+      "Ranipet",
+      "Salem",
+      "Sivagangai",
+      "Tenkasi",
+      "Thanjavur",
+      "Theni",
+      "Thiruvallur",
+      "Thiruvarur",
+      "Thoothukudi",
+      "Trichirappalli",
+      "Tirupathur",
+      "Tiruppur",
+      "Tiruvannamalai",
+      "The Nilgiris",
+      "Vellore",
+      "Viluppuram",
+      "Virudhunagar",
+    ],
+    "Telangana": [
+      "ADILABAD",
+      "BHADRADRI KOTHAGUDEM",
+      "HANUMAKONDA",
+      "HYDERABAD",
+      "	JAGTIAL",
+      "JANGOAN",
+      "JAYASHANKAR BHOOPALPALLY",
+      "JOGULAMBA GADWAL",
+      "KAMAREDDY",
+      "KHAMMAM",
+      "	KOMARAM BHEEM ASIFABAD",
+      "MAHABUBABAD",
+      "MAHABUBNAGAR",
+      "MANCHERIAL",
+      "MEDAK",
+      "	MEDCHAL-MALKAJGIRI",
+      "	NAGARKURNOOL",
+      "NALGONDA",
+      "	NARAYANPET",
+      "NIRMAL",
+      "	NIZAMABAD",
+      "PEDDAPALLI",
+      "RAJANNA SIRCILLA",
+      "RANGAREDDY",
+      "	SANGAREDDY",
+      "SIDDIPET",
+      "SURYAPET",
+      "VIKARABAD",
+      "WANAPARTHY",
+      "	WARANGAL",
+      "YADADRI BHUVANAGIRI",
+    ],
+    "Karnataka": ["Bengaluru"],
+    "Madhya pradesh": ["Bhopal", "Shivpuri"],
+    "Maharashtra": ["Mumbai"],
+    "New Delhi": ["New Delhi"],
+    "Pondicherry": ["karaikal"],
+    "Gujarat": ["Surat"],
+    "Andhra pradesh": [
+      "Guntur",
+      "Kadapa",
+      "kunchanapalli",
+      "Shreekakulam",
+      "Tirupathi",
+      "Vijaywada",
+      "Vishakapatnam"
+    ],
+    "Chandigarh": ["chandigarh"],
+    "USA": ["Columbia", "Michigan", "New jersey"],
+  };
+
+  void updateSelectedState(String newValue) {
+    selectedState.value = newValue;
+    selectedDistrict.value = districtData[newValue]![
+        0]; // Initialize with the first district in the selected state.
+  }
 
   void onInit() {
     generateFID();
@@ -62,9 +176,7 @@ class RegisterController extends GetxController {
   }
 
   void submit() {
-    if (countryText.text.isEmpty ||
-        stateText.text.isEmpty ||
-        nametext.text.isEmpty ||
+    if (nametext.text.isEmpty ||
         passwordText.text.isEmpty ||
         usernameText.text.isEmpty ||
         contactNo.text.isEmpty ||
@@ -80,8 +192,8 @@ class RegisterController extends GetxController {
         "name": "${nametext.text}",
         "email": "${emailtext.text}",
         "contactNumber": "${contactNo.text}",
-        "state": "${stateText.text}",
-        "country": "${countryText.text}",
+        "state": "${selectedState.value}",
+        "district": "${selectedDistrict.value}",
         "username": "${usernameText.text}",
         "password": "${passwordText.text}",
         "registerDate": "${registerDateText.text}"
@@ -96,7 +208,7 @@ class RegisterController extends GetxController {
         }
         if (response.statusCode == 200) {
           registrationsuccessmodel success =
-              registrationsuccessmodel.fromJson(jsonDecode(response.data));
+              registrationsuccessmodel.fromJson(response.data);
           if (success.status == true) {
             Fluttertoast.showToast(msg: success.message!);
             isLoading.value = false;

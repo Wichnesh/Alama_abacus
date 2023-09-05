@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
-                      _emailInput(hint: "Enter your Email", icon: Icons.email),
+                      _emailInput(hint: "User name", icon: Icons.email),
                       SizedBox(
                         height: Screenheight * 0.01,
                       ),

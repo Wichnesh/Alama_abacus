@@ -31,7 +31,7 @@ class FMData {
   String? email;
   String? contactNumber;
   String? state;
-  String? country;
+  String? district;
   String? username;
   String? password;
   String? registerDate;
@@ -45,7 +45,7 @@ class FMData {
       this.email,
       this.contactNumber,
       this.state,
-      this.country,
+      this.district,
       this.username,
       this.password,
       this.registerDate,
@@ -59,7 +59,7 @@ class FMData {
     email = json['email'];
     contactNumber = json['contactNumber'];
     state = json['state'];
-    country = json['country'];
+    district = json['district'];
     username = json['username'];
     password = json['password'];
     registerDate = json['registerDate'];
@@ -75,7 +75,7 @@ class FMData {
     data['email'] = this.email;
     data['contactNumber'] = this.contactNumber;
     data['state'] = this.state;
-    data['country'] = this.country;
+    data['district'] = this.district;
     data['username'] = this.username;
     data['password'] = this.password;
     data['registerDate'] = this.registerDate;
@@ -93,13 +93,13 @@ class ApprovedModel {
 
   ApprovedModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
-    msg = json['msg'];
+    msg = json['message'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['status'] = this.status;
-    data['msg'] = this.msg;
+    data['message'] = this.msg;
     return data;
   }
 }

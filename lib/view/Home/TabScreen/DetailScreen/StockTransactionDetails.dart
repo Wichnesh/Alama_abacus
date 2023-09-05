@@ -1,29 +1,28 @@
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import '../../../controller/Home_controller.dart';
-import 'DetailScreen/FranchaiseDetails.dart';
 
-class NonApprovedFranchiseScreen extends StatefulWidget {
-  const NonApprovedFranchiseScreen({Key? key}) : super(key: key);
+import '../../../../controller/stockTransaction_controller.dart';
+import '../../../../utils/colorUtils.dart';
+
+class StockTransactionScreen extends StatefulWidget {
+  const StockTransactionScreen({Key? key}) : super(key: key);
 
   @override
-  State<NonApprovedFranchiseScreen> createState() =>
-      _NonApprovedFranchiseScreenState();
+  State<StockTransactionScreen> createState() => _StockTransactionScreenState();
 }
 
-class _NonApprovedFranchiseScreenState
-    extends State<NonApprovedFranchiseScreen> {
+class _StockTransactionScreenState extends State<StockTransactionScreen> {
   @override
   Widget build(BuildContext context) {
     double _w = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Non - Approved Franchise List'),
+        title: const Text('Transaction List'),
         centerTitle: true,
       ),
-      body: GetBuilder<HomeController>(
-        init: HomeController(),
+      body: GetBuilder<StockTransactionController>(
+        init: StockTransactionController(),
         builder: ((controller) {
           if (controller.isLoading.value) {
             return const Center(
@@ -35,10 +34,10 @@ class _NonApprovedFranchiseScreenState
                 padding: EdgeInsets.all(_w / 30),
                 physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
-                itemCount: controller.nonapprovedfranchiselist.length,
+                itemCount: controller.transaction.length,
                 itemBuilder: (BuildContext c, int i) {
-                  var data = controller.nonapprovedfranchiselist[i];
-                  if (controller.nonapprovedfranchiselist.isEmpty) {
+                  var data = controller.transaction[i];
+                  if (controller.transaction.isEmpty) {
                     return const Center(
                       child: Text(
                         'No Data',
@@ -59,12 +58,10 @@ class _NonApprovedFranchiseScreenState
                           curve: Curves.fastLinearToSlowEaseIn,
                           flipAxis: FlipAxis.y,
                           child: InkWell(
-                            onTap: () {
-                              Get.to(() => franchiseDetail(data: data));
-                            },
+                            onTap: () {},
                             child: Container(
                               margin: EdgeInsets.only(bottom: _w / 20),
-                              height: _w / 5,
+                              height: _w / 4,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: const BorderRadius.all(
@@ -78,14 +75,19 @@ class _NonApprovedFranchiseScreenState
                                   ),
                                 ],
                               ),
-                              child: ListTile(
-                                title: Text(data.name!),
-                                subtitle: Text(data.contactNumber!),
-                                trailing: ElevatedButton(
-                                  child: const Text('Approve'),
-                                  onPressed: () {
-                                    controller.approve(data.franchiseID!);
-                                  },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        'Franchise Name : ${data.franchiseName}'),
+                                    Text('Student ID : ${data.studentID}'),
+                                    Text('Student Name : ${data.studentName}'),
+                                    Text('Item Name : ${data.itemName}'),
+                                    Text('Quantity : ${data.quantity}'),
+                                  ],
                                 ),
                               ),
                             ),

@@ -33,7 +33,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return const Center(child: CircularProgressIndicator());
                     } else {
                       return SizedBox(
-                        height: screenheight * 0.8,
+                        height: screenheight * 0.9,
                         child: Container(
                           margin: const EdgeInsets.only(
                               left: 20, right: 20, top: 30),
@@ -48,10 +48,79 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               _emailInput(hint: "Email", icon: Icons.mail),
                               _contactnoInput(
                                   hint: "Contact No", icon: Icons.home_filled),
-                              _StateInput(
-                                  hint: "State", icon: Icons.home_filled),
-                              _CountryInput(
-                                  hint: "Country", icon: Icons.home_filled),
+                              Obx(() => Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: SizedBox(
+                                      height: 55,
+                                      width: double.infinity,
+                                      child: DropdownButtonFormField(
+                                        hint: Text(
+                                          registerController
+                                              .selectedState.value,
+                                        ),
+                                        isExpanded: true,
+                                        icon: const Icon(Icons.arrow_drop_down),
+                                        iconSize: 25,
+                                        decoration: const InputDecoration(
+                                          labelText: "State",
+                                          labelStyle: TextStyle(fontSize: 14),
+                                          border: OutlineInputBorder(),
+                                        ),
+                                        items: registerController.stateData.map(
+                                          (val) {
+                                            return DropdownMenuItem<String>(
+                                              value: val,
+                                              child: Text(
+                                                val,
+                                              ),
+                                              onTap: () {},
+                                            );
+                                          },
+                                        ).toList(),
+                                        onChanged: (val) {
+                                          registerController
+                                              .updateSelectedState(val!);
+                                        },
+                                      ),
+                                    ),
+                                  )),
+                              Obx(() => Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: SizedBox(
+                                      height: 55,
+                                      width: double.infinity,
+                                      child: DropdownButtonFormField(
+                                        hint: Text(registerController
+                                            .selectedDistrict.value),
+                                        isExpanded: true,
+                                        icon: const Icon(Icons.arrow_drop_down),
+                                        iconSize: 25,
+                                        decoration: const InputDecoration(
+                                          labelText: "District",
+                                          labelStyle: TextStyle(fontSize: 14),
+                                          border: OutlineInputBorder(),
+                                        ),
+                                        items: registerController.districtData[
+                                                registerController
+                                                    .selectedState.value]!
+                                            .map(
+                                          (val) {
+                                            return DropdownMenuItem<String>(
+                                              value: val,
+                                              child: Text(
+                                                val,
+                                              ),
+                                              onTap: () {},
+                                            );
+                                          },
+                                        ).toList(),
+                                        onChanged: (val) {
+                                          registerController
+                                              .selectedDistrict.value = val!;
+                                        },
+                                      ),
+                                    ),
+                                  )),
                               _UsernameInput(
                                   hint: "Username", icon: Icons.person),
                               _PasswordInput(

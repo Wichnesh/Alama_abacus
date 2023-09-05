@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.alama_eorder_app">
    <application
-        android:label="alama_eorder_app"
+        android:label="alama eorder"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

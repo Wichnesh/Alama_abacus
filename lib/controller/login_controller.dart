@@ -45,17 +45,19 @@ class loginController extends GetxController {
             await Prefs.setBoolen('isLoggedIn', true);
             await Prefs.setBoolen(SHARED_ADMIN, success.isAdmin!);
             await Prefs.setString(TOKEN, success.token!);
+            await Prefs.setString(USERNAME,emailtext.text);
             Fluttertoast.showToast(msg: "login-successfully");
             Get.offAllNamed(ROUTE_HOME);
           } else {
-            _prefs.setBool('isLoggedIn', true);
-            _prefs.setBool(SHARED_ADMIN, success.isAdmin!);
+            Prefs.setBoolen('isLoggedIn', true);
+            Prefs.setBoolen(SHARED_ADMIN, success.isAdmin!);
             await Prefs.setString(TOKEN, success.token!);
             Fluttertoast.showToast(msg: "login-successfully");
+            await Prefs.setString(USERNAME,emailtext.text);
             Get.offAllNamed(ROUTE_HOME);
           }
         } else {
-          _prefs.setBool('isLoggedIn', false);
+          Prefs.setBoolen('isLoggedIn', false);
           Get.snackbar("Info", "Log-In failed",
               colorText: Colors.white,
               backgroundColor: Colors.blue,
@@ -71,16 +73,18 @@ class loginController extends GetxController {
             await Prefs.setBoolen(SHARED_ADMIN, success.isAdmin!);
             await Prefs.setString(TOKEN, success.token!);
             Fluttertoast.showToast(msg: "login-successfully");
+            await Prefs.setString(USERNAME,emailtext.text);
             Get.offAllNamed(ROUTE_HOME);
           } else {
-            _prefs.setBool('isLoggedIn', true);
-            _prefs.setBool(SHARED_ADMIN, success.isAdmin!);
+            Prefs.setBoolen('isLoggedIn', true);
+            Prefs.setBoolen(SHARED_ADMIN, success.isAdmin!);
             await Prefs.setString(TOKEN, success.token!);
             Fluttertoast.showToast(msg: "login-successfully");
+            await Prefs.setString(USERNAME,emailtext.text);
             Get.offAllNamed(ROUTE_HOME);
           }
         } else {
-          _prefs.setBool('isLoggedIn', false);
+          Prefs.setBoolen('isLoggedIn', false);
           Get.snackbar("Info", "Log-In failed",
               colorText: Colors.white,
               backgroundColor: Colors.blue,

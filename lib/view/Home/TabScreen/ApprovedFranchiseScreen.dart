@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 import '../../../controller/Home_controller.dart';
 import '../../../utils/notificationBadge.dart';
+import 'DetailScreen/FranchaiseDetails.dart';
 
 class ApprovedFranchiseScreen extends StatefulWidget {
   const ApprovedFranchiseScreen({super.key});
@@ -60,25 +61,30 @@ class _ApprovedFranchiseScreenState extends State<ApprovedFranchiseScreen> {
                           duration: const Duration(milliseconds: 3000),
                           curve: Curves.fastLinearToSlowEaseIn,
                           flipAxis: FlipAxis.y,
-                          child: Container(
-                            margin: EdgeInsets.only(bottom: _w / 20),
-                            height: _w / 5,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(20),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  blurRadius: 40,
-                                  spreadRadius: 10,
+                          child: InkWell(
+                            onTap: () {
+                              Get.to(() => franchiseDetail(data: data));
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: _w / 20),
+                              height: _w / 5,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(20),
                                 ),
-                              ],
-                            ),
-                            child: ListTile(
-                              title: Text(data.name!),
-                              subtitle: Text(data.contactNumber!),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 40,
+                                    spreadRadius: 10,
+                                  ),
+                                ],
+                              ),
+                              child: ListTile(
+                                title: Text(data.name!),
+                                subtitle: Text(data.contactNumber!),
+                              ),
                             ),
                           ),
                         ),
@@ -102,12 +108,17 @@ class _ApprovedFranchiseScreenState extends State<ApprovedFranchiseScreen> {
           return AppBar(
             title: const Text("Franchise List"),
             centerTitle: true,
-            actions: const [
+            actions: [
               Center(
-                child: NamedIcon(
-                  text: '',
-                  iconData: Icons.notifications,
-                  notificationCount: 0,
+                child: Column(
+                  children: [
+                    const Text(''),
+                    NamedIcon(
+                      text: '',
+                      iconData: Icons.notifications,
+                      notificationCount: 0,
+                    ),
+                  ],
                 ),
               )
             ],
