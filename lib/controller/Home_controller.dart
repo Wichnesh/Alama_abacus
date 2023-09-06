@@ -20,6 +20,10 @@ class HomeController extends GetxController {
   var studentList = List<SData>.empty(growable: true).obs;
   var stockList = List<StData>.empty(growable: true).obs;
   var count = ''.obs;
+  TextEditingController fromdateText = TextEditingController();
+  TextEditingController todateText = TextEditingController();
+  DateTime? fromdate;
+  DateTime? todate;
 
   @override
   void onInit() {
@@ -108,6 +112,61 @@ class HomeController extends GetxController {
       isLoading.value = false;
     });
     update();
+  }
+
+  void StockFilterlistmethod() {
+    isLoading.value = true;
+    update();
+    Map<String, dynamic>? requestData;
+    requestData = {
+      "startDate": "${fromdateText.text}",
+      "endDate": "${todateText.text}",
+    };
+    if (kDebugMode) {
+      print('${getFilterTransactionUrl},${requestData}');
+    }
+    RequestDio request =
+        RequestDio(url: getFilterTransactionUrl, body: requestData);
+    if (kDebugMode) {
+      print(requestData);
+    }
+    request.post().then((response) async {
+      print(response.data);
+      if (response.statusCode == 200) {
+        StockModel stock = StockModel.fromJson(response.data);
+        if (stock.status == true) {
+          for (var element in stock.data!) {
+            stockList.add(element);
+          }
+          isLoading.value = false;
+          update();
+        } else {
+          Get.snackbar("Error", "Fetching error",
+              colorText: Colors.white,
+              backgroundColor: Colors.red,
+              snackPosition: SnackPosition.TOP);
+        }
+      } else if (response.statusCode == 201) {
+        StudentListModel student = StudentListModel.fromJson(response.data);
+        if (student.status == true) {
+          for (var element in student.data!) {
+            studentList.add(element);
+          }
+          isLoading.value = false;
+          update();
+        } else {
+          Get.snackbar("Error", "Fetching error",
+              colorText: Colors.white,
+              backgroundColor: Colors.red,
+              snackPosition: SnackPosition.TOP);
+        }
+      } else {
+        Get.snackbar("Error", "Fetching error",
+            colorText: Colors.white,
+            backgroundColor: Colors.red,
+            snackPosition: SnackPosition.TOP);
+      }
+    });
   }
 
   void getStudentList() async {

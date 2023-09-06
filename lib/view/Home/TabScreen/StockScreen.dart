@@ -21,6 +21,14 @@ class _StockScreenState extends State<StockScreen> {
       appBar: AppBar(
         title: const Text('Stock'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Get.toNamed(ROUTE_STOCKFILTER);
+            },
+            icon: const Icon(Icons.filter_alt_rounded),
+          )
+        ],
       ),
       body: GetBuilder<HomeController>(
         init: HomeController(),
@@ -120,7 +128,7 @@ class _StockScreenState extends State<StockScreen> {
               return StatefulBuilder(
                 builder: (context, setState) {
                   return AlertDialog(
-                    title: const Text('Update Stock'),
+                    title: Text('Update Stock--> ${data.name!}'),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [

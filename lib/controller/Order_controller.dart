@@ -12,6 +12,7 @@ import '../utils/constant.dart';
 class OrderController extends GetxController {
   var isLoading = false.obs;
   bool isDataInitialized = false;
+  TextEditingController programText = TextEditingController();
   late List<String> BookList = [];
   var studentId = "".obs;
   var currentlevel = "".obs;
@@ -28,15 +29,18 @@ class OrderController extends GetxController {
   void tell() {
     int currentLevel = int.parse(currentlevel.value.split(' ')[1]);
     if (data.program == 'MA') {
+      programText.text = data.program!;
       BookList = [
         'MA AS PAPER L${currentLevel}', //MA AS PAPER L1 == level1MA
         'MA CB${currentLevel}', //cb1MA
         'MA PB${currentLevel}'
       ];
-    } else if (data.program == 'AA' && currentlevel == 6) {
-      futurelevel.value = '5';
+    } else if (data.program == 'AA' && currentLevel == 6) {
+      futurelevel.value = 'Level 5';
+      programText.text = 'MA';
     } else {
       print('AA program');
+      programText.text = data.program!;
       BookList = [
         'AA ASS PAPER L${currentLevel}',
         'AA CB$currentLevel',

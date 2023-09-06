@@ -7,6 +7,7 @@ const ROUTE_NONAPPROVEDSCREEN = slash + "nonapprovedscreen";
 const ROUTE_ENROLLSTUDENT = slash + "enrollstudent";
 const ROUTE_ORDER = slash + "order";
 const ROUTE_TRANSACTIONSCREEN = slash + "transactionscreen";
+const ROUTE_STOCKFILTER = slash + "stockfilter";
 
 ////////////
 const String TOKEN = "token";

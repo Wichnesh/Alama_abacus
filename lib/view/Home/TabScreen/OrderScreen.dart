@@ -116,6 +116,16 @@ class _OrderScreenState extends State<OrderScreen> {
                       readOnly: true,
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: TextField(
+                      decoration: const InputDecoration(
+                        labelText: 'Program',
+                      ),
+                      controller: controller.programText,
+                      readOnly: true,
+                    ),
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: controller.BookList.map((book) {

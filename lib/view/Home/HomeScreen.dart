@@ -38,10 +38,10 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         leading: Row(
           children: [
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
-            Container(height: 30, child: Image.asset(logo)),
+            SizedBox(height: 30, child: Image.asset(logo)),
           ],
         ),
         title: const Text("Alama Abacus"),

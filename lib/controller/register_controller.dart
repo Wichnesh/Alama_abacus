@@ -26,6 +26,7 @@ class RegisterController extends GetxController {
   var isLoading = true.obs;
   var selectedState = "Tamil Nadu".obs;
   var selectedDistrict = "Chennai".obs;
+  var selectedCountry = "".obs;
 
   final stateData = [
     "USA",
@@ -39,7 +40,18 @@ class RegisterController extends GetxController {
     "Gujarat",
     "Goa",
     "Andhra pradesh",
-    "Chandigarh"
+    "Chandigarh",
+    "Abu Dhabi",
+    "Australia",
+    "Canada",
+    "Dubai",
+    "Europe",
+    "Germany",
+    "Jubail",
+    "Netherlands",
+    "Oman",
+    "Scotland",
+    "Uk"
   ];
   final districtData = {
     "Tamil Nadu": [
@@ -131,6 +143,17 @@ class RegisterController extends GetxController {
     ],
     "Chandigarh": ["chandigarh"],
     "USA": ["Columbia", "Michigan", "New jersey"],
+    "Abu Dhabi": ["Abu Dhabi"],
+    "Australia": ["Australia"],
+    "Canada": ["Canada"],
+    "Dubai": ["Dubai"],
+    "Europe": ["Europe"],
+    "Germany": ["Germany"],
+    "Jubail": ["Jubail"],
+    "Netherlands": ["Netherlands"],
+    "Oman": ["Oman"],
+    "Scotland": ["Scotland"],
+    "Uk": ["london", "Uk"],
   };
 
   void updateSelectedState(String newValue) {

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../../../controller/Home_controller.dart';
 import '../../../utils/constant.dart';
+import '../../../utils/pref_manager.dart';
 import 'DetailScreen/StudentDetails.dart';
 
 class StudentList extends StatelessWidget {
@@ -12,6 +13,7 @@ class StudentList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool admin = Prefs.getBoolen(SHARED_ADMIN);
     double _w = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
@@ -90,13 +92,15 @@ class StudentList extends StatelessWidget {
           }
         }),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: primaryColor,
-        onPressed: () {
-          Get.toNamed(ROUTE_ENROLLSTUDENT);
-        },
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: admin
+          ? Container()
+          : FloatingActionButton(
+              backgroundColor: primaryColor,
+              onPressed: () {
+                Get.toNamed(ROUTE_ENROLLSTUDENT);
+              },
+              child: const Icon(Icons.add),
+            ),
     );
   }
 }

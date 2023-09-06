@@ -13,6 +13,7 @@ import '../view/Home/TabScreen/DetailScreen/StockTransactionDetails.dart';
 import '../view/Home/TabScreen/EnrollStudentScreen.dart';
 import '../view/Home/TabScreen/NonApprovedFranchiseScreen.dart';
 import '../view/Home/TabScreen/OrderScreen.dart';
+import '../view/Home/TabScreen/StockFilterScreen.dart';
 
 class AppPages {
   static final List<GetPage> pages = [
@@ -36,6 +37,7 @@ class AppPages {
         name: ROUTE_ORDER,
         page: () => const OrderScreen(),
         binding: OrderBinding()),
-    GetPage(name: ROUTE_TRANSACTIONSCREEN, page: () => const StockTransactionScreen(), binding: StockTransactionBinding())
+    GetPage(name: ROUTE_TRANSACTIONSCREEN, page: () => const StockTransactionScreen(), binding: StockTransactionBinding()),
+    GetPage(name: ROUTE_STOCKFILTER, page: ()=> const StockFilterScreen())
   ];
 }
