@@ -68,3 +68,118 @@ class OData {
     return data;
   }
 }
+
+
+class FranchiseData {
+  bool status;
+  List<Franchise> data;
+
+  FranchiseData({
+    required this.status,
+    required this.data,
+  });
+
+  factory FranchiseData.fromJson(Map<String, dynamic> json) {
+    var franchiseList = json['data'] as List;
+    List<Franchise> franchises = franchiseList.map((franchiseJson) {
+      return Franchise.fromJson(franchiseJson);
+    }).toList();
+
+    return FranchiseData(
+      status: json['status'],
+      data: franchises,
+    );
+  }
+}
+
+class Franchise {
+  String franchiseName;
+  List<EnrolledStudent> enrolledStudents;
+  List<OrderedItem> ordered;
+  Map<String, int> totalItems;
+
+  Franchise({
+    required this.franchiseName,
+    required this.enrolledStudents,
+    required this.ordered,
+    required this.totalItems,
+  });
+
+  factory Franchise.fromJson(Map<String, dynamic> json) {
+    var enrolledStudentsList = json['enrolledStudents'] as List? ??[];
+    var orderedList = json['ordered'] as List? ??[];
+
+    // Handle the case where 'ordered' list is null or empty
+    List<OrderedItem> orderedItems = [];
+    if (orderedList != null) {
+      orderedItems = orderedList.map((itemJson) {
+        return OrderedItem.fromJson(itemJson);
+      }).toList();
+    }
+
+    Map<String, int> totalItems = Map<String, int>.from(json['totalItems']);
+
+    List<EnrolledStudent> enrolledStudents = enrolledStudentsList.map((studentJson) {
+      return EnrolledStudent.fromJson(studentJson);
+    }).toList();
+
+    return Franchise(
+      franchiseName: json['franchiseName'],
+      enrolledStudents: enrolledStudents,
+      ordered: orderedItems,
+      totalItems: totalItems,
+    );
+  }
+}
+
+class EnrolledStudent {
+  String studentName;
+  String state;
+  String level;
+  String district;
+
+  EnrolledStudent({
+    required this.studentName,
+    required this.state,
+    required this.level,
+    required this.district
+  });
+
+  factory EnrolledStudent.fromJson(Map<String, dynamic> json) {
+    return EnrolledStudent(
+      studentName: json['studentName'],
+      state: json['state'],
+      level: json['level'],
+      district: json['district']
+    );
+  }
+}
+
+class OrderedItem {
+  String studentName;
+  String studentID;
+  String state;
+  String district;
+  String currentLevel;
+  String futureLevel;
+  OrderedItem({
+    required this.studentName,
+    required this.studentID,
+    required this.state,
+    required this.district,
+    required this.currentLevel,
+    required this.futureLevel
+  });
+
+  factory OrderedItem.fromJson(Map<String, dynamic> json) {
+    return OrderedItem(
+      studentName: json['studentName'],
+      studentID: json['studentID'],
+      state: json['state'],
+      district: json['district'],
+      currentLevel: json['currentLevel'],
+      futureLevel: json['futureLevel']
+    );
+  }
+}
+

@@ -18,6 +18,7 @@ const getitemtransactionUrl = "${BaseUrl}getitemtransaction";
 const getallordersUrl = "${BaseUrl}order";
 const getFilterTransactionUrl = "${BaseUrl}getFilterTransaction";
 const getallorders = "${BaseUrl}getallorders";
+const getallreports = "${BaseUrl}data";
 
 
 //2 to 3 , 5 to 6 AA

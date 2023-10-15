@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:alama_eorder_app/utils/constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -32,8 +31,7 @@ class StudentController extends GetxController {
   var orderID = ''.obs;
   var selectedState = "Telangana".obs;
   var selectedDistrict = "HYDERABAD".obs;
-  var levelList =
-      ['Enroll','Pre Level'].obs;
+  var levelList = ['Enroll','Pre Level'].obs;
   var costBool = true.obs;
   var enrollValue = '1300'.obs;
   var programValue = ''.obs;
@@ -194,10 +192,12 @@ class StudentController extends GetxController {
   }
 
   var program = "Select".obs;
-  var programList = ['MA', 'AA'].obs;
+  String? selectedProgram ;
+  var programList = [].obs;
 
   void updateProgramList(String value) {
     program.value = value;
+    selectedProgram = value;
   }
 
   List<dynamic> selectedItems = [].obs;
@@ -214,14 +214,20 @@ class StudentController extends GetxController {
   var enablePreLevelCheckBox = false.obs;
 
   void preLevelCheckBox(){
+    programList.clear();
+    selectedProgram = null;
     if(level.value == 'Pre Level'){
       enablePreLevelCheckBox.value = true;
       preLevel1.value = true;
       preLevel2.value = true;
+      program.value = 'Select';
+      programList.value = ['AA'];
     }else{
       enablePreLevelCheckBox.value = false;
       preLevel1.value = false;
       preLevel2.value = false;
+      program.value = 'Select';
+      programList.value = ['MA', 'AA'];
     }
     update();
   }

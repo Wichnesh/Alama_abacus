@@ -290,45 +290,47 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: SizedBox(
-                    height: 55,
-                    width: double.infinity,
-                    child: DropdownButtonFormField(
-                      hint: Text(
-                        studentController.program.value,
-                      ),
-                      isExpanded: true,
-                      icon: const Icon(Icons.arrow_drop_down),
-                      iconSize: 25,
-                      decoration: const InputDecoration(
-                        labelText: "Program",
-                        labelStyle: TextStyle(fontSize: 14),
-                        border: OutlineInputBorder(),
-                      ),
-                      items: studentController.programList.map(
-                            (val) {
-                          return DropdownMenuItem<String>(
-                            value: val,
-                            child: Text(
-                              val,
-                            ),
-                            onTap: () {},
-                          );
+                Obx((){
+                  return Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: SizedBox(
+                      height: 55,
+                      width: double.infinity,
+                      child: DropdownButtonFormField(
+                        hint: Text(
+                          studentController.program.value,
+                        ),
+                        isExpanded: true,
+                        icon: const Icon(Icons.arrow_drop_down),
+                        iconSize: 25,
+                        decoration: const InputDecoration(
+                          labelText: "Program",
+                          labelStyle: TextStyle(fontSize: 14),
+                          border: OutlineInputBorder(),
+                        ),
+                        items: studentController.programList.map(
+                              (val) {
+                            return DropdownMenuItem<String>(
+                              value: val,
+                              child: Text(
+                                val,
+                              ),
+                              onTap: () {},
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (val) {
+                          studentController.updateProgramList(val!);
+                          studentController.programBoolUpdate();
+                          studentController.programBool.value = true;
+                          if (kDebugMode) {
+                            print("val:    ${studentController.program.value}");
+                          }
                         },
-                      ).toList(),
-                      onChanged: (val) {
-                        studentController.updateProgramList(val!);
-                        studentController.programBoolUpdate();
-                        studentController.programBool.value = true;
-                        if (kDebugMode) {
-                          print("val:    ${studentController.program.value}");
-                        }
-                      },
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                }),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,

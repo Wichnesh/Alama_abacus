@@ -114,7 +114,7 @@ class _OrderScreenState extends State<OrderScreen> {
                     padding: const EdgeInsets.all(16.0),
                     child: TextField(
                       decoration: const InputDecoration(
-                        labelText: 'Current Level',
+                        labelText: 'Completed Level',
                       ),
                       controller: TextEditingController(
                           text: controller.currentlevel.value),
@@ -125,7 +125,7 @@ class _OrderScreenState extends State<OrderScreen> {
                     padding: const EdgeInsets.all(16.0),
                     child: TextField(
                       decoration: const InputDecoration(
-                        labelText: 'Future Level',
+                        labelText: 'Order Level',
                       ),
                       controller: TextEditingController(
                           text: controller.futurelevel.value),

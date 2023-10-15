@@ -59,42 +59,42 @@ class _OrderReportScreenState extends State<OrderReportScreen> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  height: 55,
-                  width: double.infinity,
-                  child: TextField(
-                    readOnly: true,
-                    onTap: () async {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      DateTime? date = DateTime.now();
-
-                      date = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime.now());
-
-                      if (date != null) {
-                        controller.todate = date;
-                        controller.update();
-                      }
-                    },
-                    controller: controller.todateText
-                      ..text = DateFormat("yyyy-MM-dd").format(
-                          controller.todate == null
-                              ? DateTime.now()
-                              : controller.todate ?? DateTime.now()),
-                    style: const TextStyle(fontSize: 18),
-                    decoration: const InputDecoration(
-                      suffixIcon: Icon(Icons.calendar_today),
-                      labelText: "To Date",
-                      labelStyle: TextStyle(fontSize: 14),
-                    ),
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(10.0),
+              //   child: SizedBox(
+              //     height: 55,
+              //     width: double.infinity,
+              //     child: TextField(
+              //       readOnly: true,
+              //       onTap: () async {
+              //         FocusScope.of(context).requestFocus(FocusNode());
+              //         DateTime? date = DateTime.now();
+              //
+              //         date = await showDatePicker(
+              //             context: context,
+              //             initialDate: DateTime.now(),
+              //             firstDate: DateTime(1900),
+              //             lastDate: DateTime.now());
+              //
+              //         if (date != null) {
+              //           controller.todate = date;
+              //           controller.update();
+              //         }
+              //       },
+              //       controller: controller.todateText
+              //         ..text = DateFormat("yyyy-MM-dd").format(
+              //             controller.todate == null
+              //                 ? DateTime.now()
+              //                 : controller.todate ?? DateTime.now()),
+              //       style: const TextStyle(fontSize: 18),
+              //       decoration: const InputDecoration(
+              //         suffixIcon: Icon(Icons.calendar_today),
+              //         labelText: "To Date",
+              //         labelStyle: TextStyle(fontSize: 14),
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Row(
@@ -119,13 +119,12 @@ class _OrderReportScreenState extends State<OrderReportScreen> {
                             ),
                           ),
                           onPressed: () {
-                            if (controller.todateText.text.isEmpty ||
-                                controller.fromdateText.text.isEmpty) {
+                            if (controller.fromdateText.text.isEmpty) {
                               Get.dialog(
                                 AlertDialog(
                                   title: const Text('Alert'),
                                   content: const Text(
-                                      'Please enter From date & To date'),
+                                      'Please enter From date '),
                                   actions: [
                                     TextButton(
                                       child: const Text('OK'),
@@ -137,7 +136,7 @@ class _OrderReportScreenState extends State<OrderReportScreen> {
                                 ),
                               );
                             } else {
-                              controller.getOrderMethod();
+                              controller.getReportMethod();
                             }
                           },
                           child: const SizedBox(
@@ -216,7 +215,7 @@ class _OrderReportScreenState extends State<OrderReportScreen> {
                               ),
                               onPressed: () {
                                 if (controller.enableDownload.isTrue) {
-                                  controller.generatePdf();
+                                  controller.reportGeneratePdf();
                                 } else {
                                   Fluttertoast.showToast(
                                       msg: 'Data Not Available');
