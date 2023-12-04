@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../api/request.dart';
 import '../model/loginmodel.dart';
@@ -14,12 +15,22 @@ import '../utils/constant.dart';
 class loginController extends GetxController {
   TextEditingController emailtext = TextEditingController();
   TextEditingController passwordtext = TextEditingController();
+  var version = "".obs;
+  var build = "".obs;
   late SharedPreferences _prefs;
   var isLoading = false.obs;
 
   Future<void> onInit() async {
     await _initializePreferences();
+    getVersion();
     super.onInit();
+  }
+
+  void getVersion() async {
+    final info = await PackageInfo.fromPlatform();
+    version.value = info.version;
+    build.value = info.buildNumber;
+    update();
   }
 
   Future<void> _initializePreferences() async {

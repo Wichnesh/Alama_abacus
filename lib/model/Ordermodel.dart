@@ -137,12 +137,14 @@ class EnrolledStudent {
   String state;
   String level;
   String district;
+  String enrollDate;
 
   EnrolledStudent({
     required this.studentName,
     required this.state,
     required this.level,
-    required this.district
+    required this.district,
+    required this.enrollDate
   });
 
   factory EnrolledStudent.fromJson(Map<String, dynamic> json) {
@@ -150,7 +152,8 @@ class EnrolledStudent {
       studentName: json['studentName'],
       state: json['state'],
       level: json['level'],
-      district: json['district']
+      district: json['district'],
+      enrollDate: json['enrollDate']
     );
   }
 }
@@ -162,13 +165,15 @@ class OrderedItem {
   String district;
   String currentLevel;
   String futureLevel;
+  String orderDate;
   OrderedItem({
     required this.studentName,
     required this.studentID,
     required this.state,
     required this.district,
     required this.currentLevel,
-    required this.futureLevel
+    required this.futureLevel,
+    required this.orderDate
   });
 
   factory OrderedItem.fromJson(Map<String, dynamic> json) {
@@ -178,7 +183,8 @@ class OrderedItem {
       state: json['state'],
       district: json['district'],
       currentLevel: json['currentLevel'],
-      futureLevel: json['futureLevel']
+      futureLevel: json['futureLevel'],
+      orderDate: json['createdAt']
     );
   }
 }

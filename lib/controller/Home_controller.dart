@@ -333,6 +333,10 @@ class HomeController extends GetxController {
     }
     RequestDio request = RequestDio(url: getallstudentsUrl);
     request.post().then((response) async {
+      if (kDebugMode) {
+        print(response.statusCode);
+        print(response.data);
+      }
       if (response.statusCode == 200) {
         StudentListModel student = StudentListModel.fromJson(response.data);
         if (student.status == true) {
@@ -372,6 +376,7 @@ class HomeController extends GetxController {
           colorText: Colors.white,
           backgroundColor: Colors.red,
           snackPosition: SnackPosition.TOP);
+      print(error);
       isLoading.value = false;
     });
     update();

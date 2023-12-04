@@ -53,6 +53,7 @@ class StudentController extends GetxController {
     "Gujarat",
     "Goa",
     "Andhra pradesh",
+    "West Bengal",
     "Chandigarh"
   ];
   final districtData = {
@@ -100,23 +101,23 @@ class StudentController extends GetxController {
       "BHADRADRI KOTHAGUDEM",
       "HANUMAKONDA",
       "HYDERABAD",
-      "	JAGTIAL",
+      "JAGTIAL",
       "JANGOAN",
       "JAYASHANKAR BHOOPALPALLY",
       "JOGULAMBA GADWAL",
       "KAMAREDDY",
       "KHAMMAM",
-      "	KOMARAM BHEEM ASIFABAD",
+      "KOMARAM BHEEM ASIFABAD",
       "MAHABUBABAD",
       "MAHABUBNAGAR",
       "MANCHERIAL",
       "MEDAK",
-      "	MEDCHAL-MALKAJGIRI",
-      "	NAGARKURNOOL",
+      "MEDCHAL-MALKAJGIRI",
+      "NAGARKURNOOL",
       "NALGONDA",
-      "	NARAYANPET",
+      "NARAYANPET",
       "NIRMAL",
-      "	NIZAMABAD",
+      "NIZAMABAD",
       "PEDDAPALLI",
       "RAJANNA SIRCILLA",
       "RANGAREDDY",
@@ -127,6 +128,7 @@ class StudentController extends GetxController {
       "WANAPARTHY",
       "	WARANGAL",
       "YADADRI BHUVANAGIRI",
+      "SECUNDERABAD"
     ],
     "Karnataka": ["Bengaluru"],
     "Madhya pradesh": ["Bhopal", "Shivpuri"],
@@ -143,6 +145,7 @@ class StudentController extends GetxController {
       "Vijaywada",
       "Vishakapatnam"
     ],
+    "West Bengal":["Kolkata"],
     "Chandigarh": ["chandigarh"],
     "USA": ["Columbia", "Michigan", "New jersey"],
   };
@@ -384,23 +387,23 @@ class StudentController extends GetxController {
   void submit() {
     isLoading.value = true;
     Map<String, dynamic> requestData = {
-      "studentID": '${Id.value}',
-      "enrollDate": '${enrollDateText.text}',
-      "studentName": "${nameText.text}",
-      "address": "${addressText.text}",
-      "state": "${selectedState.value}",
-      "district": "${selectedDistrict.value}",
-      "mobileNumber": "${mobileNoText.text}",
-      "email": "${emailText.text}",
-      "fatherName": "${fatherText.text}",
-      "motherName": "${motherText.text}",
-      "franchise": "${Prefs.getString(USERNAME)}",
-      "level": "${level.value}",
+      "studentID": Id.value,
+      "enrollDate": enrollDateText.text,
+      "studentName": nameText.text,
+      "address": addressText.text,
+      "state": selectedState.value,
+      "district": selectedDistrict.value,
+      "mobileNumber": mobileNoText.text,
+      "email": emailText.text,
+      "fatherName": fatherText.text,
+      "motherName": motherText.text,
+      "franchise": Prefs.getString(USERNAME),
+      "level": level.value,
       "items": selectedItems,
-      "tShirt": '${selectedShirt.value}',
-      "program": '${program.value}',
+      "tShirt": selectedShirt.value,
+      "program": program.value,
       "cost": costList,
-      "paymentID": "${paymentID.value}"
+      "paymentID": paymentID.value
     };
     if (kDebugMode) {
       print(requestData);
@@ -464,23 +467,23 @@ class StudentController extends GetxController {
       selectedShirt.value = '0';
     }
     Map<String, dynamic> requestData = {
-      "studentID": '${Id.value}',
-      "enrollDate": '${enrollDateText.text}',
-      "studentName": "${nameText.text}",
-      "address": "${addressText.text ?? "NA"}" ,
-      "state": "${selectedState.value}",
-      "district": "${selectedDistrict.value}",
-      "mobileNumber": "${mobileNoText.text}",
-      "email": "${emailText.text}",
-      "fatherName": "${fatherText.text ?? "NA"}",
-      "motherName": "${motherText.text ?? "NA"}",
-      "franchise": "${Prefs.getString(USERNAME)}",
-      "level": "${level.value}",
+      "studentID": Id.value,
+      "enrollDate": enrollDateText.text,
+      "studentName": nameText.text,
+      "address": addressText.text ?? "NA" ,
+      "state": selectedState.value,
+      "district": selectedDistrict.value,
+      "mobileNumber": mobileNoText.text,
+      "email": emailText.text,
+      "fatherName": fatherText.text ?? "NA",
+      "motherName": motherText.text ?? "NA",
+      "franchise": Prefs.getString(USERNAME),
+      "level": level.value,
       "items": selectedItems,
-      "tShirt": '${selectedShirt.value}',
-      "program": '${program.value}',
+      "tShirt": selectedShirt.value,
+      "program": program.value,
       "cost": costList,
-      "paymentID": "${paymentID.value}"
+      "paymentID": paymentID.value
     };
     if (kDebugMode) {
       print(requestData);

@@ -88,7 +88,8 @@ void getReportMethod() {
   update();
   Map<String, dynamic>? requestData;
   requestData = {
-    "date": "${fromdateText.text}",
+    "startDate": "${fromdateText.text}",
+    "endDate" : "${todateText.text}"
   };
   RequestDio request = RequestDio(url: getallreports, body: requestData);
   if (kDebugMode) {
@@ -197,6 +198,7 @@ void reportGeneratePdf() async {
       pw.Text('District', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
       pw.Text('State', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
       pw.Text('Order Level', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+      pw.Text('Enroll Date', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
     ];
 
     var orderTableHeaders = [
@@ -206,6 +208,8 @@ void reportGeneratePdf() async {
       pw.Text('District', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
       pw.Text('State', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
       pw.Text('Order Level', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+      pw.Text('Order Date', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+
     ];
     var itemListHeaders = [
       pw.Text('S.No', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
@@ -222,7 +226,7 @@ void reportGeneratePdf() async {
         build: (context) => [
           pw.Center(child: pw.Text('Alama Abacus',style: pw.TextStyle(fontSize: 20,font: pw.Font.courierBold()))),
           pw.SizedBox(height: 20),
-          pw.Center(child: pw.Text('Order Report -- ${fromdateText.text}')),
+          pw.Center(child: pw.Text('Order Report -- ${fromdateText.text} - ${todateText.text}')),
           pw.SizedBox(height: 20),
           pw.Center(
             child: pw.Text(
@@ -238,7 +242,7 @@ void reportGeneratePdf() async {
             headers: enrollTableHeaders,
             cellAlignment: pw.Alignment.center,
             cellAlignments: {0: pw.Alignment.centerLeft, 1: pw.Alignment.center, 2: pw.Alignment.center},
-            data: order.enrolledStudents.map((student) => ['${enrollCounter++}',student.studentName,student.district ,student.state, student.level]).toList(),
+            data: order.enrolledStudents.map((student) => ['${enrollCounter++}',student.studentName,student.district ,student.state, student.level,student.enrollDate]).toList(),
           ),
           pw.SizedBox(height: 10),
           pw.Center(child: pw.Text('Order Details',style: pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold))),
@@ -247,7 +251,7 @@ void reportGeneratePdf() async {
             headers: orderTableHeaders,
             cellAlignment: pw.Alignment.center,
             cellAlignments: {0: pw.Alignment.centerLeft, 1: pw.Alignment.center, 2: pw.Alignment.center},
-            data: order.ordered.map((order) => ['${orderCounter++}',order.studentName, order.studentID, order.district,order.state,order.futureLevel]).toList(),
+            data: order.ordered.map((order) => ['${orderCounter++}',order.studentName, order.studentID, order.district,order.state,order.futureLevel,order.orderDate]).toList(),
           ),
           pw.SizedBox(height: 10),
           pw.Center(child: pw.Text('Item Details',style: pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold))),

@@ -46,7 +46,7 @@ class _OrderReportScreenState extends State<OrderReportScreen> {
                       }
                     },
                     controller: controller.fromdateText
-                      ..text = DateFormat("yyyy-MM-dd").format(
+                      ..text = DateFormat("dd-MM-yyyy").format(
                           controller.fromdate == null
                               ? DateTime.now()
                               : controller.fromdate ?? DateTime.now()),
@@ -59,42 +59,42 @@ class _OrderReportScreenState extends State<OrderReportScreen> {
                   ),
                 ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.all(10.0),
-              //   child: SizedBox(
-              //     height: 55,
-              //     width: double.infinity,
-              //     child: TextField(
-              //       readOnly: true,
-              //       onTap: () async {
-              //         FocusScope.of(context).requestFocus(FocusNode());
-              //         DateTime? date = DateTime.now();
-              //
-              //         date = await showDatePicker(
-              //             context: context,
-              //             initialDate: DateTime.now(),
-              //             firstDate: DateTime(1900),
-              //             lastDate: DateTime.now());
-              //
-              //         if (date != null) {
-              //           controller.todate = date;
-              //           controller.update();
-              //         }
-              //       },
-              //       controller: controller.todateText
-              //         ..text = DateFormat("yyyy-MM-dd").format(
-              //             controller.todate == null
-              //                 ? DateTime.now()
-              //                 : controller.todate ?? DateTime.now()),
-              //       style: const TextStyle(fontSize: 18),
-              //       decoration: const InputDecoration(
-              //         suffixIcon: Icon(Icons.calendar_today),
-              //         labelText: "To Date",
-              //         labelStyle: TextStyle(fontSize: 14),
-              //       ),
-              //     ),
-              //   ),
-              // ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: SizedBox(
+                  height: 55,
+                  width: double.infinity,
+                  child: TextField(
+                    readOnly: true,
+                    onTap: () async {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      DateTime? date = DateTime.now();
+
+                      date = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime.now());
+
+                      if (date != null) {
+                        controller.todate = date;
+                        controller.update();
+                      }
+                    },
+                    controller: controller.todateText
+                      ..text = DateFormat("dd-MM-yyyy").format(
+                          controller.todate == null
+                              ? DateTime.now()
+                              : controller.todate ?? DateTime.now()),
+                    style: const TextStyle(fontSize: 18),
+                    decoration: const InputDecoration(
+                      suffixIcon: Icon(Icons.calendar_today),
+                      labelText: "To Date",
+                      labelStyle: TextStyle(fontSize: 14),
+                    ),
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Row(

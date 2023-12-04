@@ -15,14 +15,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final loginController controller = loginController();
+  final loginController controller = Get.put(loginController());
   @override
   Widget build(BuildContext context) {
     final Screenheight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.only(bottom: 30),
-        child: SingleChildScrollView(
+        child: SizedBox(
+          height: Screenheight,
           child: Column(
             children: <Widget>[
               const HeaderContainer(),
@@ -41,42 +42,48 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(
                         height: Screenheight * 0.1,
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (controller.emailtext.text.isEmpty ||
-                              controller.passwordtext.text.isEmpty) {
-                            Get.snackbar(
-                                "Warning", "Enter both Username & Password",
-                                colorText: Colors.white,
-                                backgroundColor: Colors.orange,
-                                snackPosition: SnackPosition.TOP);
-                          } else {
-                            controller.onInit();
-                            controller.login();
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          padding: const EdgeInsets.all(
-                              0), // Use zero padding to let the Container control padding
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 30),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: const Text(
-                            'Login',
-                            style: TextStyle(
-                              color: Colors.white, // Text color
-                              fontSize: 16,
+                      Obx(() {
+                        if(controller.isLoading.value){
+                          return const Center(child: CircularProgressIndicator(),);
+                        }else{
+                          return ElevatedButton(
+                            onPressed: () {
+                              if (controller.emailtext.text.isEmpty ||
+                                  controller.passwordtext.text.isEmpty) {
+                                Get.snackbar(
+                                    "Warning", "Enter both Username & Password",
+                                    colorText: Colors.white,
+                                    backgroundColor: Colors.orange,
+                                    snackPosition: SnackPosition.TOP);
+                              } else {
+                                controller.onInit();
+                                controller.login();
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              padding: const EdgeInsets.all(
+                                  0), // Use zero padding to let the Container control padding
                             ),
-                          ),
-                        ),
-                      ),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 15, horizontal: 30),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Text(
+                                'Login',
+                                style: TextStyle(
+                                  color: Colors.white, // Text color
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                      }),
                       const Spacer(),
                       RichText(
                         text: TextSpan(children: [
@@ -90,12 +97,16 @@ class _LoginPageState extends State<LoginPage> {
                                 ..onTap = () {
                                   Get.toNamed(ROUTE_REGISTER);
                                 }),
+
                         ]),
-                      )
+                      ),
+
                     ],
                   ),
                 ),
-              )
+              ),
+              const Spacer(),
+              Obx(() => Center(child: Text("Version : ${controller.version.value} + ${controller.build.value}"),))
             ],
           ),
         ),

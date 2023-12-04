@@ -1,10 +1,12 @@
-import 'package:alama_eorder_app/utils/constant.dart';
+
+
 import 'package:alama_eorder_app/utils/pref_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
 import 'ImageUtils.dart';
+import 'constant.dart';
 import 'network_image.dart';
 
 class BeautifulAlertDialog extends StatelessWidget {

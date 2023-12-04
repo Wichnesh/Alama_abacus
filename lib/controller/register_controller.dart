@@ -51,7 +51,8 @@ class RegisterController extends GetxController {
     "Netherlands",
     "Oman",
     "Scotland",
-    "Uk"
+    "Uk",
+    "Belfast"
   ];
   final districtData = {
     "Tamil Nadu": [
@@ -153,8 +154,8 @@ class RegisterController extends GetxController {
     "Netherlands": ["Netherlands"],
     "Oman": ["Oman"],
     "Scotland": ["Scotland"],
-    "Uk": ["london", "Uk"],
-    "Goa" : ["Goa"]
+    "Uk": ["london", "Uk","Belfast"],
+    "Goa" : ["Goa"],
   };
 
   void updateSelectedState(String newValue) {
