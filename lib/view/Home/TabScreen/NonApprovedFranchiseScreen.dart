@@ -79,7 +79,7 @@ class _NonApprovedFranchiseScreenState
                                 ],
                               ),
                               child: ListTile(
-                                title: Text(data.name!),
+                                title: Text(data.username!),
                                 subtitle: Text(data.contactNumber!),
                                 trailing: ElevatedButton(
                                   child: const Text('Approve'),

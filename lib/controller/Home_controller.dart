@@ -166,6 +166,7 @@ class HomeController extends GetxController {
     "Oman": ["Select","Oman"],
     "Scotland": ["Select","Scotland"],
     "Uk": ["Select","london", "Uk"],
+    "Goa" :["Select","Goa"]
   };
 
   void updateSelectedState(String newValue) {
@@ -343,6 +344,7 @@ class HomeController extends GetxController {
           for (var element in student.data!) {
             studentList.add(element);
           }
+          debugPrint("total number of Students : ${studentList.length}");
           isLoading.value = false;
           update();
         } else {
@@ -797,6 +799,7 @@ class HomeController extends GetxController {
           for (var element in student.data!) {
             studentList.add(element);
           }
+          debugPrint("total number of Students : ${studentList.length}");
           isLoading.value = false;
           update();
         } else {

@@ -110,6 +110,7 @@ class _StudentListState extends State<StudentList> {
                     ),
                   ),
                 ),
+
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: SizedBox(
@@ -130,9 +131,9 @@ class _StudentListState extends State<StudentList> {
                       items: homeController.approvedfranchiselist.map(
                             (val) {
                           return DropdownMenuItem<String>(
-                            value: val.name,
+                            value: val.username ??'',
                             child: Text(
-                              val.name!,
+                              val.username??'',
                             ),
                             onTap: () {
                               setState(() {

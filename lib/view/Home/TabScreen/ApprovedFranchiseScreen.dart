@@ -243,7 +243,7 @@ class _ApprovedFranchiseScreenState extends State<ApprovedFranchiseScreen> {
                                 ],
                               ),
                               child: ListTile(
-                                title: Text(data.name!),
+                                title: Text(data.username!),
                                 subtitle: Text(data.contactNumber!),
                               ),
                             ),

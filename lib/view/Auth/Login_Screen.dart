@@ -1,5 +1,4 @@
 import 'package:alama_eorder_app/utils/constant.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -100,7 +99,6 @@ class _LoginPageState extends State<LoginPage> {
 
                         ]),
                       ),
-
                     ],
                   ),
                 ),
