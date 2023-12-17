@@ -50,7 +50,8 @@ class _OrderScreenState extends State<OrderScreen> {
       }
     }
     var options = {
-      'key': 'rzp_test_r0nbHDzzVtfN6m',
+      //'key': 'rzp_test_r0nbHDzzVtfN6m',
+      'key' : 'rzp_live_FaHtY1SM9hLWek',
       'amount': totalCost,
       'name': name,
       'description': 'Payment',
