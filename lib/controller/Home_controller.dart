@@ -910,7 +910,6 @@ class HomeController extends GetxController {
           if(stockIsLoading.value == true){
             stockIsLoading.value = false;
           }
-
           stockList.addAll(listElement);
           stockList.refresh();
           update();

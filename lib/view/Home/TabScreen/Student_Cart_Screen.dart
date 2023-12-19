@@ -44,7 +44,8 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
       print('total cost--------$totalCost');
     }
     var options = {
-      'key': 'rzp_test_r0nbHDzzVtfN6m',
+      //'key': 'rzp_test_r0nbHDzzVtfN6m',
+      'key' : 'rzp_live_FaHtY1SM9hLWek',
       'amount': totalCost,
       'name': 'Abacus Enrollment ',
       'description': 'No of Student ${count}',
