@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class StudentListModel {
   bool? status;
   List<SData>? data;
@@ -190,7 +192,7 @@ class CSLData {
   List<String>? items;
   String? tShirt;
   String? program;
-  List<int>? cost;
+  int? cost;
   List<CartLevelOrders>? levelOrders;
   String? paymentID; // Add paymentId property here
 
@@ -234,7 +236,14 @@ class CSLData {
     tShirt = json['tShirt'];
     program = json['program'];
     paymentID = json['paymentID'];
-    cost = json['cost'].cast<int>();
+    if (json['cost'] is List) {
+      // You can choose how to handle this case.
+      // For example, take the first element of the list.
+      cost = json['cost'].isEmpty ? null : json['cost'][0] as int?;
+    } else {
+      // 'cost' is a single value
+      cost = json['cost'] as int?;
+    }
     if (json['levelOrders'] != null) {
       levelOrders = <CartLevelOrders>[];
       json['levelOrders'].forEach((v) {
@@ -295,3 +304,28 @@ class CartLevelOrders {
   }
 }
 
+
+
+class DeleteCartModel {
+  bool status;
+  String message;
+
+  DeleteCartModel({
+    required this.status,
+    required this.message,
+  });
+
+  factory DeleteCartModel.fromRawJson(String str) => DeleteCartModel.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory DeleteCartModel.fromJson(Map<String, dynamic> json) => DeleteCartModel(
+    status: json["status"],
+    message: json["message"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "status": status,
+    "message": message,
+  };
+}

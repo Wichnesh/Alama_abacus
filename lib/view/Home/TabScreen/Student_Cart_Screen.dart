@@ -1,16 +1,12 @@
-import 'package:alama_eorder_app/utils/colorUtils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-
-import '../../../controller/Home_controller.dart';
 import '../../../controller/Student_Cart_Controller.dart';
 import '../../../utils/constant.dart';
 import '../../../utils/pref_manager.dart';
-import 'DetailScreen/StudentDetails.dart';
 
 class StudentCartListScreen extends StatefulWidget {
   const StudentCartListScreen({Key? key}) : super(key: key);
@@ -38,20 +34,20 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
     _razorpay?.clear();
   }
 
-  void payment(int count,int cost) async {
+  void payment(int count,int cost, String email) async {
     int totalCost = cost * 100;
     if (kDebugMode) {
       print('total cost--------$totalCost');
     }
     var options = {
-      //'key': 'rzp_test_r0nbHDzzVtfN6m',
+      //'key': 'rzp_test_uMK9VbEsTuePim',
       'key' : 'rzp_live_FaHtY1SM9hLWek',
       'amount': totalCost,
       'name': 'Abacus Enrollment ',
-      'description': 'No of Student ${count}',
+      'description': 'No of Student $count',
       'prefill': {
         'contact': "",
-        'email': ""
+        'email': email
       },
       'external': {
         'wallets': ['paytm']
@@ -166,11 +162,16 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
                                           ],
                                         ),
                                         child: ListTile(
-                                          title: Text(data.studentName!),
-                                          subtitle: Text(data.mobileNumber!),
+                                          title: Text(data.studentName ?? ''),
+                                          subtitle: Text(data.mobileNumber ?? ''),
+                                          trailing: InkWell(
+                                            onTap: (){
+                                              controller.deleteStudent(data.studentID ?? '');
+                                            },
+                                              child: const Icon(Icons.delete,color: Colors.red,)
+                                          ),
                                         ),
                                       ),
-
                                     ],
                                   ),
                                 ),
@@ -188,7 +189,7 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
                    if (kDebugMode) {
                      print(total);
                    }
-                    payment(controller.studentCardList.length,total);
+                    payment(controller.studentCardList.length,total,Prefs.getString(USERNAME));
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(

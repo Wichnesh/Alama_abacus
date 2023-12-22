@@ -2,7 +2,6 @@ import 'package:alama_eorder_app/utils/colorUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
-
 import '../../../controller/Home_controller.dart';
 import '../../../utils/constant.dart';
 import '../../../utils/pref_manager.dart';

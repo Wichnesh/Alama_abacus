@@ -17,6 +17,7 @@ class StudentCardListController extends GetxController {
   var isLoading = false.obs;
   var studentCardList = List<CSLData>.empty(growable: true).obs;
   List<dynamic> studentEnroll = [].obs;
+  var isDelete = false.obs;
 
   @override
   void onInit() {
@@ -26,6 +27,7 @@ class StudentCardListController extends GetxController {
 
   void getCartStudentList() async {
     isLoading.value = true;
+    studentCardList.clear();
     Map<String, dynamic> requestData = {
       "username": Prefs.getString(USERNAME),
     };
@@ -73,6 +75,9 @@ class StudentCardListController extends GetxController {
           colorText: Colors.white,
           backgroundColor: Colors.red,
           snackPosition: SnackPosition.TOP);
+      if (kDebugMode) {
+        print(error.toString());
+      }
       isLoading.value = false;
     });
     update();
@@ -81,8 +86,10 @@ class StudentCardListController extends GetxController {
   int updateTotalCost() {
     int total = 0;
     for (var student in studentCardList) {
-      print(student.cost![0]);
-      total += student.cost![0];
+      if (kDebugMode) {
+        print(student.cost!);
+      }
+      total += student.cost!;
     }
     if (kDebugMode) {
       print(total);
@@ -158,6 +165,39 @@ class StudentCardListController extends GetxController {
           snackPosition: SnackPosition.TOP);
       isLoading.value = false;
     });
+    update();
+  }
+
+  void deleteStudent(String studentID)async {
+    isDelete.value = true;
+    Map<String, dynamic> requestData = {
+      "studentID": studentID,
+    };
+    RequestDio request = RequestDio(url: deleteCart, body: requestData);
+    request.post().then((response) async {
+      if (kDebugMode) {
+        print(response.data);
+      }
+      if (response.statusCode == 200) {
+        DeleteCartModel model = DeleteCartModel.fromJson(response.data);
+        Fluttertoast.showToast(msg: model.message);
+        getCartStudentList();
+      } else if (response.statusCode == 201) {
+        Fluttertoast.showToast(msg: response.statusCode.toString());
+      } else {
+        Get.snackbar("Error", "Fetching error",
+            colorText: Colors.white,
+            backgroundColor: Colors.red,
+            snackPosition: SnackPosition.TOP);
+      }
+    }).onError((error, stackTrace) {
+      Get.snackbar("Error", "$error",
+          colorText: Colors.white,
+          backgroundColor: Colors.red,
+          snackPosition: SnackPosition.TOP);
+      isDelete.value = false;
+    });
+    isDelete.value = false;
     update();
   }
 }

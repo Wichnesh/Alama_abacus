@@ -679,7 +679,15 @@ class HomeController extends GetxController {
         if (stateMatched && levelMatched) {
           filteredList.add(student);
         }
-      }else if(state !='Select' && district == 'Select' && franchise != 'Select' && level == 'Select'){
+      }else if(state =='Select' && district == 'Select' && franchise != 'Select' && level != 'Select'){
+        if (kDebugMode) {
+          print('franchise,level Only');
+        }
+        if (franchiseMatched && levelMatched) {
+          filteredList.add(student);
+        }
+      }
+      else if(state !='Select' && district == 'Select' && franchise != 'Select' && level == 'Select'){
         if (kDebugMode) {
           print('state,franchise Only');
         }

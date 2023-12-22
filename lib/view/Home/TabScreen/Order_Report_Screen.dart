@@ -46,7 +46,7 @@ class _OrderReportScreenState extends State<OrderReportScreen> {
                       }
                     },
                     controller: controller.fromdateText
-                      ..text = DateFormat("dd-MM-yyyy").format(
+                      ..text = DateFormat("MM/dd/yyyy").format(
                           controller.fromdate == null
                               ? DateTime.now()
                               : controller.fromdate ?? DateTime.now()),
@@ -82,7 +82,7 @@ class _OrderReportScreenState extends State<OrderReportScreen> {
                       }
                     },
                     controller: controller.todateText
-                      ..text = DateFormat("dd-MM-yyyy").format(
+                      ..text = DateFormat("MM/dd/yyyy").format(
                           controller.todate == null
                               ? DateTime.now()
                               : controller.todate ?? DateTime.now()),

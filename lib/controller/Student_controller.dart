@@ -482,7 +482,7 @@ class StudentController extends GetxController {
       "items": selectedItems,
       "tShirt": selectedShirt.value,
       "program": program.value,
-      "cost": costList,
+      "cost": enrollValue.value,
       "paymentID": paymentID.value
     };
     if (kDebugMode) {

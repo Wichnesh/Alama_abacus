@@ -106,10 +106,9 @@ class Franchise {
   });
 
   factory Franchise.fromJson(Map<String, dynamic> json) {
-    var enrolledStudentsList = json['enrolledStudents'] as List? ??[];
-    var orderedList = json['ordered'] as List? ??[];
+    var enrolledStudentsList = json['enrolledStudents'] as List? ?? [];
+    var orderedList = json['ordered'] as List? ?? [];
 
-    // Handle the case where 'ordered' list is null or empty
     List<OrderedItem> orderedItems = [];
     if (orderedList != null) {
       orderedItems = orderedList.map((itemJson) {
@@ -117,14 +116,15 @@ class Franchise {
       }).toList();
     }
 
-    Map<String, int> totalItems = Map<String, int>.from(json['totalItems']);
+    Map<String, int> totalItems =
+    Map<String, int>.from(json['totalItems'] ?? {});
 
     List<EnrolledStudent> enrolledStudents = enrolledStudentsList.map((studentJson) {
       return EnrolledStudent.fromJson(studentJson);
     }).toList();
 
     return Franchise(
-      franchiseName: json['franchiseName'],
+      franchiseName: json['franchiseName'] ?? "",
       enrolledStudents: enrolledStudents,
       ordered: orderedItems,
       totalItems: totalItems,
@@ -144,16 +144,16 @@ class EnrolledStudent {
     required this.state,
     required this.level,
     required this.district,
-    required this.enrollDate
+    required this.enrollDate,
   });
 
   factory EnrolledStudent.fromJson(Map<String, dynamic> json) {
     return EnrolledStudent(
-      studentName: json['studentName'],
-      state: json['state'],
-      level: json['level'],
-      district: json['district'],
-      enrollDate: json['enrollDate']
+      studentName: json['studentName'] ?? "",
+      state: json['state'] ?? "",
+      level: json['level'] ?? "",
+      district: json['district'] ?? "",
+      enrollDate: json['enrollDate'] ?? "",
     );
   }
 }
@@ -166,6 +166,7 @@ class OrderedItem {
   String currentLevel;
   String futureLevel;
   String orderDate;
+
   OrderedItem({
     required this.studentName,
     required this.studentID,
@@ -173,19 +174,20 @@ class OrderedItem {
     required this.district,
     required this.currentLevel,
     required this.futureLevel,
-    required this.orderDate
+    required this.orderDate,
   });
 
   factory OrderedItem.fromJson(Map<String, dynamic> json) {
     return OrderedItem(
-      studentName: json['studentName'],
-      studentID: json['studentID'],
-      state: json['state'],
-      district: json['district'],
-      currentLevel: json['currentLevel'],
-      futureLevel: json['futureLevel'],
-      orderDate: json['createdAt']
+      studentName: json['studentName'] ?? "",
+      studentID: json['studentID'] ?? "",
+      state: json['state'] ?? "",
+      district: json['district'] ?? "",
+      currentLevel: json['currentLevel'] ?? "",
+      futureLevel: json['futureLevel'] ?? "",
+      orderDate: json['createdAt'] ?? "",
     );
   }
 }
+
 

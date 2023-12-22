@@ -266,55 +266,63 @@ class OrderController extends GetxController {
     }
   }
 
-  void updateOrder() {
+  void updateOrder(String paymentID,int cost) {
     backendformat();
     isLoading.value = true;
     Map<String, dynamic>? requestData;
     if (gc.value == true) {
       gcstring.value = "Graduate Certificate";
       requestData = {
-        "franchise": "${Prefs.getString(USERNAME)}",
+        "franchise": Prefs.getString(USERNAME),
         "studentID": "${data.studentID}",
-        "futureLevel": "${futurelevel.value}",
-        "currentLevel": "${currentlevel.value}",
+        "futureLevel": futurelevel.value,
+        "currentLevel": currentlevel.value,
+        "paymentID" : paymentID,
+        "cost" : (cost/100).toString(),
         "items": BookList,
-        "program": "${programText.text}",
-        'certificate': '${gcstring.value}'
+        "program": programText.text,
+        'certificate': gcstring.value
       };
     } else if (mc.value == true) {
       mcstring.value = "Master Certificate";
       if(currentlevel.value =='Level 5' && programText.text == 'AA'){
         requestData = {
-          "franchise": "${Prefs.getString(USERNAME)}",
+          "franchise": Prefs.getString(USERNAME),
           "studentID": "${data.studentID}",
-          "futureLevel": "${futurelevel.value}",
-          "currentLevel": "${currentlevel.value}",
+          "futureLevel": futurelevel.value,
+          "currentLevel": currentlevel.value,
+          "paymentID" : paymentID,
+          "cost" : (cost/100).toString(),
           "items": BookList,
           'enableBtn': disableBtn.value,
-          "program": "${programText.text}",
-          'certificate': '${mcstring.value}'
+          "program": programText.text,
+          'certificate': mcstring.value
         };
       }else{
         requestData = {
-          "franchise": "${Prefs.getString(USERNAME)}",
+          "franchise": Prefs.getString(USERNAME),
           "studentID": "${data.studentID}",
-          "futureLevel": "${futurelevel.value}",
-          "currentLevel": "${currentlevel.value}",
+          "futureLevel": futurelevel.value,
+          "currentLevel": currentlevel.value,
+          "paymentID" : paymentID,
+          "cost" : (cost/100).toString(),
           "items": BookList,
           'enableBtn': false,
-          "program": "${programText.text}",
-          'certificate': '${mcstring.value}'
+          "program": programText.text,
+          'certificate': mcstring.value
         };
       }
     } else {
       requestData = {
-        "franchise": "${Prefs.getString(USERNAME)}",
+        "franchise": Prefs.getString(USERNAME),
         "studentID": "${data.studentID}",
-        "futureLevel": "${futurelevel.value}",
-        "currentLevel": "${currentlevel.value}",
+        "futureLevel": futurelevel.value,
+        "currentLevel": currentlevel.value,
+        "paymentID" : paymentID,
+        "cost" : (cost/100).toString(),
         "items": BookList,
         'enableBtn': isChecked.value,
-        "program": "${programText.text}",
+        "program": programText.text,
         'certificate': ''
       };
     }

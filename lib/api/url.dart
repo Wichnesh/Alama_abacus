@@ -1,5 +1,5 @@
-const BaseUrl = "http://62.72.58.183:3500/api/";
-
+//const BaseUrl = "http://62.72.58.183:3500/api/";
+const BaseUrl ="http://62.72.58.183:3500/api/v1/"; //test
 const loginUrl = "${BaseUrl}login";
 const generateIDUrl = "${BaseUrl}generateID";
 const regfrachaniseUrl = "${BaseUrl}franchise-reg";
@@ -19,6 +19,7 @@ const getallordersUrl = "${BaseUrl}order";
 const getFilterTransactionUrl = "${BaseUrl}getFilterTransaction";
 const getallorders = "${BaseUrl}getallorders";
 const getallreports = "${BaseUrl}data";
+const deleteCart = "${BaseUrl}studentcart-delete";
 
 
 //2 to 3 , 5 to 6 AA

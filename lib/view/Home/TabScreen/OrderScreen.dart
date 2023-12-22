@@ -31,9 +31,10 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   void dispose() {
     super.dispose();
+    totalAmount =0;
     _razorpay?.clear();
   }
-
+  int totalAmount = 0;
   void payment(String name, String contact, String email, String state,bool extraAmount) async {
     int totalCost = 0;
     if(state == 'Tamil Nadu'){
@@ -50,7 +51,7 @@ class _OrderScreenState extends State<OrderScreen> {
       }
     }
     var options = {
-      //'key': 'rzp_test_r0nbHDzzVtfN6m',
+      //'key': 'rzp_test_uMK9VbEsTuePim',
       'key' : 'rzp_live_FaHtY1SM9hLWek',
       'amount': totalCost,
       'name': name,
@@ -62,6 +63,7 @@ class _OrderScreenState extends State<OrderScreen> {
     };
 
     try {
+      totalAmount = totalCost;
       _razorpay?.open(options);
     } catch (e) {
       debugPrint(e.toString());
@@ -69,9 +71,8 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    Fluttertoast.showToast(
-        msg: "SUCCESS PAYMENT: ${response.paymentId}", timeInSecForIosWeb: 4);
-    orderController.updateOrder();
+    Fluttertoast.showToast(msg: "SUCCESS PAYMENT: ${response.paymentId}", timeInSecForIosWeb: 4);
+    orderController.updateOrder(response.paymentId ?? '',totalAmount);
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
