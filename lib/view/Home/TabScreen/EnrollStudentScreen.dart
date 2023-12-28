@@ -471,7 +471,7 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
                                 icon: const Icon(Icons.arrow_drop_down),
                                 iconSize: 25,
                                 decoration: const InputDecoration(
-                                  labelText: "T-Shirt",
+                                  labelText: "T-Shirt *",
                                   labelStyle: TextStyle(fontSize: 14),
                                   border: OutlineInputBorder(),
                                 ),
@@ -548,7 +548,8 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
                         studentController.mobileNoText.text.isEmpty ||
                         studentController.level.value == 'Select' ||
                         studentController.isChecked.value == false ||
-                        studentController.program.value == 'Select'
+                        studentController.program.value == 'Select' ||
+                        studentController.selectedShirt.value == 'Select'
                     ) {
                       Get.dialog(
                         AlertDialog(

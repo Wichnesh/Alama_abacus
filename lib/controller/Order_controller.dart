@@ -217,7 +217,7 @@ class OrderController extends GetxController {
 
   void backendformat() {
     if (currentlevel.value == 'Enroll' || currentlevel.value == 'Pre Level') {
-      if (data.paymentID == 'MA') {
+      if (data.program == 'MA') {
         BookList = [
           'level1MA', //MA AS PAPER L1 == level1MA
           'cb2MA', //cb1MA
@@ -263,6 +263,9 @@ class OrderController extends GetxController {
           ];
         }
       }
+    }
+    if (kDebugMode) {
+      print(BookList.toString() ??'');
     }
   }
 
