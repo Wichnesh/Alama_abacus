@@ -265,7 +265,7 @@ class OrderController extends GetxController {
       }
     }
     if (kDebugMode) {
-      print(BookList.toString() ??'');
+      print(BookList.toString());
     }
   }
 

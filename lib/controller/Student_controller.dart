@@ -54,7 +54,21 @@ class StudentController extends GetxController {
     "Goa",
     "Andhra pradesh",
     "West Bengal",
-    "Chandigarh"
+    "Chandigarh",
+    "Abu Dhabi",
+    "Australia",
+    "Canada",
+    "Dubai",
+    "Europe",
+    "Germany",
+    "Jubail",
+    "Netherlands",
+    "Oman",
+    "Scotland",
+    "Uk",
+    "Belfast",
+    "South Korea",
+    "Singapore"
   ];
   final districtData = {
     "Tamil Nadu": [
@@ -148,6 +162,20 @@ class StudentController extends GetxController {
     "West Bengal":["Kolkata"],
     "Chandigarh": ["chandigarh"],
     "USA": ["Columbia", "Michigan", "New jersey"],
+    "Abu Dhabi": ["Abu Dhabi"],
+    "Australia": ["Australia"],
+    "Canada": ["Canada"],
+    "Dubai": ["Dubai"],
+    "Europe": ["Europe"],
+    "Germany": ["Germany"],
+    "Jubail": ["jubail"],
+    "Netherlands": ["Netherlands"],
+    "Oman": ["Oman"],
+    "Scotland": ["Scotland"],
+    "Uk": ["london","Belfast"],
+    "Goa" : ["Goa"],
+    "South Korea" : ["South Korea"],
+    "Singapore" :["Singapore"]
   };
 
   void updateSelectedState(newValue) {

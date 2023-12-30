@@ -16,3 +16,4 @@ const String TOKEN = "token";
 const SHARED_ADMIN = 'Admin';
 const USERNAME = 'username';
 const FRANCHISESTATE = 'franchiseState';
+const TNADMIN = "tnAdmin";

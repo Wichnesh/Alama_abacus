@@ -52,7 +52,8 @@ class RegisterController extends GetxController {
     "Oman",
     "Scotland",
     "Uk",
-    "Belfast"
+    "South Korea",
+    "Singapore"
   ];
   final districtData = {
     "Tamil Nadu": [
@@ -150,12 +151,14 @@ class RegisterController extends GetxController {
     "Dubai": ["Dubai"],
     "Europe": ["Europe"],
     "Germany": ["Germany"],
-    "Jubail": ["Jubail"],
+    "Jubail": ["jubail"],
     "Netherlands": ["Netherlands"],
     "Oman": ["Oman"],
     "Scotland": ["Scotland"],
-    "Uk": ["london", "Uk","Belfast"],
+    "Uk": ["london","Belfast"],
     "Goa" : ["Goa"],
+    "South Korea" : ["South Korea"],
+    "Singapore" :["Singapore"]
   };
 
   void updateSelectedState(String newValue) {
@@ -212,15 +215,15 @@ class RegisterController extends GetxController {
     } else {
       isLoading.value = true;
       Map<String, dynamic> requestData = {
-        "franchiseID": "${Id.value}",
-        "name": "${nametext.text}",
-        "email": "${emailtext.text}",
-        "contactNumber": "${contactNo.text}",
-        "state": "${selectedState.value}",
-        "district": "${selectedDistrict.value}",
-        "username": "${usernameText.text}",
-        "password": "${passwordText.text}",
-        "registerDate": "${registerDateText.text}"
+        "franchiseID": Id.value,
+        "name": nametext.text,
+        "email": emailtext.text,
+        "contactNumber": contactNo.text,
+        "state": selectedState.value,
+        "district": selectedDistrict.value,
+        "username": usernameText.text,
+        "password": passwordText.text,
+        "registerDate": registerDateText.text
       };
       if (kDebugMode) {
         print(requestData);

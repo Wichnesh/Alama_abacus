@@ -1,3 +1,4 @@
+import 'package:alama_eorder_app/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -5,6 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../../../controller/Order_report_controller.dart';
 import '../../../utils/colorUtils.dart';
+import '../../../utils/pref_manager.dart';
 
 class OrderReportScreen extends StatefulWidget {
   const OrderReportScreen({super.key});
@@ -136,7 +138,11 @@ class _OrderReportScreenState extends State<OrderReportScreen> {
                                 ),
                               );
                             } else {
-                              controller.getReportMethod();
+                              if(Prefs.getString(USERNAME) == "tnadmin@gmail.com"){
+                                controller.getTNReportMethod();
+                              }else{
+                                controller.getReportMethod();
+                              }
                             }
                           },
                           child: const SizedBox(

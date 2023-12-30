@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../utils/DialogboxDesign.dart';
 import 'TabScreen/ApprovedFranchiseScreen.dart';
+import 'TabScreen/Order_Report_Screen.dart';
 import 'TabScreen/StockScreen.dart';
 import 'TabScreen/StudentList.dart';
 
@@ -68,15 +69,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getPage(int? page) {
     if (Prefs.getBoolen(SHARED_ADMIN) == true) {
-      switch (page) {
-        case 0:
-          return const ApprovedFranchiseScreen();
-        case 1:
-          return const StudentList();
-        case 2:
+     if(Prefs.getString(USERNAME) == "tnadmin@gmail.com"){
+       switch (page) {
+         case 0:
+           return const OrderReportScreen();
+         case 1:
+           return const Center(child: Text("Order Page"));
+         case 2:
+           return const Center(child: Text("Menu Page"));
+       }
+     }else{
+       switch (page) {
+         case 0:
+           return const ApprovedFranchiseScreen();
+         case 1:
+           return const StudentList();
+         case 2:
            return const StockScreen();
-
-      }
+       }
+     }
     } else {
       switch (page) {
         case 0:
@@ -98,6 +109,7 @@ class AnimatedBottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool admin = Prefs.getBoolen(SHARED_ADMIN);
+    bool tnAdmin = Prefs.getString(USERNAME) == "tnadmin@gmail.com";
     return Container(
       height: kToolbarHeight,
       decoration: const BoxDecoration(color: Colors.white),
@@ -107,14 +119,14 @@ class AnimatedBottomNav extends StatelessWidget {
             child: InkWell(
               onTap: () => onChange!(0),
               child: BottomNavItem(
-                icon: admin ? Icons.verified_user : Icons.person,
-                title: admin ? "Franchise" : "Student",
+                icon: admin ? tnAdmin ? Icons.admin_panel_settings_sharp : Icons.verified_user : Icons.person,
+                title: admin ? tnAdmin ? "Order Report": "Franchise" : "Student",
                 isActive: currentIndex == 0,
               ),
             ),
           ),
           admin
-              ? Expanded(
+              ? tnAdmin ? Container() :Expanded(
                   child: InkWell(
                     onTap: () => onChange!(1),
                     child: BottomNavItem(
@@ -128,7 +140,7 @@ class AnimatedBottomNav extends StatelessWidget {
                 )
               : Container(),
           admin
-              ? Expanded(
+              ? tnAdmin ? Container() : Expanded(
                   child: InkWell(
                     onTap: () => onChange!(2),
                     child: BottomNavItem(

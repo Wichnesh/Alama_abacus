@@ -20,6 +20,7 @@ const getFilterTransactionUrl = "${BaseUrl}getFilterTransaction";
 const getallorders = "${BaseUrl}getallorders";
 const getallreports = "${BaseUrl}data";
 const deleteCart = "${BaseUrl}studentcart-delete";
+const tnReport = "${BaseUrl}tamilnadureport";
 
 
 //2 to 3 , 5 to 6 AA
