@@ -103,6 +103,9 @@ class OrderController extends GetxController {
       int level = int.parse(currentlevel.value.split(' ')[1]) + 2;
       int paperLevel = int.parse(currentlevel.value.split(' ')[1]) + 1;
       int currentLevel = int.parse(currentlevel.value.split(' ')[1]);
+      if (kDebugMode) {
+        print(currentLevel.toString());
+      }
       if (data.program == 'MA' && currentLevel == 1) {
         gc.value = true;
         programText.text = data.program!;
