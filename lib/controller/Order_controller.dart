@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-
 import '../api/request.dart';
 import '../api/url.dart';
 import '../model/registermodel.dart';
@@ -67,12 +66,14 @@ class OrderController extends GetxController {
          'AA ASS PAPER L6',
          'MA CB 5', //cb1MA
          'MA PB 5',
+         "Master Certificate"
        ];
      }
    }else{
      if (data.program == 'AA') {
        BookList = [
          'AA ASS PAPER L6',
+         "Master Certificate"
        ];
      }
    }
@@ -237,13 +238,13 @@ class OrderController extends GetxController {
       int level = int.parse(currentlevel.value.split(' ')[1]) + 2;
       int paperLevel = int.parse(currentlevel.value.split(' ')[1]) + 1;
       int currentLevel = int.parse(currentlevel.value.split(' ')[1]);
-      if(data.program == 'MA' && currentLevel == 5){
+      if(data.program == 'MA' && futurelevel.value == 'Level 5'){
         BookList = [
           'level5MA',
           'cb6MA', //cb1MA
           'pb6MA'
         ];
-      } else if(data.program == 'MA' && currentLevel == 6){
+      } else if(data.program == 'MA' && futurelevel.value == 'Level 6'){
         BookList = [
           'level6MA', //MA AS PAPER L1 == level1MA
         ];
@@ -256,14 +257,20 @@ class OrderController extends GetxController {
             'pb${level}MA'
           ];
         } else {
-          if (kDebugMode) {
-            print('AA program');
+          if(data.program == 'AA' && futurelevel.value =="Level 6"){
+            BookList = [
+              'level6AA'
+            ];
+          }else{
+            if (kDebugMode) {
+              print('AA program');
+            }
+            BookList = [
+              'level${paperLevel}AA', //MA AS PAPER L1 == level1MA
+              'cb${level}AA', //cb1MA
+              'pb${level}AA'
+            ];
           }
-          BookList = [
-            'level${paperLevel}AA', //MA AS PAPER L1 == level1MA
-            'cb${level}AA', //cb1MA
-            'pb${level}AA'
-          ];
         }
       }
     }

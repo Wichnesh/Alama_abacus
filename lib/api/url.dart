@@ -1,5 +1,6 @@
 //const BaseUrl = "http://62.72.58.183:3500/api/";
-const BaseUrl ="http://62.72.58.183:3500/api/v1/"; //test
+const BaseUrl ="http://62.72.58.183:3500/api/v1/"; //live
+//const BaseUrl ="http://62.72.58.183:3501/api/v1/"; //test
 const loginUrl = "${BaseUrl}login";
 const generateIDUrl = "${BaseUrl}generateID";
 const regfrachaniseUrl = "${BaseUrl}franchise-reg";
