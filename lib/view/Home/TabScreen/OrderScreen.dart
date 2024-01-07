@@ -55,8 +55,8 @@ class _OrderScreenState extends State<OrderScreen> {
       'key' : 'rzp_live_FaHtY1SM9hLWek',
       'amount': totalCost,
       'name': name,
-      'description': 'Payment',
-      'prefill': {'contact': contact, 'email': email},
+      'description': 'Order Payment',
+      'prefill': {'email': email},
       'external': {
         'wallets': ['paytm']
       }
@@ -225,7 +225,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                     payment(
                                         controller.data.studentName!,
                                         controller.data.mobileNumber!,
-                                        controller.data.email!,
+                                        Prefs.getString(USERNAME),
                                         franchiseState,
                                         controller.transferBool.value
                                     );
