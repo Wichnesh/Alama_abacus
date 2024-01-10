@@ -39,7 +39,7 @@ class _OrderScreenState extends State<OrderScreen> {
     int totalCost = 0;
     if(state == 'Tamil Nadu'){
       if(extraAmount == true){
-        totalCost = (360 + 400) * 100;
+        totalCost = (360 + 300) * 100;
       }else{
         totalCost = 360 * 100;
       }

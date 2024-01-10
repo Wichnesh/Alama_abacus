@@ -103,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const Spacer(),
-              Obx(() => Center(child: Text("Version : ${controller.version.value} + ${controller.build.value}" "Live" ),))
+              Obx(() => Center(child: Text("Version : ${controller.version.value} + ${controller.build.value}" " Live" ),))
             ],
           ),
         ),
