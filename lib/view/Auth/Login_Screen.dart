@@ -96,7 +96,6 @@ class _LoginPageState extends State<LoginPage> {
                                 ..onTap = () {
                                   Get.toNamed(ROUTE_REGISTER);
                                 }),
-
                         ]),
                       ),
                     ],
@@ -104,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const Spacer(),
-              Obx(() => Center(child: Text("Version : ${controller.version.value} + ${controller.build.value}"),))
+              Obx(() => Center(child: Text("Version : ${controller.version.value} + ${controller.build.value}" "Live" ),))
             ],
           ),
         ),
