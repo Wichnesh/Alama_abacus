@@ -184,7 +184,7 @@ class OrderController extends GetxController {
           mc.value = true;
           programText.text = data.program!;
           BookList = [
-            'AA ASS PAPER L${paperLevel}',
+            'AA ASS PAPER L$paperLevel',
             'Master Certificate'
           ];
           state.value = data.state!;
@@ -256,21 +256,35 @@ class OrderController extends GetxController {
             'cb${level}MA', //cb1MA
             'pb${level}MA'
           ];
-        } else {
-          if(data.program == 'AA' && futurelevel.value =="Level 6"){
-            BookList = [
-              'level6AA'
-            ];
-          }else{
-            if (kDebugMode) {
-              print('AA program');
-            }
-            BookList = [
-              'level${paperLevel}AA', //MA AS PAPER L1 == level1MA
-              'cb${level}AA', //cb1MA
-              'pb${level}AA'
-            ];
-          }
+        }else if(data.program == "AA" && currentlevel.value == "Level 6"){
+         BookList = [
+           "level5MA",
+           "cb6MA",
+           "cb6MA"
+         ];
+        }else {
+         if(transferBool.value){
+           BookList = [
+             'level6AA',
+             'cb5MA',
+             'pb5MA'
+           ];
+         }else{
+           if(data.program == 'AA' && futurelevel.value =="Level 6"){
+             BookList = [
+               'level6AA'
+             ];
+           }else{
+             if (kDebugMode) {
+               print('AA program');
+             }
+             BookList = [
+               'level${paperLevel}AA', //MA AS PAPER L1 == level1MA
+               'cb${level}AA', //cb1MA
+               'pb${level}AA'
+             ];
+           }
+         }
         }
       }
     }
