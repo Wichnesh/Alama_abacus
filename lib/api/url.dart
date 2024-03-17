@@ -1,11 +1,13 @@
 //const BaseUrl = "http://62.72.58.183:3500/api/";
-const BaseUrl ="http://62.72.58.183:3500/api/v1/"; //live
+// const BaseUrl ="http://62.72.58.183:3500/api/v1/"; //live
+const BaseUrl ="http://localhost:3500/api/v1/"; //live
 //const BaseUrl ="http://62.72.58.183:3501/api/v1/"; //test
 const loginUrl = "${BaseUrl}login";
 const generateIDUrl = "${BaseUrl}generateID";
 const regfrachaniseUrl = "${BaseUrl}franchise-reg";
 const getallfranchiseUrl = "${BaseUrl}getallfranchise";
 const approveUserUrl = "${BaseUrl}approveUser";
+const rejectUserUrl = "${BaseUrl}rejectUser";
 const generateStudentIDUrl = "${BaseUrl}generate-studentid";
 const studentregistrationUrl = "${BaseUrl}student-reg";
 const studentcartregUrl = "${BaseUrl}studentcartreg";

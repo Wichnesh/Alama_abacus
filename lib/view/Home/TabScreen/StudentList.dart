@@ -24,180 +24,195 @@ class _StudentListState extends State<StudentList> {
         return StatefulBuilder(builder: (context,setState){
           return AlertDialog(
             title: const Text('Filter Options'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Dropdown 1
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: SizedBox(
-                    height: 55,
-                    width: double.infinity,
-                    child: DropdownButtonFormField(
-                      hint: Text(
-                        homeController.selectedState.value,
-                      ),
-                      isExpanded: true,
-                      icon: const Icon(Icons.arrow_drop_down),
-                      iconSize: 25,
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Search Field
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: homeController.studentIdSearchTEC,
                       decoration: const InputDecoration(
-                        labelText: "State",
-                        labelStyle: TextStyle(fontSize: 14),
-                        border: OutlineInputBorder(),
+                          labelText: 'Student ID',
+                          labelStyle: TextStyle(fontSize: 14),
+                          border: OutlineInputBorder(),
                       ),
-                      items: homeController.stateData.map(
-                            (val) {
-                          return DropdownMenuItem<String>(
-                            value: val,
-                            child: Text(
-                              val,
-                            ),
-                            onTap: () {
-                              setState(() {
-
-                              });
-                            },
-                          );
-                        },
-                      ).toList(),
-                      onChanged: (val) {
-                        setState(() {
-                          homeController.updateSelectedState(val!);
-                        });
-
-                      },
                     ),
                   ),
-                ),
-                // Dropdown 2
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: SizedBox(
-                    height: 55,
-                    width: double.infinity,
-                    child: DropdownButtonFormField(
-                      hint: Text(homeController.selectedDistrict.value),
-                      isExpanded: true,
-                      icon: const Icon(Icons.arrow_drop_down),
-                      iconSize: 25,
-                      decoration: const InputDecoration(
-                        labelText: "District",
-                        labelStyle: TextStyle(fontSize: 14),
-                        border: OutlineInputBorder(),
-                      ),
-                      items: homeController.districtData[homeController.selectedState.value]!
-                          .map(
-                            (val) {
-                          return DropdownMenuItem<String>(
-                            value: val,
-                            child: Text(
-                              val,
-                            ),
-                            onTap: () {
-                              setState(() {
-
-                              });
-                            },
-                          );
+                  // Dropdown 1
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: SizedBox(
+                      height: 55,
+                      width: double.infinity,
+                      child: DropdownButtonFormField(
+                        hint: Text(
+                          homeController.selectedState.value,
+                        ),
+                        isExpanded: true,
+                        icon: const Icon(Icons.arrow_drop_down),
+                        iconSize: 25,
+                        decoration: const InputDecoration(
+                          labelText: "State",
+                          labelStyle: TextStyle(fontSize: 14),
+                          border: OutlineInputBorder(),
+                        ),
+                        items: homeController.stateData.map(
+                              (val) {
+                            return DropdownMenuItem<String>(
+                              value: val,
+                              child: Text(
+                                val,
+                              ),
+                              onTap: () {
+                                setState(() {
+              
+                                });
+                              },
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (val) {
+                          setState(() {
+                            homeController.updateSelectedState(val!);
+                          });
+              
                         },
-                      ).toList(),
-                      onChanged: (val) {
-                        setState(() {
-                          homeController.selectedDistrict.value = val!;
-                        });
-                      },
+                      ),
                     ),
                   ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: SizedBox(
-                    height: 55,
-                    width: double.infinity,
-                    child: DropdownButtonFormField(
-                      hint: Text(
-                        homeController.selectedFranchise.value,
-                      ),
-                      isExpanded: true,
-                      icon: const Icon(Icons.arrow_drop_down),
-                      iconSize: 25,
-                      decoration: const InputDecoration(
-                        labelText: "Franchise",
-                        labelStyle: TextStyle(fontSize: 14),
-                        border: OutlineInputBorder(),
-                      ),
-                      items: homeController.approvedfranchiselist.map(
-                            (val) {
-                          return DropdownMenuItem<String>(
-                            value: val.username ??'',
-                            child: Text(
-                              val.username??'',
-                            ),
-                            onTap: () {
-                              setState(() {
-
-                              });
-                            },
-                          );
+                  // Dropdown 2
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: SizedBox(
+                      height: 55,
+                      width: double.infinity,
+                      child: DropdownButtonFormField(
+                        hint: Text(homeController.selectedDistrict.value),
+                        isExpanded: true,
+                        icon: const Icon(Icons.arrow_drop_down),
+                        iconSize: 25,
+                        decoration: const InputDecoration(
+                          labelText: "District",
+                          labelStyle: TextStyle(fontSize: 14),
+                          border: OutlineInputBorder(),
+                        ),
+                        items: homeController.districtData[homeController.selectedState.value]!
+                            .map(
+                              (val) {
+                            return DropdownMenuItem<String>(
+                              value: val,
+                              child: Text(
+                                val,
+                              ),
+                              onTap: () {
+                                setState(() {
+              
+                                });
+                              },
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (val) {
+                          setState(() {
+                            homeController.selectedDistrict.value = val!;
+                          });
                         },
-                      ).toList(),
-                      onChanged: (val) {
-                        setState(() {
-                          homeController.updateSelectedFranchise(val!);
-                        });
-
-                      },
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: SizedBox(
-                    height: 55,
-                    width: double.infinity,
-                    child: DropdownButtonFormField(
-                      hint: Text(
-                        homeController.selectedLevel.value,
-                      ),
-                      isExpanded: true,
-                      icon: const Icon(Icons.arrow_drop_down),
-                      iconSize: 25,
-                      decoration: const InputDecoration(
-                        labelText: "Level",
-                        labelStyle: TextStyle(fontSize: 14),
-                        border: OutlineInputBorder(),
-                      ),
-                      items: homeController.levelList.map(
-                            (val) {
-                          return DropdownMenuItem<String>(
-                            value: val,
-                            child: Text(
-                              val,
-                            ),
-                            onTap: () {
-                              setState(() {
-
-                              });
-                            },
-                          );
+              
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: SizedBox(
+                      height: 55,
+                      width: double.infinity,
+                      child: DropdownButtonFormField(
+                        hint: Text(
+                          homeController.selectedFranchise.value,
+                        ),
+                        isExpanded: true,
+                        icon: const Icon(Icons.arrow_drop_down),
+                        iconSize: 25,
+                        decoration: const InputDecoration(
+                          labelText: "Franchise",
+                          labelStyle: TextStyle(fontSize: 14),
+                          border: OutlineInputBorder(),
+                        ),
+                        items: homeController.approvedfranchiselist.map(
+                              (val) {
+                            return DropdownMenuItem<String>(
+                              value: val.username ??'',
+                              child: Text(
+                                val.username??'',
+                              ),
+                              onTap: () {
+                                setState(() {
+              
+                                });
+                              },
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (val) {
+                          setState(() {
+                            homeController.updateSelectedFranchise(val!);
+                          });
+              
                         },
-                      ).toList(),
-                      onChanged: (val) {
-                        setState(() {
-                          homeController.updateSelectedLevel(val!);
-                        });
-
-                      },
+                      ),
                     ),
                   ),
-                ),
-
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: SizedBox(
+                      height: 55,
+                      width: double.infinity,
+                      child: DropdownButtonFormField(
+                        hint: Text(
+                          homeController.selectedLevel.value,
+                        ),
+                        isExpanded: true,
+                        icon: const Icon(Icons.arrow_drop_down),
+                        iconSize: 25,
+                        decoration: const InputDecoration(
+                          labelText: "Level",
+                          labelStyle: TextStyle(fontSize: 14),
+                          border: OutlineInputBorder(),
+                        ),
+                        items: homeController.levelList.map(
+                              (val) {
+                            return DropdownMenuItem<String>(
+                              value: val,
+                              child: Text(
+                                val,
+                              ),
+                              onTap: () {
+                                setState(() {
+              
+                                });
+                              },
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (val) {
+                          setState(() {
+                            homeController.updateSelectedLevel(val!);
+                          });
+              
+                        },
+                      ),
+                    ),
+                  ),
+              
+                ],
+              ),
             ),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
+                  homeController.studentIdSearchTEC.text = "";
                   Navigator.of(context).pop();
                 },
                 child: const Text('Clear'),
@@ -205,6 +220,7 @@ class _StudentListState extends State<StudentList> {
               TextButton(
                 onPressed: () {
                   homeController.filterStudentListAllAdmin(
+                      homeController.studentIdSearchTEC.text,
                       homeController.selectedState.value,
                       homeController.selectedDistrict.value,
                       homeController.selectedFranchise.value,

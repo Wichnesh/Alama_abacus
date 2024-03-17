@@ -26,6 +26,9 @@ class HomeController extends GetxController {
   TextEditingController todateText = TextEditingController();
   TextEditingController nametext = TextEditingController();
   TextEditingController contactNo = TextEditingController();
+
+  TextEditingController studentIdSearchTEC = TextEditingController();
+
   DateTime? fromdate;
   DateTime? todate;
   var selectedState = "Select".obs;
@@ -600,19 +603,24 @@ class HomeController extends GetxController {
     Get.to(() => FilterStudentScreen(filteredList));
   }
 
-  void filterStudentListAllAdmin(String state, String district, String franchise ,String level) {
+  void filterStudentListAllAdmin(String id,String state, String district, String franchise ,String level) {
     // Create a new list to store the filtered results
     List<SData> filteredList = [];
 
     // Iterate over the original studentList
     for (var student in studentList) {
 
+      bool idMatched = false;
       bool stateMatched = false;
       bool districtMatched = false;
       bool franchiseMatched = false;
       bool levelMatched = false;
 
       // Check if the studentName contains the input name (case insensitive)
+      if (id.isNotEmpty) {
+        idMatched = student.studentID?.toLowerCase().contains(id.toLowerCase()) ?? false;
+      }
+
       if (franchise.isNotEmpty) {
         franchiseMatched = student.franchise?.toLowerCase().contains(franchise.toLowerCase()) ?? false;
       }
@@ -633,42 +641,42 @@ class HomeController extends GetxController {
       }
 
       // If any of the conditions are met, add it to the filtered list
-      if(franchise !='Select' && level !='Select' && state !='Select' && district !='Select'){
+      if(franchise !='Select' && level !='Select' && state !='Select' && district !='Select' && id !=''){
         if (kDebugMode) {
-          print('State , district , franchise , level Only');
+          print('State , district , franchise , level Only , id');
         }
-        if (franchiseMatched && levelMatched && stateMatched && districtMatched) {
+        if (franchiseMatched && levelMatched && stateMatched && districtMatched && idMatched) {
           filteredList.add(student);
         }
-      }else if(state !='Select' && district == 'Select' && franchise == 'Select' && level == 'Select'){
+      }else if(state !='Select' && district == 'Select' && franchise == 'Select' && level == 'Select' && id !=''){
         if (kDebugMode) {
           print('State Only');
         }
         if(stateMatched){
           filteredList.add(student);
         }
-      }else if(franchise =='Select' && level =='Select' && state !='Select' && district !='Select'){
+      }else if(franchise =='Select' && level =='Select' && state !='Select' && district !='Select' && id !=''){
         if (kDebugMode) {
           print('State and District Only');
         }
         if (stateMatched && districtMatched) {
           filteredList.add(student);
         }
-      }else if(franchise !='Select' && level =='Select' && state !='Select' && district !='Select'){
+      }else if(franchise !='Select' && level =='Select' && state !='Select' && district !='Select' && id !=''){
         if (kDebugMode) {
           print('State , district , franchise Only');
         }
         if (franchiseMatched && stateMatched && districtMatched) {
           filteredList.add(student);
         }
-      }else if(state =='Select' && district == 'Select' && franchise != 'Select' && level == 'Select'){
+      }else if(state =='Select' && district == 'Select' && franchise != 'Select' && level == 'Select' && id !=''){
         if (kDebugMode) {
           print('franchise Only');
         }
         if(franchiseMatched){
           filteredList.add(student);
         }
-      }else if(state !='Select' && district == 'Select' && franchise != 'Select' && level != 'Select'){
+      }else if(state !='Select' && district == 'Select' && franchise != 'Select' && level != 'Select' && id !=''){
         if (kDebugMode) {
           print('state,level,franchise Only');
         }
@@ -676,14 +684,14 @@ class HomeController extends GetxController {
           filteredList.add(student);
         }
       }
-      else if(state !='Select' && district == 'Select' && franchise == 'Select' && level != 'Select'){
+      else if(state !='Select' && district == 'Select' && franchise == 'Select' && level != 'Select' && id !=''){
         if (kDebugMode) {
           print('state,level Only');
         }
         if (stateMatched && levelMatched) {
           filteredList.add(student);
         }
-      }else if(state =='Select' && district == 'Select' && franchise != 'Select' && level != 'Select'){
+      }else if(state =='Select' && district == 'Select' && franchise != 'Select' && level != 'Select' && id !=''){
         if (kDebugMode) {
           print('franchise,level Only');
         }
@@ -691,7 +699,7 @@ class HomeController extends GetxController {
           filteredList.add(student);
         }
       }
-      else if(state !='Select' && district == 'Select' && franchise != 'Select' && level == 'Select'){
+      else if(state !='Select' && district == 'Select' && franchise != 'Select' && level == 'Select' && id !=''){
         if (kDebugMode) {
           print('state,franchise Only');
         }
@@ -699,12 +707,25 @@ class HomeController extends GetxController {
           filteredList.add(student);
         }
       }
-      else if(state =='Select' && district == 'Select' && franchise == 'Select' && level != 'Select'){
+      else if(state =='Select' && district == 'Select' && franchise == 'Select' && level != 'Select' && id !=''){
         if (kDebugMode) {
           print('level Only');
         }
         if(levelMatched){
           filteredList.add(student);
+        }
+      }
+      else if(state =='Select' && district == 'Select' && franchise == 'Select' && level == 'Select' && id !=''){
+        if (kDebugMode) {
+          print('id Only');
+        }
+        if(idMatched){
+          filteredList.add(student);
+        }
+      }
+      else if(state =='Select' && district == 'Select' && franchise == 'Select' && level == 'Select' && id ==''){
+        if (kDebugMode) {
+          print('nothing');
         }
       }
       else{
@@ -1025,6 +1046,43 @@ class HomeController extends GetxController {
       print(requestData);
     }
     RequestDio request = RequestDio(url: approveUserUrl, body: requestData);
+    request.post().then((response) async {
+      if (kDebugMode) {
+        print(response.data);
+      }
+      if (response.statusCode == 200) {
+        ApprovedModel approve =
+            ApprovedModel.fromJson(jsonDecode(response.data));
+        getFranchiseList();
+        Fluttertoast.showToast(msg: approve.msg!);
+        isLoading.value = false;
+        update();
+      } else {
+        Get.snackbar("Info", "Status not 201",
+            colorText: Colors.white,
+            backgroundColor: Colors.blue,
+            snackPosition: SnackPosition.TOP);
+        isLoading.value = false;
+      }
+    }).onError((error, stackTrace) {
+      Get.snackbar("Error", "$error",
+          colorText: Colors.white,
+          backgroundColor: Colors.blue,
+          snackPosition: SnackPosition.TOP);
+      isLoading.value = false;
+      update();
+    });
+  }
+
+  void reject(String ID) {
+    isLoading.value = true;
+    Map<String, dynamic> requestData = {
+      "franchiseID": "$ID",
+    };
+    if (kDebugMode) {
+      print(requestData);
+    }
+    RequestDio request = RequestDio(url: rejectUserUrl, body: requestData);
     request.post().then((response) async {
       if (kDebugMode) {
         print(response.data);

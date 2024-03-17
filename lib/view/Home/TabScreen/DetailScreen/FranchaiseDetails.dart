@@ -1,4 +1,6 @@
+import 'package:alama_eorder_app/controller/Home_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../../model/HomeModel.dart';
 
@@ -115,6 +117,17 @@ class franchiseDetail extends StatelessWidget {
                 controller:
                     TextEditingController(text: data.approve.toString()),
                 readOnly: true,
+              ),
+            ),
+          //   Button to change the approval status expanded button
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  Get.find<HomeController>().reject(data.franchiseID!);
+                  Get.back();
+                },
+                child: const Text('Reject'),
               ),
             ),
           ],
