@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        useMaterial3: false,
         appBarTheme: const AppBarTheme(
           color: primaryColor, // Set default app bar color to red
         ),
