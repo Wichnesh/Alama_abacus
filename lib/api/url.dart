@@ -10,6 +10,7 @@ const approveUserUrl = "${BaseUrl}approveUser";
 const rejectUserUrl = "${BaseUrl}rejectUser";
 const generateStudentIDUrl = "${BaseUrl}generate-studentid";
 const studentregistrationUrl = "${BaseUrl}student-reg";
+String studentUpdateUrl(String studentId) => "${BaseUrl}student-update/$studentId";
 const studentcartregUrl = "${BaseUrl}studentcartreg";
 const multiplestudentsUrl = "${BaseUrl}multiplestudents";
 const getallstudentsUrl = "${BaseUrl}getallstudents";

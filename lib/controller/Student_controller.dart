@@ -36,6 +36,8 @@ class StudentController extends GetxController {
   var enrollValue = '1300'.obs;
   var programValue = ''.obs;
 
+  Map<String,String> updateStudentData = {};
+
   void onInit() {
     super.onInit();
     generateStudentId();
@@ -475,6 +477,42 @@ class StudentController extends GetxController {
           update();
         }
       } else {
+        Get.snackbar("Error", "Please try later",
+            colorText: Colors.white,
+            backgroundColor: Colors.red,
+            snackPosition: SnackPosition.TOP);
+      }
+    });
+  }
+
+  updateStudent(String studentId) {
+    print("Update Student");
+    print(updateStudentData);
+    isLoading.value = true;
+    RequestDio request =
+        RequestDio(url: studentUpdateUrl(studentId), body: jsonEncode(updateStudentData));
+    request.post().then((response) async {
+      if (kDebugMode) {
+        print(response.data);
+      }
+      if (response.statusCode == 200) {
+        registrationsuccessmodel success =
+            registrationsuccessmodel.fromJson(response.data);
+        if (success.status == true) {
+          Fluttertoast.showToast(msg: success.message!);
+          final HomeController homeController = Get.find<HomeController>();
+          homeController.studentList.clear();
+          homeController.getStudentList();
+          isLoading.value = false;
+          update();
+          Get.back();
+        } else {
+          Fluttertoast.showToast(msg: success.message!);
+          isLoading.value = false;
+          update();
+        }
+      } else {
+        isLoading.value = false;
         Get.snackbar("Error", "Please try later",
             colorText: Colors.white,
             backgroundColor: Colors.red,

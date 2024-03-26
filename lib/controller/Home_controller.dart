@@ -16,6 +16,8 @@ import '../view/Home/TabScreen/filterfranchiseScreen.dart';
 
 class HomeController extends GetxController {
   var isLoading = false.obs;
+  RxBool isStudentEdit = false.obs;
+
   var approvedfranchiselist = List<FMData>.empty(growable: true).obs;
   var nonapprovedfranchiselist = List<FMData>.empty(growable: true).obs;
   var studentList = List<SData>.empty(growable: true).obs;

@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import '../../../../controller/Home_controller.dart';
+import '../../../../controller/Student_controller.dart';
 import '../../../../model/studentmodel.dart';
 import '../../../../utils/colorUtils.dart';
 
@@ -16,110 +18,145 @@ class StudentDetails extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Student Details'),
-        centerTitle: true,
+        centerTitle: false,
+      //   Edit button in right corner
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Obx(()=>IconButton(
+                onPressed: () {
+                  Get.find<HomeController>().isStudentEdit.value = !Get.find<HomeController>().isStudentEdit.value ;
+                },
+                icon: Icon(Get.find<HomeController>().isStudentEdit.value?Icons.edit_off:Icons.edit),
+              )),
+            ],
+          )
+        ],
       ),
       body: SingleChildScrollView(
-        child: Column(
+        child: Obx(()=>Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Student ID',
+                  // border: Get.find<HomeController>().isStudentEdit.value?const OutlineInputBorder():null,
                 ),
                 controller:
                     TextEditingController(text: data.studentID.toString()),
-                readOnly: true,
+                readOnly: true,//!Get.find<HomeController>().isStudentEdit.value,
+                onChanged: (value) => Get.find<StudentController>().updateStudentData['studentID'] = value,
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Registration date',
+                  // border: Get.find<HomeController>().isStudentEdit.value?const OutlineInputBorder():null,
                 ),
                 controller: TextEditingController(text: data.enrollDate),
-                readOnly: true,
+                readOnly: true,//!Get.find<HomeController>().isStudentEdit.value,
+                onChanged: (value) => Get.find<StudentController>().updateStudentData['enrollDate'] = value,
+
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Franchise Under',
+                  border: Get.find<HomeController>().isStudentEdit.value?const OutlineInputBorder():null,
                 ),
                 controller: TextEditingController(text: data.franchise),
-                readOnly: true,
+                readOnly: !Get.find<HomeController>().isStudentEdit.value,
+                onChanged: (value) => Get.find<StudentController>().updateStudentData['franchise'] = value,
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Student Name',
+                  border: Get.find<HomeController>().isStudentEdit.value?const OutlineInputBorder():null,
                 ),
                 controller: TextEditingController(text: data.studentName),
-                readOnly: true,
+                readOnly: !Get.find<HomeController>().isStudentEdit.value,
+                onChanged: (value) => Get.find<StudentController>().updateStudentData['studentName'] = value,
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Student Email ID',
+                  border: Get.find<HomeController>().isStudentEdit.value?const OutlineInputBorder():null,
                 ),
                 controller: TextEditingController(text: data.email),
-                readOnly: true,
+                readOnly: !Get.find<HomeController>().isStudentEdit.value,
+                onChanged: (value) => Get.find<StudentController>().updateStudentData['email'] = value,
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Contact No',
+                  border: Get.find<HomeController>().isStudentEdit.value?const OutlineInputBorder():null,
                 ),
                 controller: TextEditingController(text: data.mobileNumber),
-                readOnly: true,
+                readOnly: !Get.find<HomeController>().isStudentEdit.value,
+                onChanged: (value) => Get.find<StudentController>().updateStudentData['mobileNumber'] = value,
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'State',
+                  border: Get.find<HomeController>().isStudentEdit.value?const OutlineInputBorder():null,
                 ),
                 controller: TextEditingController(text: data.state),
-                readOnly: true,
+                readOnly: !Get.find<HomeController>().isStudentEdit.value,
+                onChanged: (value) => Get.find<StudentController>().updateStudentData['state'] = value,
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'District',
+                  border: Get.find<HomeController>().isStudentEdit.value?const OutlineInputBorder():null,
                 ),
                 controller: TextEditingController(text: data.district),
-                readOnly: true,
+                readOnly: !Get.find<HomeController>().isStudentEdit.value,
+                onChanged: (value) => Get.find<StudentController>().updateStudentData['district'] = value,
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Current Level',
+                  // border: Get.find<HomeController>().isStudentEdit.value?const OutlineInputBorder():null,
                 ),
                 controller: TextEditingController(text: data.level),
-                readOnly: true,
+                readOnly: true,//!Get.find<HomeController>().isStudentEdit.value,
+                onChanged: (value) => Get.find<StudentController>().updateStudentData['level'] = value,
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Program',
+                  // border: Get.find<HomeController>().isStudentEdit.value?const OutlineInputBorder():null,
                 ),
                 controller: TextEditingController(text: data.program),
-                readOnly: true,
+                readOnly: true,//!Get.find<HomeController>().isStudentEdit.value,
+                onChanged: (value) => Get.find<StudentController>().updateStudentData['program'] = value,
               ),
             ),
             data.levelOrders!.isEmpty
@@ -257,28 +294,22 @@ class StudentDetails extends StatelessWidget {
                           child: SizedBox(
                             height: 55,
                             width: 175,
-                            child: ElevatedButton(
+                            child: Obx(()=>ElevatedButton(
                               style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                    if (states
-                                        .contains(MaterialState.pressed)) {
-                                      // Change the button color when pressed
-                                      return Colors.green;
-                                    }
-                                    // Return the default button color
-                                    return Colors
-                                        .red; // or any other color you want
-                                  },
-                                ),
+                                backgroundColor:Get.find<HomeController>().isStudentEdit.value?
+                                MaterialStateProperty.all(Colors.green):MaterialStateProperty.all(primaryColor),
                               ),
-                              onPressed: () {
-                                // Handle the button click event
-                                Get.back();
+                              onPressed: Get.find<StudentController>().isLoading.value?null:
+                                  () async{
+                                if(Get.find<HomeController>().isStudentEdit.value){
+                                  await Get.find<StudentController>().updateStudent(data.studentID!);
+                                }else{
+                                  Get.find<HomeController>().isStudentEdit.value = true;
+                                }
                               },
-                              child: const Text('Close'),
-                            ),
+                              child:  Get.find<StudentController>().isLoading.value?const Text("Updating...",style: TextStyle(color: Colors.white),):
+                              Text(Get.find<HomeController>().isStudentEdit.value?"Save":"Edit",style: TextStyle(color: Colors.white),),
+                            )),
                           ),
                         ),
                       ],
@@ -286,7 +317,7 @@ class StudentDetails extends StatelessWidget {
                   );
                 })
           ],
-        ),
+        )),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import '../../../controller/Home_controller.dart';
+import '../../../controller/Student_controller.dart';
 import '../../../utils/constant.dart';
 import '../../../utils/pref_manager.dart';
 import 'DetailScreen/StudentDetails.dart';
@@ -480,6 +481,8 @@ class _StudentListState extends State<StudentList> {
                             flipAxis: FlipAxis.y,
                             child: InkWell(
                               onTap: () {
+                                controller.isStudentEdit.value = false;
+                                Get.put<StudentController>(StudentController());
                                 Get.to(() => StudentDetails(data: data));
                               },
                               child: Container(

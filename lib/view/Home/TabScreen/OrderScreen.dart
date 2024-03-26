@@ -94,7 +94,7 @@ class _OrderScreenState extends State<OrderScreen> {
         appBar: AppBar(
           title: const Text('Order'),
           centerTitle: true,
-          automaticallyImplyLeading: false,
+          // automaticallyImplyLeading: false,
         ),
         body: GetBuilder<OrderController>(
           builder: ((controller) {
