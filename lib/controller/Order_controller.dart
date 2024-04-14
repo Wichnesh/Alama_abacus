@@ -260,7 +260,7 @@ class OrderController extends GetxController {
          BookList = [
            "level5MA",
            "cb6MA",
-           "cb6MA"
+           "pb6MA"
          ];
         }else {
          if(transferBool.value){
