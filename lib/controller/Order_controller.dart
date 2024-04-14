@@ -356,7 +356,6 @@ class OrderController extends GetxController {
     if (kDebugMode) {
       print(requestData);
     }
-    return;
     RequestDio request = RequestDio(url: getallordersUrl, body: requestData);
     request.post().then((response) async {
       if (kDebugMode) {
