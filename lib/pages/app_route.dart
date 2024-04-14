@@ -10,6 +10,7 @@ import '../binding/stockTransactionBinding.dart';
 import '../utils/constant.dart';
 import '../view/Auth/Login_Screen.dart';
 import '../view/Auth/Register_Screen.dart';
+import '../view/Home/Drawer/Report/Report_DashBoard.dart';
 import '../view/Home/TabScreen/DetailScreen/StockTransactionDetails.dart';
 import '../view/Home/TabScreen/EnrollStudentScreen.dart';
 import '../view/Home/TabScreen/NonApprovedFranchiseScreen.dart';
@@ -44,6 +45,6 @@ class AppPages {
     GetPage(name: ROUTE_STOCKFILTER, page: ()=> const StockFilterScreen()),
     GetPage(name: ROUTE_STUDENTCARTLISTSCREEN, page: () => const StudentCartListScreen(),binding: StudentCardListBinding()),
     GetPage(name: ROUTE_ORDERREPORTS, page: ()=> const OrderReportScreen()),
-
+    GetPage(name: ROUTE_REPORTDASHBOARD, page: () => const ReportDashboard()),
   ];
 }

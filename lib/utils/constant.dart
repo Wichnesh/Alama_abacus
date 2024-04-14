@@ -10,7 +10,7 @@ const ROUTE_TRANSACTIONSCREEN = "${slash}transactionscreen";
 const ROUTE_STOCKFILTER = "${slash}stockfilter";
 const ROUTE_STUDENTCARTLISTSCREEN = "${slash}studentcartlistScreen";
 const ROUTE_ORDERREPORTS = "${slash}orderreport";
-
+const ROUTE_REPORTDASHBOARD = '${slash}reportDashBoard';
 ////////////
 const String TOKEN = "token";
 const SHARED_ADMIN = 'Admin';

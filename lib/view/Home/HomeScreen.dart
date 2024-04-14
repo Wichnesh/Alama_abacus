@@ -1,16 +1,19 @@
-import 'package:alama_eorder_app/utils/ImageUtils.dart';
-import 'package:alama_eorder_app/utils/constant.dart';
-import 'package:alama_eorder_app/utils/pref_manager.dart';
+import 'package:alama_eorder_app/utils/colorUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../utils/DialogboxDesign.dart';
+import '../../utils/ImageUtils.dart';
+import '../../utils/constant.dart';
+import '../../utils/pref_manager.dart';
 import 'TabScreen/ApprovedFranchiseScreen.dart';
 import 'TabScreen/Order_Report_Screen.dart';
 import 'TabScreen/StockScreen.dart';
 import 'TabScreen/StudentList.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -37,57 +40,78 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Row(
-          children: [
-            const SizedBox(
-              width: 10,
-            ),
-            SizedBox(height: 30, child: Image.asset(logo)),
-          ],
-        ),
         title: const Text("Alama Abacus"),
         centerTitle: true,
         actions: [
           IconButton(
-              onPressed: () {
-                _alertDialog(context);
-              },
-              icon: const Icon(Icons.logout))
+            onPressed: () {
+              _alertDialog(context);
+            },
+            icon: const Icon(Icons.logout),
+          ),
         ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: const BoxDecoration(
+                color: primaryColor,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 80,
+                    child: Image.asset(logo),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              title: const Text('Report'),
+              onTap: () {
+                Get.toNamed(ROUTE_REPORTDASHBOARD);
+              },
+            ),
+          ],
+        ),
       ),
       backgroundColor: Colors.grey.shade300,
       body: getPage(_currentPage),
       bottomNavigationBar: AnimatedBottomNav(
-          currentIndex: _currentPage,
-          onChange: (index) {
-            setState(() {
-              _currentPage = index;
-            });
-          }),
+        currentIndex: _currentPage,
+        onChange: (index) {
+          setState(() {
+            _currentPage = index;
+          });
+        },
+      ),
     );
   }
 
   getPage(int? page) {
     if (Prefs.getBoolen(SHARED_ADMIN) == true) {
-     if(Prefs.getString(USERNAME) == "tnadmin@gmail.com"){
-       switch (page) {
-         case 0:
-           return const OrderReportScreen();
-         case 1:
-           return const Center(child: Text("Order Page"));
-         case 2:
-           return const Center(child: Text("Menu Page"));
-       }
-     }else{
-       switch (page) {
-         case 0:
-           return const ApprovedFranchiseScreen();
-         case 1:
-           return const StudentList();
-         case 2:
-           return const StockScreen();
-       }
-     }
+      if (Prefs.getString(USERNAME) == "tnadmin@gmail.com") {
+        switch (page) {
+          case 0:
+            return const OrderReportScreen();
+          case 1:
+            return const Center(child: Text("Order Page"));
+          case 2:
+            return const Center(child: Text("Menu Page"));
+        }
+      } else {
+        switch (page) {
+          case 0:
+            return const ApprovedFranchiseScreen();
+          case 1:
+            return const StudentList();
+          case 2:
+            return const StockScreen();
+        }
+      }
     } else {
       switch (page) {
         case 0:
@@ -127,29 +151,29 @@ class AnimatedBottomNav extends StatelessWidget {
           ),
           admin
               ? tnAdmin ? Container() :Expanded(
-                  child: InkWell(
-                    onTap: () => onChange!(1),
-                    child: BottomNavItem(
-                      icon: admin
-                          ? Icons.person
-                          : Icons.local_convenience_store_rounded,
-                      title: "Students",
-                      isActive: currentIndex == 1,
-                    ),
-                  ),
-                )
+            child: InkWell(
+              onTap: () => onChange!(1),
+              child: BottomNavItem(
+                icon: admin
+                    ? Icons.person
+                    : Icons.local_convenience_store_rounded,
+                title: "Students",
+                isActive: currentIndex == 1,
+              ),
+            ),
+          )
               : Container(),
           admin
               ? tnAdmin ? Container() : Expanded(
-                  child: InkWell(
-                    onTap: () => onChange!(2),
-                    child: BottomNavItem(
-                      icon: Icons.menu,
-                      title: admin ? "Stock" : 'Extra Tab',
-                      isActive: currentIndex == 2,
-                    ),
-                  ),
-                )
+            child: InkWell(
+              onTap: () => onChange!(2),
+              child: BottomNavItem(
+                icon: Icons.menu,
+                title: admin ? "Stock" : 'Extra Tab',
+                isActive: currentIndex == 2,
+              ),
+            ),
+          )
               : Container()
         ],
       ),
@@ -165,11 +189,11 @@ class BottomNavItem extends StatelessWidget {
   final String? title;
   const BottomNavItem(
       {Key? key,
-      this.isActive = false,
-      this.icon,
-      this.activeColor,
-      this.inactiveColor,
-      this.title})
+        this.isActive = false,
+        this.icon,
+        this.activeColor,
+        this.inactiveColor,
+        this.title})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -187,34 +211,34 @@ class BottomNavItem extends StatelessWidget {
       reverseDuration: const Duration(milliseconds: 200),
       child: isActive
           ? Container(
-              color: Colors.white,
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    title!,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: activeColor ?? Theme.of(context).primaryColor,
-                    ),
-                  ),
-                  const SizedBox(height: 5.0),
-                  Container(
-                    width: 5.0,
-                    height: 5.0,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: activeColor ?? Theme.of(context).primaryColor,
-                    ),
-                  ),
-                ],
+        color: Colors.white,
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              title!,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: activeColor ?? Theme.of(context).primaryColor,
               ),
-            )
-          : Icon(
-              icon,
-              color: inactiveColor ?? Colors.grey,
             ),
+            const SizedBox(height: 5.0),
+            Container(
+              width: 5.0,
+              height: 5.0,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: activeColor ?? Theme.of(context).primaryColor,
+              ),
+            ),
+          ],
+        ),
+      )
+          : Icon(
+        icon,
+        color: inactiveColor ?? Colors.grey,
+      ),
     );
   }
 }
