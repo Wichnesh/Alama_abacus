@@ -221,15 +221,15 @@ class _OrderScreenState extends State<OrderScreen> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    //ontroller.backendformat();
-                                    controller.updateOrder("test", 1300);
-                                    // payment(
-                                    //     controller.data.studentName!,
-                                    //     controller.data.mobileNumber!,
-                                    //     Prefs.getString(USERNAME),
-                                    //     franchiseState,
-                                    //     controller.transferBool.value
-                                    // );
+                                    //controller.backendformat();
+                                   // controller.updateOrder("test", 1300);
+                                    payment(
+                                        controller.data.studentName!,
+                                        controller.data.mobileNumber!,
+                                        Prefs.getString(USERNAME),
+                                        franchiseState,
+                                        controller.transferBool.value
+                                    );
                                   },
                                   child: const SizedBox(
                                     height: 50,
