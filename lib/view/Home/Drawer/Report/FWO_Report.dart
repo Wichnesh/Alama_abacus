@@ -1,22 +1,91 @@
-import 'package:alama_eorder_app/utils/colorUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import '../../../../controller/FranchiseWiseStudent_controller.dart';
-import '../../../../controller/Home_controller.dart';
+import 'package:intl/intl.dart';
+import '../../../../controller/FranchiseWiseOrderController.dart';
+import '../../../../utils/colorUtils.dart';
 
-
-class FranchiseWiseStudentScreen extends StatelessWidget {
-  FranchiseWiseStudentScreen({super.key});
-  FranchiseWiseStudentController controller = Get.put(FranchiseWiseStudentController());
+class FranchiseWiseOrderReport extends StatelessWidget {
+   FranchiseWiseOrderReport({super.key});
+  final controller = Get.put(FWOController());
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
-        title: const Text('Franchise Wise Student Report'),
+        title: const Text('Franchise Wise Order Report'),
       ),
       body: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: SizedBox(
+              height: 55,
+              width: double.infinity,
+              child: TextField(
+                readOnly: true,
+                onTap: () async {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  DateTime? date = DateTime.now();
+                  date = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now());
+                  if (date != null) {
+                    controller.fromDate = date;
+                    controller.update();
+                  }
+                },
+                controller: controller.fromDateText
+                  ..text = DateFormat("MM/dd/yyyy").format(
+                      controller.fromDate == null
+                          ? DateTime.now()
+                          : controller.fromDate ?? DateTime.now()),
+                style: const TextStyle(fontSize: 18),
+                decoration: const InputDecoration(
+                  suffixIcon: Icon(Icons.calendar_today),
+                  labelText: "From Date",
+                  labelStyle: TextStyle(fontSize: 14),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: SizedBox(
+              height: 55,
+              width: double.infinity,
+              child: TextField(
+                readOnly: true,
+                onTap: () async {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  DateTime? date = DateTime.now();
+
+                  date = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now());
+
+                  if (date != null) {
+                    controller.toDate = date;
+                    controller.update();
+                  }
+                },
+                controller: controller.toDateText
+                  ..text = DateFormat("MM/dd/yyyy").format(
+                      controller.toDate == null
+                          ? DateTime.now()
+                          : controller.toDate ?? DateTime.now()),
+                style: const TextStyle(fontSize: 18),
+                decoration: const InputDecoration(
+                  suffixIcon: Icon(Icons.calendar_today),
+                  labelText: "To Date",
+                  labelStyle: TextStyle(fontSize: 14),
+                ),
+              ),
+            ),
+          ),
           Obx(() => Padding(
             padding: const EdgeInsets.all(10.0),
             child: SizedBox(
@@ -57,7 +126,7 @@ class FranchiseWiseStudentScreen extends StatelessWidget {
           )),
           ElevatedButton(
               onPressed: (){
-                controller.getFranchiseStudentList();
+                  controller.validate();
               },
               child: const Text("Submit")
           ),

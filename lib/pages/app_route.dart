@@ -1,3 +1,7 @@
+import 'package:alama_eorder_app/binding/FWOBinding.dart';
+import 'package:alama_eorder_app/binding/FWSBinding.dart';
+import 'package:alama_eorder_app/view/Home/Drawer/Report/FWO_Report.dart';
+import 'package:alama_eorder_app/view/Home/Drawer/Report/FranchiseWise_Report.dart';
 import 'package:alama_eorder_app/view/Home/HomeScreen.dart';
 import 'package:get/get.dart';
 
@@ -10,7 +14,7 @@ import '../binding/stockTransactionBinding.dart';
 import '../utils/constant.dart';
 import '../view/Auth/Login_Screen.dart';
 import '../view/Auth/Register_Screen.dart';
-import '../view/Home/Drawer/Report/Report_DashBoard.dart';
+import '../view/Home/Drawer/Report_DashBoard.dart';
 import '../view/Home/TabScreen/DetailScreen/StockTransactionDetails.dart';
 import '../view/Home/TabScreen/EnrollStudentScreen.dart';
 import '../view/Home/TabScreen/NonApprovedFranchiseScreen.dart';
@@ -41,10 +45,24 @@ class AppPages {
         name: ROUTE_ORDER,
         page: () => const OrderScreen(),
         binding: OrderBinding()),
-    GetPage(name: ROUTE_TRANSACTIONSCREEN, page: () => const StockTransactionScreen(), binding: StockTransactionBinding()),
-    GetPage(name: ROUTE_STOCKFILTER, page: ()=> const StockFilterScreen()),
-    GetPage(name: ROUTE_STUDENTCARTLISTSCREEN, page: () => const StudentCartListScreen(),binding: StudentCardListBinding()),
-    GetPage(name: ROUTE_ORDERREPORTS, page: ()=> const OrderReportScreen()),
+    GetPage(
+        name: ROUTE_TRANSACTIONSCREEN,
+        page: () => const StockTransactionScreen(),
+        binding: StockTransactionBinding()),
+    GetPage(name: ROUTE_STOCKFILTER, page: () => const StockFilterScreen()),
+    GetPage(
+        name: ROUTE_STUDENTCARTLISTSCREEN,
+        page: () => const StudentCartListScreen(),
+        binding: StudentCardListBinding()),
+    GetPage(name: ROUTE_ORDERREPORTS, page: () => const OrderReportScreen()),
     GetPage(name: ROUTE_REPORTDASHBOARD, page: () => const ReportDashboard()),
+    GetPage(
+        name: ROUTE_FWS,
+        page: () => FranchiseWiseStudentScreen(),
+        binding: FWSBinding()),
+    GetPage(
+        name: ROUTE_FWO,
+        page: () => FranchiseWiseOrderReport(),
+        binding: FWOBinding())
   ];
 }

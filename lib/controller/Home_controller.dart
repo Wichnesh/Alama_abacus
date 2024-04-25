@@ -285,8 +285,8 @@ class HomeController extends GetxController {
     update();
     Map<String, dynamic>? requestData;
     requestData = {
-      "startDate": "${fromdateText.text}",
-      "endDate": "${todateText.text}",
+      "startDate": fromdateText.text,
+      "endDate": todateText.text,
     };
     RequestDio request = RequestDio(url: getFilterTransactionUrl, body: requestData);
     if (kDebugMode) {
@@ -402,29 +402,29 @@ class HomeController extends GetxController {
       return ;
     }else if(nametext.text.isEmpty && contactNo.text.isEmpty &&selectedState.value != 'Select' && selectedDistrict.value != 'Select' ){
       params = {
-        'state': '${selectedState.value}',
-        'district': '${selectedDistrict.value}',
+        'state': selectedState.value,
+        'district': selectedDistrict.value,
       };
     }else if(nametext.text.isNotEmpty && contactNo.text.isNotEmpty && selectedState.value == 'Select' && selectedDistrict.value == 'Select'){
       params = {
-        'name': '${nametext.text}',
-        'phoneNumber': '${contactNo.text}',
+        'name': nametext.text,
+        'phoneNumber': contactNo.text,
       };
     }else if(selectedState.value != 'Select' && selectedDistrict.value != 'Select'){
       params = {
-        'state': '${selectedState.value}',
-        'district': '${selectedDistrict.value}',
+        'state': selectedState.value,
+        'district': selectedDistrict.value,
       };
     }else if(nametext.text.isNotEmpty && contactNo.text.isNotEmpty && selectedState.value != 'Select' && selectedDistrict.value != 'Select'){
        params = {
-        'name': '${nametext.text}',
-        'state': '${selectedState.value}',
-        'district': '${selectedDistrict.value}',
-        'phoneNumber': '${contactNo.text}',
+        'name': nametext.text,
+        'state': selectedState.value,
+        'district': selectedDistrict.value,
+        'phoneNumber': contactNo.text,
       };
     }else if(nametext.text.isNotEmpty && contactNo.text.isEmpty && selectedState.value == 'Select' && selectedDistrict.value == 'Select'){
       params = {
-        'name': '${nametext.text}',
+        'name': nametext.text,
       };
     }else{
       // params = {
@@ -438,7 +438,7 @@ class HomeController extends GetxController {
       print(getallstudentsUrl);
     }
 
-    RequestDio request = RequestDio(url: '${getallstudentsUrl}',parameters: params);
+    RequestDio request = RequestDio(url: getallstudentsUrl,parameters: params);
     request.post().then((response) async {
       print('${response.data}');
       if (response.statusCode == 200) {
@@ -816,7 +816,7 @@ class HomeController extends GetxController {
   void getFranchiseStudentList() async {
     isLoading.value = true;
     Map<String, dynamic> requestData = {
-      "username": "${Prefs.getString(USERNAME)}",
+      "username": Prefs.getString(USERNAME),
     };
     if (kDebugMode) {
       print(getfranchisestudentUrl);
@@ -990,7 +990,7 @@ class HomeController extends GetxController {
     stockIsLoading.value = true;
     update();
     refresh();
-    Map<String, dynamic> requestData = {"id": "${id}", "count": "${count}"};
+    Map<String, dynamic> requestData = {"id": id, "count": "${count}"};
 
     if (kDebugMode) {
       print(requestData);
@@ -1038,7 +1038,7 @@ class HomeController extends GetxController {
   void approve(String ID) {
     isLoading.value = true;
     Map<String, dynamic> requestData = {
-      "franchiseID": "$ID",
+      "franchiseID": ID,
     };
     if (kDebugMode) {
       print(requestData);
@@ -1075,7 +1075,7 @@ class HomeController extends GetxController {
   void reject(String ID) {
     isLoading.value = true;
     Map<String, dynamic> requestData = {
-      "franchiseID": "$ID",
+      "franchiseID": ID,
     };
     if (kDebugMode) {
       print(requestData);

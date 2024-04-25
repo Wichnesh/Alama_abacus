@@ -11,6 +11,8 @@ const ROUTE_STOCKFILTER = "${slash}stockfilter";
 const ROUTE_STUDENTCARTLISTSCREEN = "${slash}studentcartlistScreen";
 const ROUTE_ORDERREPORTS = "${slash}orderreport";
 const ROUTE_REPORTDASHBOARD = '${slash}reportDashBoard';
+const ROUTE_FWS = "${slash}franchiseWiseStudent";
+const ROUTE_FWO = "${slash}franchiseWiseOrder";
 ////////////
 const String TOKEN = "token";
 const SHARED_ADMIN = 'Admin';
