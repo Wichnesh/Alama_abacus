@@ -16,236 +16,247 @@ class OrderReportScreen extends StatefulWidget {
 }
 
 class _OrderReportScreenState extends State<OrderReportScreen> {
+  final controller = Get.put(OrderReportController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Order Report'),
+        actions: [
+          Prefs.getString(USERNAME) == "tnadmin@gmail.com" ?  const SizedBox.shrink(): Obx(() => Container(
+            height: 60, // Adjust the height as needed
+            width: 60, // Adjust the width as needed
+            child: IconButton(
+              iconSize: 40, // Adjust the icon size as needed
+              icon: Icon(controller.isToggleOn.value ? Icons.toggle_on : Icons.toggle_off),
+              color: controller.isToggleOn.value ? Colors.green : Colors.grey,
+              onPressed: () {
+                controller.isToggleOn.value = !controller.isToggleOn.value;
+                controller.enableDownload.value = false;
+              },
+            ),
+          )),
+        ],
       ),
-      body: GetBuilder<OrderReportController>(
-        init: OrderReportController(),
-        builder: ((controller) {
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  height: 55,
-                  width: double.infinity,
-                  child: TextField(
-                    readOnly: true,
-                    onTap: () async {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      DateTime? date = DateTime.now();
-                      date = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime.now());
-                      if (date != null) {
-                        controller.fromdate = date;
-                        controller.update();
-                      }
-                    },
-                    controller: controller.fromdateText
-                      ..text = DateFormat("MM/dd/yyyy").format(
-                          controller.fromdate == null
-                              ? DateTime.now()
-                              : controller.fromdate ?? DateTime.now()),
-                    style: const TextStyle(fontSize: 18),
-                    decoration: const InputDecoration(
-                      suffixIcon: Icon(Icons.calendar_today),
-                      labelText: "From Date",
-                      labelStyle: TextStyle(fontSize: 14),
-                    ),
-                  ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: SizedBox(
+              height: 55,
+              width: double.infinity,
+              child: TextField(
+                readOnly: true,
+                onTap: () async {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  DateTime? date = DateTime.now();
+                  date = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now());
+                  if (date != null) {
+                    controller.fromdate = date;
+                    controller.update();
+                  }
+                },
+                controller: controller.fromdateText
+                  ..text = DateFormat("MM/dd/yyyy").format(
+                      controller.fromdate == null
+                          ? DateTime.now()
+                          : controller.fromdate ?? DateTime.now()),
+                style: const TextStyle(fontSize: 18),
+                decoration: const InputDecoration(
+                  suffixIcon: Icon(Icons.calendar_today),
+                  labelText: "From Date",
+                  labelStyle: TextStyle(fontSize: 14),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  height: 55,
-                  width: double.infinity,
-                  child: TextField(
-                    readOnly: true,
-                    onTap: () async {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      DateTime? date = DateTime.now();
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: SizedBox(
+              height: 55,
+              width: double.infinity,
+              child: TextField(
+                readOnly: true,
+                onTap: () async {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  DateTime? date = DateTime.now();
 
-                      date = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime.now());
+                  date = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now());
 
-                      if (date != null) {
-                        controller.todate = date;
-                        controller.update();
-                      }
-                    },
-                    controller: controller.todateText
-                      ..text = DateFormat("MM/dd/yyyy").format(
-                          controller.todate == null
-                              ? DateTime.now()
-                              : controller.todate ?? DateTime.now()),
-                    style: const TextStyle(fontSize: 18),
-                    decoration: const InputDecoration(
-                      suffixIcon: Icon(Icons.calendar_today),
-                      labelText: "To Date",
-                      labelStyle: TextStyle(fontSize: 14),
-                    ),
-                  ),
+                  if (date != null) {
+                    controller.todate = date;
+                    controller.update();
+                  }
+                },
+                controller: controller.todateText
+                  ..text = DateFormat("MM/dd/yyyy").format(
+                      controller.todate == null
+                          ? DateTime.now()
+                          : controller.todate ?? DateTime.now()),
+                style: const TextStyle(fontSize: 18),
+                decoration: const InputDecoration(
+                  suffixIcon: Icon(Icons.calendar_today),
+                  labelText: "To Date",
+                  labelStyle: TextStyle(fontSize: 14),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 55,
-                        width: 175,
-                        color: primaryColor,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.resolveWith<Color>(
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    height: 55,
+                    width: 175,
+                    color: primaryColor,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                        MaterialStateProperty.resolveWith<Color>(
                               (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) {
-                                  // Change the button color when pressed
-                                  return Colors.green;
-                                }
-                                // Return the default button color
-                                return primaryColor;
-                              },
-                            ),
-                          ),
-                          onPressed: () {
-                            if (controller.fromdateText.text.isEmpty) {
-                              Get.dialog(
-                                AlertDialog(
-                                  title: const Text('Alert'),
-                                  content: const Text(
-                                      'Please enter From date '),
-                                  actions: [
-                                    TextButton(
-                                      child: const Text('OK'),
-                                      onPressed: () {
-                                        Get.back();
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              );
-                            } else {
-                              if(Prefs.getString(USERNAME) == "tnadmin@gmail.com"){
-                                controller.getTNReportMethod();
-                              }else{
-                                controller.getReportMethod();
-                              }
+                            if (states.contains(MaterialState.pressed)) {
+                              // Change the button color when pressed
+                              return Colors.green;
                             }
+                            // Return the default button color
+                            return primaryColor;
                           },
-                          child: const SizedBox(
-                            height: 50,
-                            width: 165,
-                            child: Center(
-                              child: Text(
-                                "Submit",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    Expanded(
-                      child: Container(
-                        height: 55,
-                        width: 175,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) {
-                                  // Change the button color when pressed
-                                  return Colors.green;
-                                }
-                                // Return the default button color
-                                return Colors
-                                    .red; // or any other color you want
-                              },
-                            ),
-                          ),
-                          onPressed: () {
-                            // Handle the button click event
-                            Get.back();
-                          },
-                          child: const Text('Close'),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 100,
-              ),
-              controller.enableDownload.isTrue
-                  ? Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 55,
-                            width: 175,
-                            color: primaryColor,
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                    if (states
-                                        .contains(MaterialState.pressed)) {
-                                      // Change the button color when pressed
-                                      return Colors.green;
-                                    }
-                                    // Return the default button color
-                                    return primaryColor;
+                      onPressed: () {
+                        if (controller.fromdateText.text.isEmpty) {
+                          Get.dialog(
+                            AlertDialog(
+                              title: const Text('Alert'),
+                              content: const Text(
+                                  'Please enter From date '),
+                              actions: [
+                                TextButton(
+                                  child: const Text('OK'),
+                                  onPressed: () {
+                                    Get.back();
                                   },
                                 ),
-                              ),
-                              onPressed: () {
-                                if (controller.enableDownload.isTrue) {
-                                  controller.reportGeneratePdf();
-                                } else {
-                                  Fluttertoast.showToast(
-                                      msg: 'Data Not Available');
-                                }
-                              },
-                              child: const SizedBox(
-                                height: 50,
-                                width: 165,
-                                child: Center(
-                                  child: Text(
-                                    "Download PDF",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ),
+                              ],
                             ),
+                          );
+                        } else {
+                          if(Prefs.getString(USERNAME) == "tnadmin@gmail.com" || controller.isToggleOn.value){
+                            controller.getTNReportMethod();
+                          }else{
+                            controller.getReportMethod();
+                          }
+                        }
+                      },
+                      child: const SizedBox(
+                        height: 50,
+                        width: 165,
+                        child: Center(
+                          child: Text(
+                            "Submit",
+                            style: TextStyle(color: Colors.white),
                           ),
-                        ],
+                        ),
                       ),
-                    )
-                  : Container(),
-            ],
-          );
-        }),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 15,
+                ),
+                Expanded(
+                  child: Container(
+                    height: 55,
+                    width: 175,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                        MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.pressed)) {
+                              // Change the button color when pressed
+                              return Colors.green;
+                            }
+                            // Return the default button color
+                            return Colors
+                                .red; // or any other color you want
+                          },
+                        ),
+                      ),
+                      onPressed: () {
+                        // Handle the button click event
+                        Get.back();
+                      },
+                      child: const Text('Close'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 100,
+          ),
+          Obx(() => controller.enableDownload.isTrue
+              ? Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  height: 55,
+                  width: 175,
+                  color: primaryColor,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                      MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                          if (states
+                              .contains(MaterialState.pressed)) {
+                            // Change the button color when pressed
+                            return Colors.green;
+                          }
+                          // Return the default button color
+                          return primaryColor;
+                        },
+                      ),
+                    ),
+                    onPressed: () {
+                      if (controller.enableDownload.isTrue) {
+                        controller.reportGeneratePdf();
+                      } else {
+                        Fluttertoast.showToast(
+                            msg: 'Data Not Available');
+                      }
+                    },
+                    child: const SizedBox(
+                      height: 50,
+                      width: 165,
+                      child: Center(
+                        child: Text(
+                          "Download PDF",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+              : Container(),)
+        ],
       ),
     );
   }

@@ -126,7 +126,9 @@ class FranchiseWiseStudentController extends GetxController {
         StudentListModel student = StudentListModel.fromJson(response.data);
         if (student.status == true) {
           for (var element in student.data!) {
-            studentList.add(element);
+            if(element.franchise == selectedFranchise.value){
+              studentList.add(element);
+            }
           }
           if (studentList.isNotEmpty) {
             enableDownload.value = true;
@@ -184,7 +186,7 @@ class FranchiseWiseStudentController extends GetxController {
 
     // Format the date and time
     String formattedDate = DateFormat('dd-MM-yyyy HH:mm').format(now);
-    for (var data in studentList) {
+
       // Create a table header
       var enrollTableHeaders = [
         pw.Text('S.No', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
@@ -195,7 +197,7 @@ class FranchiseWiseStudentController extends GetxController {
         pw.Text('District',
             style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
         pw.Text('State', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-        pw.Text('Order Level',
+        pw.Text('Current Level',
             style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
       ];
 
@@ -252,7 +254,7 @@ class FranchiseWiseStudentController extends GetxController {
           ],
         ),
       );
-    }
+
 
     // Save the PDF file
     final tempDir = await getTemporaryDirectory();

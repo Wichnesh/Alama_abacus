@@ -15,6 +15,7 @@ import '../model/Ordermodel.dart';
 class OrderReportController extends GetxController {
   var isLoading = false.obs;
   var enableDownload = false.obs;
+  var isToggleOn = false.obs;
   DateTime? fromdate;
   DateTime? todate;
   TextEditingController fromdateText = TextEditingController();
