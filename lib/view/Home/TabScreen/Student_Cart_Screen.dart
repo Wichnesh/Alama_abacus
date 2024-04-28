@@ -41,7 +41,8 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
     }
     var options = {
       //'key': 'rzp_test_uMK9VbEsTuePim',
-      'key' : 'rzp_live_FaHtY1SM9hLWek',
+      // 'key' : 'rzp_live_FaHtY1SM9hLWek', //live key
+      'key' : 'rzp_test_edocUhj72yJ1Rm',
       'amount': totalCost,
       'name': 'Abacus Enrollment ',
       'description': 'No of Student $count',
@@ -54,8 +55,20 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
       }
     };
 
+    Map note = {
+      "total_cost": totalCost,
+      "no_of_student": count,
+      "email": email
+    };
+    String name = 'Abacus Enrollment';
+
     try {
-      _razorpay?.open(options);
+      String? id = await enrollController.enrollStudentOrder(name, note,totalCost);
+      print('order id is $id');
+      if(id != null){
+        options['order_id'] = id;
+        _razorpay?.open(options);
+      }
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -65,9 +78,9 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
     Fluttertoast.showToast(
         msg: "SUCCESS PAYMENT: ${response.paymentId}", timeInSecForIosWeb: 4);
     if (response.orderId == null) {
-      enrollController.updatePaymentId(response.paymentId!);
+      enrollController.updatePaymentId();
     } else {
-      enrollController.updatePaymentId(response.paymentId!);
+      enrollController.updatePaymentId();
     }
   }
 

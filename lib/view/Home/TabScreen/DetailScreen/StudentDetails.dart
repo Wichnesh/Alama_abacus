@@ -1,5 +1,6 @@
 import 'package:alama_eorder_app/controller/Order_controller.dart';
 import 'package:alama_eorder_app/utils/constant.dart';
+import 'package:alama_eorder_app/utils/order_invoice_pdf.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -159,6 +160,12 @@ class StudentDetails extends StatelessWidget {
                 onChanged: (value) => Get.find<StudentController>().updateStudentData['program'] = value,
               ),
             ),
+            ElevatedButton(
+              onPressed: () {
+                OrderInvoicePdf.generateInvoice(data);
+              },
+              child: const Text('Download Invoice',style: TextStyle(),textAlign: TextAlign.start,),
+            ),
             data.levelOrders!.isEmpty
                 ? Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -194,10 +201,13 @@ class StudentDetails extends StatelessWidget {
                                 padding: const EdgeInsets.all(8.00),
                                 child: Card(
                                   elevation: 5,
-                                  child: ListTile(
-                                    title: Text(formattedDate.toString()),
-                                    trailing:
-                                        Text(data.levelOrders![index].level!),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ListTile(
+                                      title: Text(formattedDate.toString()),
+                                      trailing:
+                                          Text(data.levelOrders![index].level!),
+                                    ),
                                   ),
                                 ),
                               );

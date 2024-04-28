@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -395,4 +397,88 @@ class OrderController extends GetxController {
       }
     });
   }
+
+  void onOrderSuccess(){
+    registrationsuccessmodel success =
+    registrationsuccessmodel.fromJson({
+      "status": true,
+      "message": "Order Placed Successfully"
+    });
+    if (success.status == true) {
+      Fluttertoast.showToast(msg: success.message!);
+      isLoading.value = false;
+      update();
+      Get.offAllNamed(ROUTE_HOME);
+    } else {
+      Fluttertoast.showToast(msg: success.message!);
+      isLoading.value = false;
+      update();
+    }
+  }
+
+  Future<String?> createOrder( String name,Map notes,int cost)async {
+    backendformat();
+    isLoading.value = true;
+    String certificate = '';
+    bool enableBtn = isChecked.value;
+    if (gc.value == true) {
+      certificate = "Graduate Certificate";
+    } else if (mc.value == true) {
+      certificate = "Master Certificate";
+      if(currentlevel.value =='Level 5' && programText.text == 'AA'){
+        enableBtn = disableBtn.value;
+      } else {
+        enableBtn = false;
+      }
+    }
+    Map orderData = {
+      "franchise": Prefs.getString(USERNAME),
+      "studentID": "${data.studentID}",
+      "futureLevel": futurelevel.value,
+      "currentLevel": currentlevel.value,
+      "cost" : (cost/100).toString(),
+      "items": BookList,
+      "program": programText.text,
+      'certificate': certificate
+    };
+
+    if (mc.value == true) {
+      orderData['enableBtn'] = enableBtn;
+    }
+    Map<String, dynamic>? requestData = {
+      "isSuccessful" : false,
+      "razorpayOrderObj":{
+        "amount": cost,
+        "currency": "INR",
+        "receipt": name,
+        "notes": notes
+      },
+    };
+    requestData['razorpayOrderObj']['notes'].addAll({"orderData":jsonEncode(orderData)});
+    requestData.addAll(orderData.cast<String, dynamic>());
+    print("requestData");
+    print(requestData);
+    if (kDebugMode) {
+      print(requestData);
+    }
+    RequestDio request = RequestDio(url: getallordersUrl, body: requestData);
+    return await request.post().then((response) async {
+      if (kDebugMode) {
+        print(response.data);
+        print(response.statusCode);
+      }
+      if (response.statusCode == 200) {
+        return response.data;
+      } else if (response.statusCode == 201) {
+        return null;
+      } else {
+        Get.snackbar("Error", "Please try later",
+            colorText: Colors.white,
+            backgroundColor: Colors.red,
+            snackPosition: SnackPosition.TOP);
+      }
+      return null;
+    });
+  }
+
 }

@@ -97,74 +97,52 @@ class StudentCardListController extends GetxController {
     return total;
   }
 
-  void updatePaymentId(String paymentId) {
-    for (var student in studentCardList) {
-      student.paymentID = paymentId;
-    }
-    studentEnroll.add(studentCardList);
-    enrollStudent();
+  void updatePaymentId() {
+    // enrollStudent({});
+    Fluttertoast.showToast(msg: "Payment Success");
+    final HomeController homeController = Get.put(HomeController());
+    homeController.studentList.clear();
+    homeController.getFranchiseStudentList();
+    isLoading.value = false;
     update();
+    Get.offAllNamed(ROUTE_HOME);
   }
 
-  void enrollStudent() async {
+  Future<String?> enrollStudentOrder(String name, Map notes, int cost) async {
     isLoading.value = true;
+    studentEnroll.add(studentCardList);
     Map<String, dynamic> requestData = {
+      "isSuccessful" : false,
       "data": studentCardList,
+      "razorpayOrderObj": {
+        "amount": cost,
+        "currency": "INR",
+        "receipt": name,
+        "notes": notes
+      },
     };
+
     if (kDebugMode) {
       print(requestData.toString());
     }
     RequestDio request =
         RequestDio(url: multiplestudentsUrl, body: requestData);
-    request.post().then((response) async {
+    return await request.post().then((response) async {
       if (kDebugMode) {
         print(response.data);
       }
       if (response.statusCode == 200) {
-        registrationsuccessmodel success =
-            registrationsuccessmodel.fromJson(response.data);
-        if (success.status == true) {
-          Fluttertoast.showToast(msg: success.message!);
-          final HomeController homeController = Get.put(HomeController());
-          homeController.studentList.clear();
-          homeController.getFranchiseStudentList();
-          isLoading.value = false;
-          update();
-          Get.offAllNamed(ROUTE_HOME);
-        } else {
-          Fluttertoast.showToast(msg: success.message!);
-          isLoading.value = false;
-          update();
-        }
-      } else if (response.statusCode == 201) {
-        registrationsuccessmodel success =
-            registrationsuccessmodel.fromJson(response.data);
-        if (success.status == true) {
-          Fluttertoast.showToast(msg: success.message!);
-          final HomeController homeController = Get.find<HomeController>();
-          homeController.studentList.clear();
-          homeController.getFranchiseStudentList();
-          isLoading.value = false;
-          update();
-          Get.offAllNamed(ROUTE_HOME);
-        } else {
-          Fluttertoast.showToast(msg: success.message!);
-          isLoading.value = false;
-          update();
-        }
+        isLoading.value = false;
+        return response.data;
       } else {
+        isLoading.value = false;
         Get.snackbar("Error", "Please try later",
             colorText: Colors.white,
             backgroundColor: Colors.red,
             snackPosition: SnackPosition.TOP);
       }
-    }).onError((error, stackTrace) {
-      Get.snackbar("Error", "$error",
-          colorText: Colors.white,
-          backgroundColor: Colors.red,
-          snackPosition: SnackPosition.TOP);
-      isLoading.value = false;
     });
+    isLoading.value = false;
     update();
   }
 

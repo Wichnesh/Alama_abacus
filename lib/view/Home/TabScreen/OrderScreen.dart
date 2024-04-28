@@ -52,7 +52,8 @@ class _OrderScreenState extends State<OrderScreen> {
     }
     var options = {
       //'key': 'rzp_test_uMK9VbEsTuePim',
-      'key' : 'rzp_live_FaHtY1SM9hLWek',
+      // 'key' : 'rzp_live_FaHtY1SM9hLWek', //live key
+      'key' : 'rzp_test_edocUhj72yJ1Rm',
       'amount': totalCost,
       'name': name,
       'description': 'Order Payment',
@@ -64,7 +65,18 @@ class _OrderScreenState extends State<OrderScreen> {
 
     try {
       totalAmount = totalCost;
-      _razorpay?.open(options);
+      print("Payment Start");
+      Map notes = {
+        "contact": contact,
+        "email": email,
+        "state": state,
+      };
+      String? id = await orderController.createOrder(name, notes, totalCost);
+      print("Order ID: $id");
+      if(id != null){
+        options['order_id'] = id;
+        _razorpay?.open(options);
+      }
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -72,7 +84,8 @@ class _OrderScreenState extends State<OrderScreen> {
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     Fluttertoast.showToast(msg: "SUCCESS PAYMENT: ${response.paymentId}", timeInSecForIosWeb: 4);
-    orderController.updateOrder(response.paymentId ?? '',totalAmount);
+    // orderController.updateOrder(response.paymentId ?? '',totalAmount);
+    orderController.onOrderSuccess();
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {

@@ -1,7 +1,19 @@
-//const BaseUrl = "http://62.72.58.183:3500/api/";
-// const BaseUrl ="http://62.72.58.183:3500/api/v1/"; //live
-const BaseUrl ="http://localhost:3500/api/v1/"; //live
-//const BaseUrl ="http://62.72.58.183:3501/api/v1/"; //test
+
+const String dev = "dev";
+const String prod = "prod";
+const String local = "local";
+
+// const String env = local;
+// const String env = "local";
+const String env = "dev";
+
+const String localUrl = "http://localhost:3500/api/v1/";
+const String devUrl = "http://62.72.58.183:3501/api/v1/";
+const String prodUrl = "http://62.72.58.183:3500/api/v1/";
+
+
+
+const String BaseUrl = env == prod ? prodUrl : env == dev ? devUrl : localUrl;
 const loginUrl = "${BaseUrl}login";
 const generateIDUrl = "${BaseUrl}generateID";
 const regfrachaniseUrl = "${BaseUrl}franchise-reg";
@@ -20,11 +32,18 @@ const getallitemsUrl = "${BaseUrl}getallitems";
 const editItemUrl = "${BaseUrl}editItem";
 const getitemtransactionUrl = "${BaseUrl}getitemtransaction";
 const getallordersUrl = "${BaseUrl}order";
+const createOrderordersUrl = "${BaseUrl}create-order";
 const getFilterTransactionUrl = "${BaseUrl}getFilterTransaction";
 const getallorders = "${BaseUrl}getallorders";
 const getallreports = "${BaseUrl}data";
 const deleteCart = "${BaseUrl}studentcart-delete";
 const tnReport = "${BaseUrl}tamilnadureport";
+
+
+class RazorPay {
+  static const key = "rzp_test_1DP5mmOlF5G5ag";
+  static const createOrder = "https://api.razorpay.com/v1/orders";
+}
 
 
 //2 to 3 , 5 to 6 AA

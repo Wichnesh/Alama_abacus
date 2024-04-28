@@ -829,6 +829,9 @@ class HomeController extends GetxController {
         RequestDio(url: getfranchisestudentUrl, body: requestData);
     request.post().then((response) async {
       if (response.statusCode == 200) {
+        response.data['data'].forEach((element) {
+          print(element);
+        });
         StudentListModel student = StudentListModel.fromJson(response.data);
         if (student.status == true) {
           for (var element in student.data!) {

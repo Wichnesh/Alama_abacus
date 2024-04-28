@@ -130,6 +130,8 @@ class LevelOrders {
   String? level;
   String? date;
   String? sId;
+  String? program;
+  String? cost;
 
   LevelOrders({this.level, this.date, this.sId});
 
@@ -137,6 +139,8 @@ class LevelOrders {
     level = json['level'];
     date = json['date'];
     sId = json['_id'];
+    program = json['program'];
+    cost = json['cost'];
   }
 
   Map<String, dynamic> toJson() {
@@ -144,6 +148,8 @@ class LevelOrders {
     data['level'] = level;
     data['date'] = date;
     data['_id'] = sId;
+    data['program'] = program;
+    data['cost'] = cost;
     return data;
   }
 }
