@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../api/request.dart';
 import '../api/url.dart';
 import '../model/HomeModel.dart';
+import '../model/loginmodel.dart';
 import '../model/registermodel.dart';
 import '../model/stockmodel.dart';
 import '../model/studentmodel.dart';
@@ -196,10 +197,47 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     bool admin = Prefs.getBoolen(SHARED_ADMIN);
+    getLoginStatus();
     getFranchiseList();
     admin ? stockIsLoading.value ? Container() : getStockList() : Container();
     admin ? getStudentList() : getFranchiseStudentList();
     super.onInit();
+  }
+
+
+  void getLoginStatus() async{
+    isLoading.value = true;
+    var body = {
+      "username" : Prefs.getString(USERNAME)
+    };
+    RequestDio request = RequestDio(url: getallfranchiseUrl,parameters: body);
+    request.post().then((response) async {
+      FranchiseModel franchise = FranchiseModel.fromJson(response.data);
+      for(var data in franchise.data!){
+        if(data.approve == false){
+          await Prefs.setString(TOKEN, "");
+          await Prefs.setString(USERNAME, "");
+          await Prefs.setString(FRANCHISESTATE,"");
+          await Prefs.setBoolen(SHARED_ADMIN, false);
+          await Prefs.setBoolen('isLoggedIn', false);
+          if (kDebugMode) {
+            print(
+                '${Prefs.getString(TOKEN)} -- ${Prefs.getBoolen(SHARED_ADMIN)} -- ${Prefs.getString('isLoggedIn')}');
+          }
+          Fluttertoast.showToast(msg: "Please Contact Administrator");
+          Get.offAllNamed(ROUTE_LOGIN);
+        }else{
+          print(data.approve);
+        }
+      }
+    }).onError((error, stackTrace) {
+      Get.snackbar("Error", "$error",
+          colorText: Colors.white,
+          backgroundColor: Colors.red,
+          snackPosition: SnackPosition.TOP);
+      isLoading.value = false;
+    });
+    update();
   }
 
   void getFranchiseList() async {
@@ -1082,7 +1120,7 @@ class HomeController extends GetxController {
   void reject(String ID) {
     isLoading.value = true;
     Map<String, dynamic> requestData = {
-      "franchiseID": "$ID",
+      "franchiseID": ID,
     };
     if (kDebugMode) {
       print(requestData);

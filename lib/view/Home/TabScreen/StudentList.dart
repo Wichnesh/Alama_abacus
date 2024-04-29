@@ -482,8 +482,9 @@ class _StudentListState extends State<StudentList> {
                             child: InkWell(
                               onTap: () {
                                 controller.isStudentEdit.value = false;
+                                AppConstant.studentID = data.studentID!;
                                 Get.put<StudentController>(StudentController());
-                                Get.to(() => StudentDetails(data: data));
+                                Get.to(() => StudentDetails());
                               },
                               child: Container(
                                 margin: EdgeInsets.only(bottom: _w / 20),

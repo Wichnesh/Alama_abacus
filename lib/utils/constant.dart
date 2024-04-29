@@ -17,3 +17,9 @@ const SHARED_ADMIN = 'Admin';
 const USERNAME = 'username';
 const FRANCHISESTATE = 'franchiseState';
 const TNADMIN = "tnAdmin";
+
+
+
+class AppConstant{
+  static String studentID = "";
+}

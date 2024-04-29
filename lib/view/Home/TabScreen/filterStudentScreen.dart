@@ -54,7 +54,7 @@ class FilterStudentScreen extends StatelessWidget {
                     flipAxis: FlipAxis.y,
                     child: InkWell(
                       onTap: () {
-                        Get.to(() => StudentDetails(data: data));
+                        Get.to(() => StudentDetails());
                       },
                       child: Container(
                         margin: EdgeInsets.only(bottom: _w / 20),

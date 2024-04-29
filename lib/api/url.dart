@@ -4,7 +4,7 @@ const String prod = "prod";
 const String local = "local";
 
 // const String env = local;
-// const String env = "local";
+//const String env = "prod";
 const String env = "dev";
 
 const String localUrl = "http://localhost:3500/api/v1/";
@@ -17,6 +17,7 @@ const String BaseUrl = env == prod ? prodUrl : env == dev ? devUrl : localUrl;
 const loginUrl = "${BaseUrl}login";
 const generateIDUrl = "${BaseUrl}generateID";
 const regfrachaniseUrl = "${BaseUrl}franchise-reg";
+const loginStatusUrl = "${BaseUrl}login-status";
 const getallfranchiseUrl = "${BaseUrl}getallfranchise";
 const approveUserUrl = "${BaseUrl}approveUser";
 const rejectUserUrl = "${BaseUrl}rejectUser";

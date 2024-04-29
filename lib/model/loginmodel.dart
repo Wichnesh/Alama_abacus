@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class loginmodel {
   bool? status;
   bool? isAdmin;
@@ -21,4 +23,29 @@ class loginmodel {
     data['franchiseState'] =this.franchiseState;
     return data;
   }
+}
+
+
+LoginStatusModel loginStatusModelFromJson(String str) => LoginStatusModel.fromJson(json.decode(str));
+
+String loginStatusModelToJson(LoginStatusModel data) => json.encode(data.toJson());
+
+class LoginStatusModel {
+  final bool status;
+  final bool approve;
+
+  LoginStatusModel({
+    required this.status,
+    required this.approve,
+  });
+
+  factory LoginStatusModel.fromJson(Map<String, dynamic> json) => LoginStatusModel(
+    status: json["status"],
+    approve: json["approve"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "status": status,
+    "approve": approve,
+  };
 }
