@@ -325,8 +325,8 @@ class HomeController extends GetxController {
     update();
     Map<String, dynamic>? requestData;
     requestData = {
-      "startDate": "${fromdateText.text}",
-      "endDate": "${todateText.text}",
+      "startDate": fromdateText.text,
+      "endDate": todateText.text,
     };
     RequestDio request = RequestDio(url: getFilterTransactionUrl, body: requestData);
     if (kDebugMode) {
@@ -442,29 +442,29 @@ class HomeController extends GetxController {
       return ;
     }else if(nametext.text.isEmpty && contactNo.text.isEmpty &&selectedState.value != 'Select' && selectedDistrict.value != 'Select' ){
       params = {
-        'state': '${selectedState.value}',
-        'district': '${selectedDistrict.value}',
+        'state': selectedState.value,
+        'district': selectedDistrict.value,
       };
     }else if(nametext.text.isNotEmpty && contactNo.text.isNotEmpty && selectedState.value == 'Select' && selectedDistrict.value == 'Select'){
       params = {
-        'name': '${nametext.text}',
-        'phoneNumber': '${contactNo.text}',
+        'name': nametext.text,
+        'phoneNumber': contactNo.text,
       };
     }else if(selectedState.value != 'Select' && selectedDistrict.value != 'Select'){
       params = {
-        'state': '${selectedState.value}',
-        'district': '${selectedDistrict.value}',
+        'state': selectedState.value,
+        'district': selectedDistrict.value,
       };
     }else if(nametext.text.isNotEmpty && contactNo.text.isNotEmpty && selectedState.value != 'Select' && selectedDistrict.value != 'Select'){
        params = {
-        'name': '${nametext.text}',
-        'state': '${selectedState.value}',
-        'district': '${selectedDistrict.value}',
-        'phoneNumber': '${contactNo.text}',
+        'name': nametext.text,
+        'state': selectedState.value,
+        'district': selectedDistrict.value,
+        'phoneNumber': contactNo.text,
       };
     }else if(nametext.text.isNotEmpty && contactNo.text.isEmpty && selectedState.value == 'Select' && selectedDistrict.value == 'Select'){
       params = {
-        'name': '${nametext.text}',
+        'name': nametext.text,
       };
     }else{
       // params = {
@@ -478,7 +478,7 @@ class HomeController extends GetxController {
       print(getallstudentsUrl);
     }
 
-    RequestDio request = RequestDio(url: '${getallstudentsUrl}',parameters: params);
+    RequestDio request = RequestDio(url: getallstudentsUrl,parameters: params);
     request.post().then((response) async {
       print('${response.data}');
       if (response.statusCode == 200) {
@@ -646,7 +646,6 @@ class HomeController extends GetxController {
   void filterStudentListAllAdmin(String id,String state, String district, String franchise ,String level) {
     // Create a new list to store the filtered results
     List<SData> filteredList = [];
-
     // Iterate over the original studentList
     for (var student in studentList) {
 
@@ -670,7 +669,6 @@ class HomeController extends GetxController {
         levelMatched = student.level?.contains(level) ?? false;
       }
 
-      // Check if the state contains the input state (case insensitive)
       if (state != 'Select') {
         stateMatched = student.state?.toLowerCase().contains(state.toLowerCase()) ?? false;
       }
@@ -688,35 +686,35 @@ class HomeController extends GetxController {
         if (franchiseMatched && levelMatched && stateMatched && districtMatched && idMatched) {
           filteredList.add(student);
         }
-      }else if(state !='Select' && district == 'Select' && franchise == 'Select' && level == 'Select' && id !=''){
+      }else if(state !='Select' && district == 'Select' && franchise == 'Select' && level == 'Select' && id.isEmpty){
         if (kDebugMode) {
           print('State Only');
         }
         if(stateMatched){
           filteredList.add(student);
         }
-      }else if(franchise =='Select' && level =='Select' && state !='Select' && district !='Select' && id !=''){
+      }else if(franchise =='Select' && level =='Select' && state !='Select' && district !='Select' && id.isEmpty){
         if (kDebugMode) {
           print('State and District Only');
         }
         if (stateMatched && districtMatched) {
           filteredList.add(student);
         }
-      }else if(franchise !='Select' && level =='Select' && state !='Select' && district !='Select' && id !=''){
+      }else if(franchise !='Select' && level =='Select' && state !='Select' && district !='Select' && id.isEmpty){
         if (kDebugMode) {
           print('State , district , franchise Only');
         }
         if (franchiseMatched && stateMatched && districtMatched) {
           filteredList.add(student);
         }
-      }else if(state =='Select' && district == 'Select' && franchise != 'Select' && level == 'Select' && id !=''){
+      }else if(state =='Select' && district == 'Select' && franchise != 'Select' && level == 'Select' && id.isEmpty){
         if (kDebugMode) {
           print('franchise Only');
         }
         if(franchiseMatched){
           filteredList.add(student);
         }
-      }else if(state !='Select' && district == 'Select' && franchise != 'Select' && level != 'Select' && id !=''){
+      }else if(state !='Select' && district == 'Select' && franchise != 'Select' && level != 'Select' && id.isEmpty){
         if (kDebugMode) {
           print('state,level,franchise Only');
         }
@@ -724,14 +722,14 @@ class HomeController extends GetxController {
           filteredList.add(student);
         }
       }
-      else if(state !='Select' && district == 'Select' && franchise == 'Select' && level != 'Select' && id !=''){
+      else if(state !='Select' && district == 'Select' && franchise == 'Select' && level != 'Select' && id.isEmpty){
         if (kDebugMode) {
           print('state,level Only');
         }
         if (stateMatched && levelMatched) {
           filteredList.add(student);
         }
-      }else if(state =='Select' && district == 'Select' && franchise != 'Select' && level != 'Select' && id !=''){
+      }else if(state =='Select' && district == 'Select' && franchise != 'Select' && level != 'Select' && id.isEmpty){
         if (kDebugMode) {
           print('franchise,level Only');
         }
@@ -739,7 +737,7 @@ class HomeController extends GetxController {
           filteredList.add(student);
         }
       }
-      else if(state !='Select' && district == 'Select' && franchise != 'Select' && level == 'Select' && id !=''){
+      else if(state !='Select' && district == 'Select' && franchise != 'Select' && level == 'Select' && id.isEmpty){
         if (kDebugMode) {
           print('state,franchise Only');
         }
@@ -747,7 +745,7 @@ class HomeController extends GetxController {
           filteredList.add(student);
         }
       }
-      else if(state =='Select' && district == 'Select' && franchise == 'Select' && level != 'Select' && id !=''){
+      else if(state =='Select' && district == 'Select' && franchise == 'Select' && level != 'Select' && id.isEmpty){
         if (kDebugMode) {
           print('level Only');
         }
@@ -858,7 +856,7 @@ class HomeController extends GetxController {
   void getFranchiseStudentList() async {
     isLoading.value = true;
     Map<String, dynamic> requestData = {
-      "username": "${Prefs.getString(USERNAME)}",
+      "username": Prefs.getString(USERNAME),
     };
     if (kDebugMode) {
       print(getfranchisestudentUrl);
@@ -1035,7 +1033,7 @@ class HomeController extends GetxController {
     stockIsLoading.value = true;
     update();
     refresh();
-    Map<String, dynamic> requestData = {"id": "${id}", "count": "${count}"};
+    Map<String, dynamic> requestData = {"id": id, "count": "${count}"};
 
     if (kDebugMode) {
       print(requestData);
@@ -1083,7 +1081,7 @@ class HomeController extends GetxController {
   void approve(String ID) {
     isLoading.value = true;
     Map<String, dynamic> requestData = {
-      "franchiseID": "$ID",
+      "franchiseID": ID,
     };
     if (kDebugMode) {
       print(requestData);

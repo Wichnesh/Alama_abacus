@@ -1,55 +1,62 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import '../api/request.dart';
+import '../api/url.dart';
+import '../model/HomeModel.dart';
+import '../model/Ordermodel.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import '../api/request.dart';
 import 'dart:io';
-import '../api/url.dart';
-import '../model/Ordermodel.dart';
-
-class OrderReportController extends GetxController {
+class FWOController extends GetxController {
+  var approvedFranchiseList = List<FMData>.empty(growable: true).obs;
+  var selectedFranchise  ="Select".obs;
   var isLoading = false.obs;
   var enableDownload = false.obs;
-  var isToggleOn = false.obs;
-  DateTime? fromdate;
-  DateTime? todate;
-  TextEditingController fromdateText = TextEditingController();
-  TextEditingController todateText = TextEditingController();
   var orderList = List<OData>.empty(growable: true).obs;
   var reportList = List<Franchise>.empty(growable: true).obs;
+  DateTime? fromDate;
+  DateTime? toDate;
+  TextEditingController fromDateText = TextEditingController();
+  TextEditingController toDateText = TextEditingController();
 
-  void getOrderMethod() {
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    getFranchiseList();
+  }
+
+  void updateSelectedFranchise(String newValue) {
+    selectedFranchise.value = newValue;
+  }
+  
+  void getFranchiseList() async {
+    approvedFranchiseList.clear();
     isLoading.value = true;
-    update();
-    Map<String, dynamic>? requestData;
-    requestData = {
-      "startDate": fromdateText.text,
-      "endDate": todateText.text,
-    };
-    RequestDio request = RequestDio(url: getallorders, body: requestData);
-    if (kDebugMode) {
-      print(requestData);
-    }
+    RequestDio request = RequestDio(url: getallfranchiseUrl);
     request.post().then((response) async {
-      if (kDebugMode) {
-        print(response.data);
-        print(response.statusCode);
-      }
       if (response.statusCode == 200) {
-        OrderModel order = OrderModel.fromJson(response.data);
-        if (order.status == true) {
-          for (var element in order.data!) {
-            orderList.add(element);
-          }
-          if (orderList.isNotEmpty) {
-            enableDownload.value = true;
-          } else {
-            enableDownload.value = false;
+        FranchiseModel franchise = FranchiseModel.fromJson(response.data);
+        if (franchise.status == true) {
+          for (var element in franchise.data!) {
+            {
+              if (element.approve == true) {
+                approvedFranchiseList.add(element);
+                if (kDebugMode) {
+                  print(approvedFranchiseList);
+                }
+              } else {
+                if (element.approve == false) {
+                  if (kDebugMode) {
+                    print(element.franchiseID);
+                  }
+                }
+              }
+            }
           }
           isLoading.value = false;
           update();
@@ -60,10 +67,26 @@ class OrderReportController extends GetxController {
               snackPosition: SnackPosition.TOP);
         }
       } else if (response.statusCode == 201) {
-        OrderModel order = OrderModel.fromJson(response.data);
-        if (order.status == true) {
-          for (var element in order.data!) {
-            orderList.add(element);
+        FranchiseModel franchise = FranchiseModel.fromJson(response.data);
+        if (franchise.status == true) {
+          for (var element in franchise.data!) {
+            {
+              if (element.approve == true) {
+                approvedFranchiseList.add(element);
+                if (element.approve == true) {
+                  if (kDebugMode) {
+                    print('Approved ${element.franchiseID}');
+                  }
+                }
+              } else {
+                //nonapprovedfranchiselist.add(element);
+                if (element.approve == false) {
+                  if (kDebugMode) {
+                    print('Not Approved ${element.franchiseID}');
+                  }
+                }
+              }
+            }
           }
           isLoading.value = false;
           update();
@@ -79,15 +102,23 @@ class OrderReportController extends GetxController {
             backgroundColor: Colors.red,
             snackPosition: SnackPosition.TOP);
       }
+    }).onError((error, stackTrace) {
+      Get.snackbar("Error", "$error",
+          colorText: Colors.white,
+          backgroundColor: Colors.red,
+          snackPosition: SnackPosition.TOP);
+      isLoading.value = false;
     });
+    update();
   }
+
 
   void getReportMethod() {
     reportList.clear();
     isLoading.value = true;
     update();
     Map<String, dynamic>? requestData;
-    requestData = {"startDate": fromdateText.text, "endDate": todateText.text};
+    requestData = {"startDate": fromDateText.text, "endDate": toDateText.text};
     RequestDio request = RequestDio(url: getallreports, body: requestData);
     if (kDebugMode) {
       print(requestData);
@@ -100,74 +131,17 @@ class OrderReportController extends GetxController {
       if (response.statusCode == 200) {
         FranchiseData order = FranchiseData.fromJson(response.data);
         if (order.status == true) {
-          for (var element in order.data!) {
-            reportList.add(element);
-          }
-          if (reportList.isNotEmpty) {
-            enableDownload.value = true;
-          } else {
-            enableDownload.value = false;
-          }
-          isLoading.value = false;
-          update();
-        } else {
-          Get.snackbar("Error", "Fetching error",
-              colorText: Colors.white,
-              backgroundColor: Colors.red,
-              snackPosition: SnackPosition.TOP);
-        }
-      } else if (response.statusCode == 201) {
-        OrderModel order = OrderModel.fromJson(response.data);
-        if (order.status == true) {
-          for (var element in order.data!) {
-            orderList.add(element);
-          }
-          isLoading.value = false;
-          update();
-        } else {
-          Get.snackbar("Error", "Fetching error",
-              colorText: Colors.white,
-              backgroundColor: Colors.red,
-              snackPosition: SnackPosition.TOP);
-        }
-      } else {
-        Get.snackbar("Error", "Fetching error",
-            colorText: Colors.white,
-            backgroundColor: Colors.red,
-            snackPosition: SnackPosition.TOP);
-      }
-    });
-  }
-
-  void getTNReportMethod() {
-    reportList.clear();
-    isLoading.value = true;
-    update();
-    Map<String, dynamic>? requestData;
-    requestData = {"startDate": fromdateText.text, "endDate": todateText.text};
-    RequestDio request = RequestDio(url: tnReport, body: requestData);
-    if (kDebugMode) {
-      print(requestData);
-    }
-    request.post().then((response) async {
-      if (kDebugMode) {
-        print(response.data);
-        print(response.statusCode);
-      }
-      if (response.statusCode == 200) {
-        FranchiseData order = FranchiseData.fromJson(response.data);
-        if (order.status == true) {
           for (var element in order.data) {
-            // Check if both enrolledStudents and ordered lists are not empty
-            if (element.enrolledStudents.isNotEmpty ||
-                element.ordered.isNotEmpty) {
+            if(element.franchiseName == selectedFranchise.value){
               reportList.add(element);
             }
           }
-          // Check if reportList is not empty to enable download
           if (reportList.isNotEmpty) {
+            print("Report Is Not Empty");
             enableDownload.value = true;
           } else {
+            print("Report Is Empty");
+            Fluttertoast.showToast(msg: 'Order Report Is Empty');
             enableDownload.value = false;
           }
           isLoading.value = false;
@@ -200,7 +174,6 @@ class OrderReportController extends GetxController {
       }
     });
   }
-
 
 
   void reportGeneratePdf() async {
@@ -256,13 +229,13 @@ class OrderReportController extends GetxController {
             pw.SizedBox(height: 20),
             pw.Center(
                 child: pw.Text(
-                    'Order Report -- ${fromdateText.text} - ${todateText.text}')),
+                    'Order Report -- ${fromDateText.text} - ${toDateText.text}')),
             pw.SizedBox(height: 20),
             pw.Center(
               child: pw.Text(
                 'Franchise Name: ${order.franchiseName}',
                 style:
-                    pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold),
+                pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold),
               ),
             ),
             pw.SizedBox(height: 10),
@@ -282,13 +255,13 @@ class OrderReportController extends GetxController {
               },
               data: order.enrolledStudents
                   .map((student) => [
-                        '${enrollCounter++}',
-                        student.studentName,
-                        student.district,
-                        student.state,
-                        student.level,
-                        student.enrollDate
-                      ])
+                '${enrollCounter++}',
+                student.studentName,
+                student.district,
+                student.state,
+                student.level,
+                student.enrollDate
+              ])
                   .toList(),
             ),
             pw.SizedBox(height: 10),
@@ -307,14 +280,14 @@ class OrderReportController extends GetxController {
               },
               data: order.ordered
                   .map((order) => [
-                        '${orderCounter++}',
-                        order.studentName,
-                        order.studentID,
-                        order.district,
-                        order.state,
-                        order.futureLevel,
-                        order.orderDate
-                      ])
+                '${orderCounter++}',
+                order.studentName,
+                order.studentID,
+                order.district,
+                order.state,
+                order.futureLevel,
+                order.orderDate
+              ])
                   .toList(),
             ),
             pw.SizedBox(height: 10),
@@ -349,5 +322,13 @@ class OrderReportController extends GetxController {
 
     // Open the PDF file
     await OpenFile.open(pdfFile.path);
+  }
+
+  void validate() async {
+    if(selectedFranchise.value == "Select"){
+      Fluttertoast.showToast(msg: "Select Franchise to Submit");
+    }else{
+      getReportMethod();
+    }
   }
 }
