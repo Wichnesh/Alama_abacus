@@ -12,6 +12,9 @@ import '../model/HomeModel.dart';
 import '../model/studentmodel.dart';
 import 'dart:io';
 
+import '../utils/constant.dart';
+import '../utils/pref_manager.dart';
+
 class FranchiseWiseStudentController extends GetxController {
 
   var approvedFranchiseList = List<FMData>.empty(growable: true).obs;
@@ -19,12 +22,14 @@ class FranchiseWiseStudentController extends GetxController {
   var isLoading = false.obs;
   var enableDownload = false.obs;
   var studentList = List<SData>.empty(growable: true).obs;
-
+  var username = "".obs;
 @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    getFranchiseList();
+    var admin = Prefs.getBoolen(SHARED_ADMIN);
+    username.value = Prefs.getString(USERNAME);
+    admin ? getFranchiseList() : Container();
   }
 
   void updateSelectedFranchise(String newValue) {
@@ -111,23 +116,36 @@ class FranchiseWiseStudentController extends GetxController {
   }
 
   void getFranchiseStudentList() async {
+    var admin = Prefs.getBoolen(SHARED_ADMIN);
     isLoading.value = true;
     studentList.clear();
-    Map<String, dynamic> requestData = {
-      "username": selectedFranchise.value,
-    };
+    Map<String, dynamic> requestData;
+    if(admin){
+      requestData = {
+        "username": selectedFranchise.value,
+      };
+    }else{
+      requestData = {
+        "username": username.value,
+      };
+    }
     if (kDebugMode) {
       print(getfranchisestudentUrl);
     }
-    RequestDio request =
-    RequestDio(url: getfranchisestudentUrl, body: requestData);
+    RequestDio request = RequestDio(url: getfranchisestudentUrl, body: requestData);
     request.post().then((response) async {
       if (response.statusCode == 200) {
         StudentListModel student = StudentListModel.fromJson(response.data);
         if (student.status == true) {
           for (var element in student.data!) {
-            if(element.franchise == selectedFranchise.value){
-              studentList.add(element);
+            if(admin){
+              if(element.franchise == selectedFranchise.value){
+                studentList.add(element);
+              }
+            }else{
+              if(element.franchise == username.value){
+                studentList.add(element);
+              }
             }
           }
           if (studentList.isNotEmpty) {
@@ -180,6 +198,13 @@ class FranchiseWiseStudentController extends GetxController {
   }
 
   void reportGeneratePdf() async {
+    var admin = Prefs.getBoolen(SHARED_ADMIN);
+    var name;
+    if(admin){
+      name = selectedFranchise.value;
+    }else{
+      name = username.value;
+    }
     final pdf = pw.Document();
     int enrollCounter = 1;
     DateTime now = DateTime.now();
@@ -218,7 +243,7 @@ class FranchiseWiseStudentController extends GetxController {
             pw.SizedBox(height: 20),
             pw.Center(
               child: pw.Text(
-                'Franchise Name: ${selectedFranchise.value}',
+                'Franchise Name: $name',
                 style:
                 pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold),
               ),

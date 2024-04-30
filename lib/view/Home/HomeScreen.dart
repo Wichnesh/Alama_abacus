@@ -38,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool admin = Prefs.getBoolen(SHARED_ADMIN);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Alama Abacus"),
@@ -69,12 +70,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            ListTile(
+             ListTile(
               title: const Text('Report'),
               onTap: () {
                 Get.toNamed(ROUTE_REPORTDASHBOARD);
               },
-            ),
+            )
           ],
         ),
       ),

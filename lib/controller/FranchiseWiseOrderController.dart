@@ -11,6 +11,9 @@ import '../model/Ordermodel.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'dart:io';
+
+import '../utils/constant.dart';
+import '../utils/pref_manager.dart';
 class FWOController extends GetxController {
   var approvedFranchiseList = List<FMData>.empty(growable: true).obs;
   var selectedFranchise  ="Select".obs;
@@ -22,12 +25,14 @@ class FWOController extends GetxController {
   DateTime? toDate;
   TextEditingController fromDateText = TextEditingController();
   TextEditingController toDateText = TextEditingController();
-
+  var username = "".obs;
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    getFranchiseList();
+    var admin = Prefs.getBoolen(SHARED_ADMIN);
+    username.value = Prefs.getString(USERNAME);
+    admin ? getFranchiseList() : Container();
   }
 
   void updateSelectedFranchise(String newValue) {
@@ -114,6 +119,7 @@ class FWOController extends GetxController {
 
 
   void getReportMethod() {
+    var admin = Prefs.getBoolen(SHARED_ADMIN);
     reportList.clear();
     isLoading.value = true;
     update();
@@ -132,31 +138,27 @@ class FWOController extends GetxController {
         FranchiseData order = FranchiseData.fromJson(response.data);
         if (order.status == true) {
           for (var element in order.data) {
+          if(admin){
             if(element.franchiseName == selectedFranchise.value){
               reportList.add(element);
             }
+          }else{
+            if(element.franchiseName == username.value){
+              reportList.add(element);
+            }
+          }
           }
           if (reportList.isNotEmpty) {
-            print("Report Is Not Empty");
+            if (kDebugMode) {
+              print("Report Is Not Empty");
+            }
             enableDownload.value = true;
           } else {
-            print("Report Is Empty");
+            if (kDebugMode) {
+              print("Report Is Empty");
+            }
             Fluttertoast.showToast(msg: 'Order Report Is Empty');
             enableDownload.value = false;
-          }
-          isLoading.value = false;
-          update();
-        } else {
-          Get.snackbar("Error", "Fetching error",
-              colorText: Colors.white,
-              backgroundColor: Colors.red,
-              snackPosition: SnackPosition.TOP);
-        }
-      } else if (response.statusCode == 201) {
-        OrderModel order = OrderModel.fromJson(response.data);
-        if (order.status == true) {
-          for (var element in order.data!) {
-            orderList.add(element);
           }
           isLoading.value = false;
           update();
@@ -325,10 +327,15 @@ class FWOController extends GetxController {
   }
 
   void validate() async {
-    if(selectedFranchise.value == "Select"){
-      Fluttertoast.showToast(msg: "Select Franchise to Submit");
-    }else{
-      getReportMethod();
-    }
+    var admin = Prefs.getBoolen(SHARED_ADMIN);
+   if(admin){
+     if(selectedFranchise.value == "Select"){
+       Fluttertoast.showToast(msg: "Select Franchise to Submit");
+     }else{
+       getReportMethod();
+     }
+   }else{
+     getReportMethod();
+   }
   }
 }

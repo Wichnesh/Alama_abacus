@@ -4,6 +4,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import '../../../../controller/FranchiseWiseStudent_controller.dart';
 import '../../../../controller/Home_controller.dart';
+import '../../../../utils/constant.dart';
+import '../../../../utils/pref_manager.dart';
 
 
 class FranchiseWiseStudentScreen extends StatelessWidget {
@@ -11,6 +13,7 @@ class FranchiseWiseStudentScreen extends StatelessWidget {
   FranchiseWiseStudentController controller = Get.put(FranchiseWiseStudentController());
   @override
   Widget build(BuildContext context) {
+    var admin = Prefs.getBoolen(SHARED_ADMIN);
     return  Scaffold(
       appBar: AppBar(
         title: const Text('Franchise Wise Student Report'),
@@ -22,7 +25,7 @@ class FranchiseWiseStudentScreen extends StatelessWidget {
             child: SizedBox(
               height: 60,
               width: double.infinity,
-              child: DropdownButtonFormField(
+              child:admin ? DropdownButtonFormField(
                 hint: Text(
                   controller.selectedFranchise.value,
                 ),
@@ -52,9 +55,16 @@ class FranchiseWiseStudentScreen extends StatelessWidget {
                 onChanged: (val) {
                   controller.updateSelectedFranchise(val!);
                 },
+              )
+                  : TextFormField(
+                enabled: false,
+                controller: TextEditingController(
+                    text: controller.username.value
+                ),
               ),
             ),
-          )),
+          )
+          ),
           ElevatedButton(
               onPressed: (){
                 controller.getFranchiseStudentList();

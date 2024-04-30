@@ -4,12 +4,15 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../../controller/FranchiseWiseOrderController.dart';
 import '../../../../utils/colorUtils.dart';
+import '../../../../utils/constant.dart';
+import '../../../../utils/pref_manager.dart';
 
 class FranchiseWiseOrderReport extends StatelessWidget {
    FranchiseWiseOrderReport({super.key});
   final controller = Get.put(FWOController());
   @override
   Widget build(BuildContext context) {
+    var admin = Prefs.getBoolen(SHARED_ADMIN);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Franchise Wise Order Report'),
@@ -91,7 +94,7 @@ class FranchiseWiseOrderReport extends StatelessWidget {
             child: SizedBox(
               height: 60,
               width: double.infinity,
-              child: DropdownButtonFormField(
+              child: admin ? DropdownButtonFormField(
                 hint: Text(
                   controller.selectedFranchise.value,
                 ),
@@ -121,9 +124,16 @@ class FranchiseWiseOrderReport extends StatelessWidget {
                 onChanged: (val) {
                   controller.updateSelectedFranchise(val!);
                 },
+              )
+                  : TextFormField(
+                enabled: false,
+                controller: TextEditingController(
+                    text: controller.username.value
+                ),
               ),
             ),
-          )),
+          )
+          ),
           ElevatedButton(
               onPressed: (){
                   controller.validate();

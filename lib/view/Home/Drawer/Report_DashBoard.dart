@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/constant.dart';
+import '../../../utils/pref_manager.dart';
 
 class ReportDashboard extends StatelessWidget {
   const ReportDashboard({Key? key}) : super(key: key);
@@ -20,9 +21,13 @@ class ReportDashboard extends StatelessWidget {
   }
 
   List<Widget> _buildReportItems(BuildContext context) {
-    final reportItems = {
+    var admin = Prefs.getBoolen(SHARED_ADMIN);
+    final reportItems = admin ? {
       'Franchise Wise Student Report': ROUTE_FWS,
       'Order Report': ROUTE_ORDERREPORTS,
+      'Franchise Wise Order Report' : ROUTE_FWO
+    } :{
+      'Franchise Wise Student Report': ROUTE_FWS,
       'Franchise Wise Order Report' : ROUTE_FWO
     };
 
