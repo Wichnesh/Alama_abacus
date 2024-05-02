@@ -414,12 +414,7 @@ class _StudentListState extends State<StudentList> {
     double _w = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        leading: admin ?  IconButton(
-          onPressed: (){
-           Get.toNamed(ROUTE_ORDERREPORTS);
-          },
-          icon: const Icon(Icons.newspaper),
-        ) : IconButton(
+        leading: admin ?  const SizedBox.shrink() : IconButton(
             onPressed: (){
               Get.toNamed(ROUTE_STUDENTCARTLISTSCREEN);
             },

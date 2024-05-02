@@ -4,12 +4,12 @@ const String prod = "prod";
 const String local = "local";
 
 // const String env = local;
-//const String env = "prod";
-const String env = "dev";
+const String env = "prod";
+//const String env = "dev";
 
 const String localUrl = "http://localhost:3500/api/v1/";
 const String devUrl = "http://62.72.58.183:3501/api/v1/";
-const String prodUrl = "http://62.72.58.183:3500/api/v1/";
+const String prodUrl = "http://62.72.58.183:3500/api/v2/";
 
 
 
@@ -42,7 +42,7 @@ const tnReport = "${BaseUrl}tamilnadureport";
 
 
 class RazorPay {
-  static const key = "rzp_test_1DP5mmOlF5G5ag";
+  //static const key = "rzp_test_1DP5mmOlF5G5ag";
   static const createOrder = "https://api.razorpay.com/v1/orders";
 }
 

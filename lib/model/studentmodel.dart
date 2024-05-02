@@ -130,6 +130,7 @@ class LevelOrders {
   String? level;
   String? date;
   String? sId;
+  String? paymentID;
   String? program;
   String? cost;
 
@@ -139,6 +140,7 @@ class LevelOrders {
     level = json['level'];
     date = json['date'];
     sId = json['_id'];
+    paymentID = json["paymentID"];
     program = json['program'];
     cost = json['cost'];
   }
@@ -148,6 +150,7 @@ class LevelOrders {
     data['level'] = level;
     data['date'] = date;
     data['_id'] = sId;
+    data["paymentID"] = paymentID;
     data['program'] = program;
     data['cost'] = cost;
     return data;

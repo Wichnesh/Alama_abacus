@@ -52,8 +52,8 @@ class _OrderScreenState extends State<OrderScreen> {
     }
     var options = {
       //'key': 'rzp_test_uMK9VbEsTuePim',
-      // 'key' : 'rzp_live_FaHtY1SM9hLWek', //live key
-      'key' : 'rzp_test_edocUhj72yJ1Rm',
+       'key' : 'rzp_live_AbmoGrxyMh5jnn', //live key
+      //'key' : 'rzp_test_edocUhj72yJ1Rm',
       'amount': totalCost,
       'name': name,
       'description': 'Order Payment',
@@ -78,7 +78,7 @@ class _OrderScreenState extends State<OrderScreen> {
         _razorpay?.open(options);
       }
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("razorpay error ---> ${e.toString()}");
     }
   }
 

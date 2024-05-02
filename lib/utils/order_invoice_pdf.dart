@@ -55,7 +55,7 @@ class OrderInvoicePdf {
             data: <List<String>>[
               <String>['ID', 'Level', 'Program', 'Date', 'Cost',],
               ...data.levelOrders?.map((e) => [
-                e.sId.toString(),
+                e.paymentID.toString(),
                 e.level.toString(),
                 e.program.toString(),
                 e.date.toString().substring(0, 10),

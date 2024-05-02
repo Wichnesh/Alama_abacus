@@ -41,8 +41,8 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
     }
     var options = {
       //'key': 'rzp_test_uMK9VbEsTuePim',
-      // 'key' : 'rzp_live_FaHtY1SM9hLWek', //live key
-      'key' : 'rzp_test_edocUhj72yJ1Rm',
+       'key' : 'rzp_live_AbmoGrxyMh5jnn', //live key
+     // 'key' : 'rzp_test_edocUhj72yJ1Rm',
       'amount': totalCost,
       'name': 'Abacus Enrollment ',
       'description': 'No of Student $count',
