@@ -355,7 +355,7 @@ class StudentDetails extends StatelessWidget {
                             const SizedBox(
                               width: 15,
                             ),
-                            Expanded(
+                          admin ?  Expanded(
                               child: SizedBox(
                                 height: 55,
                                 width: 175,
@@ -407,7 +407,7 @@ class StudentDetails extends StatelessWidget {
                                   ),
                                 )),
                               ),
-                            ),
+                            ) : const SizedBox.shrink(),
                           ],
                         ),
                       );
