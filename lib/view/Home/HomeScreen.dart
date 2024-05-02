@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-             ListTile(
+            Prefs.getString(USERNAME) == "tnadmin@gmail.com" ? Container() : ListTile(
               title: const Text('Report'),
               onTap: () {
                 Get.toNamed(ROUTE_REPORTDASHBOARD);

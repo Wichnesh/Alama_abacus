@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 
+import '../../../controller/Home_controller.dart';
+import '../../../controller/Student_controller.dart';
 import 'DetailScreen/StudentDetails.dart';
 
 class FilterStudentScreen extends StatelessWidget {
@@ -54,6 +56,10 @@ class FilterStudentScreen extends StatelessWidget {
                     flipAxis: FlipAxis.y,
                     child: InkWell(
                       onTap: () {
+                        final controller = Get.find<HomeController>();
+                        controller.isStudentEdit.value = false;
+                        Get.put<StudentController>(StudentController());
+                        AppConstant.studentID = data.studentID!;
                         Get.to(() => StudentDetails());
                       },
                       child: Container(
