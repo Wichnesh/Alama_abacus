@@ -13,6 +13,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'dart:io';
 
 import '../utils/constant.dart';
+import '../utils/franchise_class/franchise_Service.dart';
 import '../utils/pref_manager.dart';
 class FWOController extends GetxController {
   var approvedFranchiseList = List<FMData>.empty(growable: true).obs;
@@ -26,97 +27,35 @@ class FWOController extends GetxController {
   TextEditingController fromDateText = TextEditingController();
   TextEditingController toDateText = TextEditingController();
   var username = "".obs;
+  final FranchiseService franchiseService = FranchiseService();
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
     var admin = Prefs.getBoolen(SHARED_ADMIN);
     username.value = Prefs.getString(USERNAME);
-    admin ? getFranchiseList() : Container();
+    admin ? fetchFranchiseList() : Container();
   }
 
   void updateSelectedFranchise(String newValue) {
     selectedFranchise.value = newValue;
   }
-  
-  void getFranchiseList() async {
+
+  void fetchFranchiseList() async {
     approvedFranchiseList.clear();
-    isLoading.value = true;
-    RequestDio request = RequestDio(url: getallfranchiseUrl);
-    request.post().then((response) async {
-      if (response.statusCode == 200) {
-        FranchiseModel franchise = FranchiseModel.fromJson(response.data);
-        if (franchise.status == true) {
-          for (var element in franchise.data!) {
-            {
-              if (element.approve == true) {
-                approvedFranchiseList.add(element);
-                if (kDebugMode) {
-                  print(approvedFranchiseList);
-                }
-              } else {
-                if (element.approve == false) {
-                  if (kDebugMode) {
-                    print(element.franchiseID);
-                  }
-                }
-              }
-            }
-          }
-          isLoading.value = false;
-          update();
-        } else {
-          Get.snackbar("Error", "Fetching error",
-              colorText: Colors.white,
-              backgroundColor: Colors.red,
-              snackPosition: SnackPosition.TOP);
-        }
-      } else if (response.statusCode == 201) {
-        FranchiseModel franchise = FranchiseModel.fromJson(response.data);
-        if (franchise.status == true) {
-          for (var element in franchise.data!) {
-            {
-              if (element.approve == true) {
-                approvedFranchiseList.add(element);
-                if (element.approve == true) {
-                  if (kDebugMode) {
-                    print('Approved ${element.franchiseID}');
-                  }
-                }
-              } else {
-                //nonapprovedfranchiselist.add(element);
-                if (element.approve == false) {
-                  if (kDebugMode) {
-                    print('Not Approved ${element.franchiseID}');
-                  }
-                }
-              }
-            }
-          }
-          isLoading.value = false;
-          update();
-        } else {
-          Get.snackbar("Error", "Fetching error",
-              colorText: Colors.white,
-              backgroundColor: Colors.red,
-              snackPosition: SnackPosition.TOP);
-        }
-      } else {
-        Get.snackbar("Error", "Fetching error",
-            colorText: Colors.white,
-            backgroundColor: Colors.red,
-            snackPosition: SnackPosition.TOP);
-      }
-    }).onError((error, stackTrace) {
-      Get.snackbar("Error", "$error",
+    try {
+      isLoading.value = true;
+      approvedFranchiseList.assignAll(await franchiseService.getFranchiseList());
+    } catch (e) {
+      Get.snackbar("Error", "$e",
           colorText: Colors.white,
           backgroundColor: Colors.red,
           snackPosition: SnackPosition.TOP);
+    } finally {
       isLoading.value = false;
-    });
-    update();
+    }
   }
-
 
   void getReportMethod() {
     var admin = Prefs.getBoolen(SHARED_ADMIN);
