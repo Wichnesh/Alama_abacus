@@ -60,10 +60,8 @@ class StudentDetails extends StatelessWidget {
                       labelText: 'Student ID',
                       // border: Get.find<HomeController>().isStudentEdit.value?const OutlineInputBorder():null,
                     ),
-                    controller: TextEditingController(
-                        text: data.studentID.toString()),
-                    readOnly:
-                    true, //!Get.find<HomeController>().isStudentEdit.value,
+                    controller: TextEditingController(text: data.studentID.toString()),
+                    readOnly: true, //!Get.find<HomeController>().isStudentEdit.value,
                     onChanged: (value) => Get.find<StudentController>()
                         .updateStudentData['studentID'] = value,
                   ),

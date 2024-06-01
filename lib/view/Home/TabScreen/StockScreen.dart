@@ -175,7 +175,7 @@ class _StockScreenState extends State<StockScreen> {
                                   });
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: isAdding ? Colors.green : null,
+                                  backgroundColor: isAdding ? Colors.green : null,
                                 ),
                                 child: const Text('Add'),
                               ),
@@ -196,7 +196,7 @@ class _StockScreenState extends State<StockScreen> {
                                     });
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    primary: !isAdding ? Colors.red : null,
+                                    backgroundColor: !isAdding ? Colors.red : null,
                                   ),
                                   child: const Text('Subtract'),
                                 )),
@@ -279,7 +279,7 @@ class _StockScreenState extends State<StockScreen> {
                                   });
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: isAdding ? Colors.green : null,
+                                  backgroundColor: isAdding ? Colors.green : null,
                                 ),
                                 child: const Text('Add'),
                               ),
@@ -300,7 +300,7 @@ class _StockScreenState extends State<StockScreen> {
                                 });
                               },
                               style: ElevatedButton.styleFrom(
-                                primary: !isAdding ? Colors.red : null,
+                                backgroundColor: !isAdding ? Colors.red : null,
                               ),
                               child: const Text('Subtract'),
                             )),

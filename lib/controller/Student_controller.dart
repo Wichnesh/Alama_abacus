@@ -195,11 +195,11 @@ class StudentController extends GetxController {
   void costBoolUpdate(String state){
     if(costBool.value == true){
      if(level.value == 'Pre Level' && state == 'Tamil Nadu'){
-       enrollValue.value = '1700';
+       enrollValue.value = (1200+600).toString();
      }else if(level.value == 'Enroll' && state == 'Tamil Nadu'){
-       enrollValue.value = '1100';
+       enrollValue.value = '1200';
      }else if(level.value=='Select' && state == 'Tamil Nadu'){
-       enrollValue.value = '1100';
+       enrollValue.value = '1200';
      }
      else if(level.value =='Pre Level' ){
        enrollValue.value = '2000';

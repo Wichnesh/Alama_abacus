@@ -4,6 +4,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import '../../../api/url.dart';
 import '../../../controller/Student_Cart_Controller.dart';
 import '../../../utils/constant.dart';
 import '../../../utils/pref_manager.dart';
@@ -41,7 +42,7 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
     }
     var options = {
       //'key': 'rzp_test_uMK9VbEsTuePim',
-       'key' : 'rzp_live_AbmoGrxyMh5jnn', //live key
+       'key' : RazorPay.key, //live key
      // 'key' : 'rzp_test_edocUhj72yJ1Rm',
       'amount': totalCost,
       'name': 'Abacus Enrollment ',

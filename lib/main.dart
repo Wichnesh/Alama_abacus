@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            primary: secondaryColor, // Set elevated button color to blue
+            backgroundColor: secondaryColor, // Set elevated button color to blue
           ),
         ),
         iconTheme: IconThemeData(

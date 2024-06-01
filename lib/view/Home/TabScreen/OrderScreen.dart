@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
+import '../../../api/url.dart';
 import '../../../utils/colorUtils.dart';
 import '../../../utils/constant.dart';
 import '../../../utils/pref_manager.dart';
@@ -39,9 +40,9 @@ class _OrderScreenState extends State<OrderScreen> {
     int totalCost = 0;
     if(state == 'Tamil Nadu'){
       if(extraAmount == true){
-        totalCost = (360 + 300) * 100;
+        totalCost = (400 + 300) * 100;
       }else{
-        totalCost = 360 * 100;
+        totalCost = 400 * 100;
       }
     }else{
       if(extraAmount == true){
@@ -52,7 +53,7 @@ class _OrderScreenState extends State<OrderScreen> {
     }
     var options = {
       //'key': 'rzp_test_uMK9VbEsTuePim',
-       'key' : 'rzp_live_AbmoGrxyMh5jnn', //live key
+       'key' : RazorPay.key, //live key
       //'key' : 'rzp_test_edocUhj72yJ1Rm',
       'amount': totalCost,
       'name': name,
