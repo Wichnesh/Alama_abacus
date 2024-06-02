@@ -202,15 +202,31 @@ class StudentController extends GetxController {
        enrollValue.value = '1200';
      }
      else if(level.value =='Pre Level' ){
-       enrollValue.value = '2000';
+       if(Prefs.getString(USERNAME) == "padma@gmail.com"){
+         enrollValue.value = '1';
+       }else{
+         enrollValue.value = '2000';
+       }
      } else {
-       enrollValue.value = '1300';
+       if(Prefs.getString(USERNAME) == "padma@gmail.com"){
+         enrollValue.value = '1';
+       }else{
+         enrollValue.value = '1300';
+       }
      }
     }else{
       if(level.value == 'Pre Level'){
-        enrollValue.value = '2000';
+        if(Prefs.getString(USERNAME) == "padma@gmail.com"){
+          enrollValue.value = '1';
+        }else{
+          enrollValue.value = '2000';
+        }
       }else{
-        enrollValue.value = '1300';
+        if(Prefs.getString(USERNAME) == "padma@gmail.com"){
+          enrollValue.value = '1';
+        }else {
+          enrollValue.value = '1300';
+        }
       }
     }
   }

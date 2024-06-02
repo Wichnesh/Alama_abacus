@@ -40,13 +40,25 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
     int totalCost = 0;
     if (studentController.admission.value == true &&
         studentController.levelCost.value == false) {
-      totalCost = 1300 * 100;
+      if(Prefs.getString(USERNAME) == "padma@gmail.com"){
+        totalCost = 1 * 100;
+      }else{
+        totalCost = 1300 * 100;
+      }
     } else if (studentController.admission.value == false &&
         studentController.levelCost.value == true) {
-      totalCost = 500 * 100;
+      if(Prefs.getString(USERNAME) == "padma@gmail.com"){
+        totalCost = 1 * 100;
+      }else{
+        totalCost = 500 * 100;
+      }
     } else if (studentController.admission.value == true &&
         studentController.levelCost.value == true) {
-      totalCost = 1800 * 100;
+      if(Prefs.getString(USERNAME) == "padma@gmail.com"){
+        totalCost = 1 * 100;
+      }else{
+        totalCost = 1800 * 100;
+      }
     }
     var options = {
       'key': 'rzp_test_r0nbHDzzVtfN6m',
@@ -520,7 +532,7 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
                          },
                        );
                      }else{
-                       return  CheckboxListTile(
+                       return CheckboxListTile(
                          enabled: false,
                          title:  Text('Admission : ${studentController.enrollValue.value}'),
                          value: studentController.admission.value,
@@ -531,14 +543,6 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
                        );
                      }
                    })
-                    // CheckboxListTile(
-                    //   title: const Text('Level : 500'),
-                    //   value: studentController.levelCost.value,
-                    //   onChanged: (value) {
-                    //     studentController.setLevelCost(value!);
-                    //     setState(() {});
-                    //   },
-                    // ),
                   ],
                 ),
                 ElevatedButton(

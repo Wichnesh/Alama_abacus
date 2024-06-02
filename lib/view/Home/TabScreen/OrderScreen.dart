@@ -38,17 +38,21 @@ class _OrderScreenState extends State<OrderScreen> {
   int totalAmount = 0;
   void payment(String name, String contact, String email, String state,bool extraAmount) async {
     int totalCost = 0;
-    if(state == 'Tamil Nadu'){
-      if(extraAmount == true){
-        totalCost = (400 + 300) * 100;
-      }else{
-        totalCost = 400 * 100;
-      }
+    if(Prefs.getString(USERNAME) == "padma@gmail.com"){
+      totalCost = 1 * 100;
     }else{
-      if(extraAmount == true){
-        totalCost = (500 + 400) * 100;
+      if(state == 'Tamil Nadu'){
+        if(extraAmount == true){
+          totalCost = (400 + 300) * 100;
+        }else{
+          totalCost = 400 * 100;
+        }
       }else{
-        totalCost = 500 * 100;
+        if(extraAmount == true){
+          totalCost = (500 + 400) * 100;
+        }else{
+          totalCost = 500 * 100;
+        }
       }
     }
     var options = {
