@@ -5,7 +5,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-
 import '../api/request.dart';
 import '../api/url.dart';
 import '../model/registermodel.dart';
