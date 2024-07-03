@@ -67,7 +67,8 @@ class HomeController extends GetxController {
     "Scotland",
     "Uk",
     "South Korea",
-    "Singapore"
+    "Singapore",
+    "Hong Kong"
   ];
   final districtData = {
     "Select" : ["Select"],
@@ -176,7 +177,8 @@ class HomeController extends GetxController {
     "Uk": ["Select","london", "Uk"],
     "Goa" :["Select","Goa"],
     "South Korea" : ["Select","South Korea"],
-    "Singapore" :["Select","Singapore"]
+    "Singapore" :["Select","Singapore"],
+    "Hong Kong" : ["Select","Hong Kong"]
   };
 
   void updateSelectedState(String newValue) {
