@@ -547,13 +547,17 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    if (studentController.nameText.text.isEmpty ||
+                    if (kDebugMode) {
+                      print("Trying to added Student");
+
+                    }if (studentController.nameText.text.isEmpty ||
                         studentController.emailText.text.isEmpty ||
                         studentController.mobileNoText.text.isEmpty ||
                         studentController.level.value == 'Select' ||
                         studentController.isChecked.value == false ||
                         studentController.program.value == 'Select' ||
-                        studentController.selectedShirt.value == 'Select'
+                        studentController.selectedShirt.value == 'Select' ||
+                        studentController.selectedShirt.value == ''
                     ) {
                       Get.dialog(
                         AlertDialog(
@@ -570,7 +574,7 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
                         ),
                       );
                     } else {
-                      studentController.addUnpaidStudent();
+                        studentController.addUnpaidStudent();
                      // print('Data Filled');
                     }
                   },
