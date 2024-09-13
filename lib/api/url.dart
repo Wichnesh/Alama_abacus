@@ -9,7 +9,7 @@ const String env = "prod";
 
 const String localUrl = "http://localhost:3500/api/v1/";
 const String devUrl = "http://62.72.58.183:3501/api/v2/";
-const String prodUrl = "http://34.93.102.214:3500/api/v2/";
+const String prodUrl = "http://35.200.229.3:3500/api/v2/";
 
 
 
