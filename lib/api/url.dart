@@ -1,4 +1,3 @@
-
 const String dev = "dev";
 const String prod = "prod";
 const String local = "local";
@@ -9,11 +8,13 @@ const String env = "prod";
 
 const String localUrl = "http://localhost:3500/api/v1/";
 const String devUrl = "http://62.72.58.183:3501/api/v2/";
-const String prodUrl = "http://35.200.229.3:3500/api/v2/";
+const String prodUrl = "http://34.131.71.153:3500/api/v2/";
 
-
-
-const String BaseUrl = env == prod ? prodUrl : env == dev ? devUrl : localUrl;
+const String BaseUrl = env == prod
+    ? prodUrl
+    : env == dev
+        ? devUrl
+        : localUrl;
 const loginUrl = "${BaseUrl}login";
 const generateIDUrl = "${BaseUrl}generateID";
 const regfrachaniseUrl = "${BaseUrl}franchise-reg";
@@ -40,13 +41,11 @@ const getallreports = "${BaseUrl}data";
 const deleteCart = "${BaseUrl}studentcart-delete";
 const tnReport = "${BaseUrl}tamilnadureport";
 
-
 class RazorPay {
   //static const key = "rzp_test_edocUhj72yJ1Rm";
   static const key = "rzp_live_AbmoGrxyMh5jnn";
   static const createOrder = "https://api.razorpay.com/v1/orders";
 }
-
 
 //2 to 3 , 5 to 6 AA
 //2 to 3 , 4 to 5 , 5 to 6 MA

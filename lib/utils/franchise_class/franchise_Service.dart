@@ -1,9 +1,8 @@
 import 'package:flutter/foundation.dart';
+
 import '../../api/request.dart';
 import '../../api/url.dart';
 import '../../model/HomeModel.dart';
-
-// Define a FranchiseService class responsible for fetching franchise data
 
 class FranchiseService {
   Future<List<FMData>> getFranchiseList() async {
