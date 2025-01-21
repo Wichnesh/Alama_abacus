@@ -8,7 +8,7 @@ const String env = "prod";
 
 const String localUrl = "http://localhost:3500/api/v1/";
 const String devUrl = "http://62.72.58.183:3501/api/v2/";
-const String prodUrl = "http://34.131.71.153:3500/api/v2/";
+const String prodUrl = "http://185.75.21.53:3500/api/v2/";
 
 const String BaseUrl = env == prod
     ? prodUrl

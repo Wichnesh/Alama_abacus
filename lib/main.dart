@@ -4,14 +4,14 @@ import 'package:alama_eorder_app/utils/pref_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+
 import 'View/Splash_Screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Prefs.init();
-  runApp(MyApp());
-  SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+  runApp(const MyApp());
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 }
 
 class MyApp extends StatelessWidget {
@@ -41,9 +41,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         final mediaQueryData = MediaQuery.of(context);
         final scale = mediaQueryData.textScaleFactor.clamp(0.9, 0.9);
-        return MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: scale),
-            child: child!);
+        return MediaQuery(data: MediaQuery.of(context).copyWith(textScaleFactor: scale), child: child!);
       },
     );
   }
