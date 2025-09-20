@@ -1,0 +1,2 @@
+/Users/vigneshselvaraj/Personnal Code repository/Alama_abacus/android/app/.cxx/Debug/1p1l3a3d/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/vigneshselvaraj/Personnal Code repository/Alama_abacus/android/app/.cxx/Debug/1p1l3a3d/arm64-v8a/CMakeFiles/rebuild_cache.dir

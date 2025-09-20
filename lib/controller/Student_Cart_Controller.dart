@@ -124,6 +124,7 @@ class StudentCardListController extends GetxController {
 
     if (kDebugMode) {
       print(requestData.toString());
+      print(studentCardList.map((e) => e.toJson()).toList());
     }
     RequestDio request =
         RequestDio(url: multiplestudentsUrl, body: requestData);
