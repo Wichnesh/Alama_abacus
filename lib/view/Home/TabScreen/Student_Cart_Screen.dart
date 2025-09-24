@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -35,38 +37,40 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
     _razorpay?.clear();
   }
 
-  void payment(int count,int cost, String email) async {
+  void payment(int count, int cost, String email, String state) async {
     int totalCost = cost * 100;
+    String key = "";
+
+    if (state == 'Tamil Nadu') {
+      key = RazorPay.Tn_Key;
+      log("TN key Used");
+    } else {
+      key = RazorPay.key;
+      log("NON TN Key");
+    }
     if (kDebugMode) {
       print('total cost--------$totalCost');
     }
     var options = {
       //'key': 'rzp_test_uMK9VbEsTuePim',
-       'key' : RazorPay.key, //live key
-     // 'key' : 'rzp_test_edocUhj72yJ1Rm',
+      'key': key, //live key
+      // 'key' : 'rzp_test_edocUhj72yJ1Rm',
       'amount': totalCost,
       'name': 'Abacus Enrollment ',
       'description': 'No of Student $count',
-      'prefill': {
-        'contact': "",
-        'email': email
-      },
+      'prefill': {'contact': "", 'email': email},
       'external': {
         'wallets': ['paytm']
       }
     };
 
-    Map note = {
-      "total_cost": totalCost,
-      "no_of_student": count,
-      "email": email
-    };
+    Map note = {"total_cost": totalCost, "no_of_student": count, "email": email};
     String name = 'Abacus Enrollment';
 
     try {
-      String? id = await enrollController.enrollStudentOrder(name, note,totalCost);
+      String? id = await enrollController.enrollStudentOrder(name, note, totalCost);
       print('order id is $id');
-      if(id != null){
+      if (id != null) {
         options['order_id'] = id;
         _razorpay?.open(options);
       }
@@ -76,8 +80,7 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    Fluttertoast.showToast(
-        msg: "SUCCESS PAYMENT: ${response.paymentId}", timeInSecForIosWeb: 4);
+    Fluttertoast.showToast(msg: "SUCCESS PAYMENT: ${response.paymentId}", timeInSecForIosWeb: 4);
     if (response.orderId == null) {
       enrollController.updatePaymentId();
     } else {
@@ -86,15 +89,11 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    Fluttertoast.showToast(
-        msg: "ERROR HERE: ${response.code} - ${response.message}",
-        timeInSecForIosWeb: 4);
+    Fluttertoast.showToast(msg: "ERROR HERE: ${response.code} - ${response.message}", timeInSecForIosWeb: 4);
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    Fluttertoast.showToast(
-        msg: "EXTERNAL_WALLET IS : ${response.walletName}",
-        timeInSecForIosWeb: 4);
+    Fluttertoast.showToast(msg: "EXTERNAL_WALLET IS : ${response.walletName}", timeInSecForIosWeb: 4);
   }
 
   @override
@@ -102,15 +101,16 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
     bool admin = Prefs.getBoolen(SHARED_ADMIN);
     double _w = MediaQuery.of(context).size.width;
     double _h = MediaQuery.of(context).size.height;
+    String franchiseState = Prefs.getString(FRANCHISESTATE);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cart'),
         centerTitle: true,
         automaticallyImplyLeading: false,
         leading: InkWell(
-          onTap: (){
-            Get.offAllNamed(ROUTE_HOME);
-          },
+            onTap: () {
+              Get.offAllNamed(ROUTE_HOME);
+            },
             child: const Icon(Icons.arrow_back_rounded)),
       ),
       body: GetBuilder<StudentCardListController>(
@@ -124,12 +124,11 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
             return Column(
               children: [
                 SizedBox(
-                  height:  _h * 0.8,
+                  height: _h * 0.8,
                   child: AnimationLimiter(
                     child: ListView.builder(
                       padding: EdgeInsets.all(_w / 30),
-                      physics: const BouncingScrollPhysics(
-                          parent: AlwaysScrollableScrollPhysics()),
+                      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                       itemCount: controller.studentCardList.length,
                       itemBuilder: (BuildContext c, int i) {
                         var data = controller.studentCardList[i];
@@ -179,11 +178,13 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
                                           title: Text(data.studentName ?? ''),
                                           subtitle: Text(data.mobileNumber ?? ''),
                                           trailing: InkWell(
-                                            onTap: (){
-                                              controller.deleteStudent(data.studentID ?? '');
-                                            },
-                                              child: const Icon(Icons.delete,color: Colors.red,)
-                                          ),
+                                              onTap: () {
+                                                controller.deleteStudent(data.studentID ?? '');
+                                              },
+                                              child: const Icon(
+                                                Icons.delete,
+                                                color: Colors.red,
+                                              )),
                                         ),
                                       ),
                                     ],
@@ -199,11 +200,11 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                   int total = controller.updateTotalCost();
-                   if (kDebugMode) {
-                     print(total);
-                   }
-                    payment(controller.studentCardList.length,total,Prefs.getString(USERNAME));
+                    int total = controller.updateTotalCost();
+                    if (kDebugMode) {
+                      print(total);
+                    }
+                    payment(controller.studentCardList.length, total, Prefs.getString(USERNAME), franchiseState);
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -212,8 +213,7 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
                     padding: const EdgeInsets.all(0), // Use zero padding to let the Container control padding
                   ),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 30),
+                    padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                     ),

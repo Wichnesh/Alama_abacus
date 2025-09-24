@@ -1,0 +1,2 @@
+/Users/vigneshselvaraj/Personnal Code repository/Alama_abacus/android/app/.cxx/RelWithDebInfo/cm6404c2/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/vigneshselvaraj/Personnal Code repository/Alama_abacus/android/app/.cxx/RelWithDebInfo/cm6404c2/armeabi-v7a/CMakeFiles/rebuild_cache.dir

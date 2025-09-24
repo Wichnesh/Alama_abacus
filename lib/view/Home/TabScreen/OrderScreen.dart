@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:alama_eorder_app/controller/Order_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -32,33 +34,38 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   void dispose() {
     super.dispose();
-    totalAmount =0;
+    totalAmount = 0;
     _razorpay?.clear();
   }
+
   int totalAmount = 0;
-  void payment(String name, String contact, String email, String state,bool extraAmount) async {
+  void payment(String name, String contact, String email, String state, bool extraAmount) async {
     int totalCost = 0;
-    if(Prefs.getString(USERNAME) == "padma@gmail.com"){
+    String key = "";
+    if (Prefs.getString(USERNAME) == "padma@gmail.com") {
       totalCost = 1 * 100;
-    }else{
-      if(state == 'Tamil Nadu'){
-        if(extraAmount == true){
+    } else {
+      if (state == 'Tamil Nadu') {
+        key = RazorPay.Tn_Key;
+        log("TN key Used");
+        if (extraAmount == true) {
           totalCost = (400 + 300) * 100;
-        }else{
+        } else {
           totalCost = 400 * 100;
         }
-      }else{
-        if(extraAmount == true){
+      } else {
+        key = RazorPay.key;
+        log("NON TN Key");
+        if (extraAmount == true) {
           totalCost = (500 + 400) * 100;
-        }else{
+        } else {
           totalCost = 500 * 100;
         }
       }
     }
+    log("------$key-------");
     var options = {
-      //'key': 'rzp_test_uMK9VbEsTuePim',
-       'key' : RazorPay.key, //live key
-      //'key' : 'rzp_test_edocUhj72yJ1Rm',
+      'key': key, //live key
       'amount': totalCost,
       'name': name,
       'description': 'Order Payment',
@@ -78,7 +85,7 @@ class _OrderScreenState extends State<OrderScreen> {
       };
       String? id = await orderController.createOrder(name, notes, totalCost);
       print("Order ID: $id");
-      if(id != null){
+      if (id != null) {
         options['order_id'] = id;
         _razorpay?.open(options);
       }
@@ -94,15 +101,11 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    Fluttertoast.showToast(
-        msg: "ERROR HERE: ${response.code} - ${response.message}",
-        timeInSecForIosWeb: 4);
+    Fluttertoast.showToast(msg: "ERROR HERE: ${response.code} - ${response.message}", timeInSecForIosWeb: 4);
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    Fluttertoast.showToast(
-        msg: "EXTERNAL_WALLET IS : ${response.walletName}",
-        timeInSecForIosWeb: 4);
+    Fluttertoast.showToast(msg: "EXTERNAL_WALLET IS : ${response.walletName}", timeInSecForIosWeb: 4);
   }
 
   @override
@@ -125,8 +128,7 @@ class _OrderScreenState extends State<OrderScreen> {
                       decoration: const InputDecoration(
                         labelText: 'Student ID',
                       ),
-                      controller: TextEditingController(
-                          text: controller.data.studentID.toString()),
+                      controller: TextEditingController(text: controller.data.studentID.toString()),
                       readOnly: true,
                     ),
                   ),
@@ -136,8 +138,7 @@ class _OrderScreenState extends State<OrderScreen> {
                       decoration: const InputDecoration(
                         labelText: 'Completed Level',
                       ),
-                      controller: TextEditingController(
-                          text: controller.currentlevel.value),
+                      controller: TextEditingController(text: controller.currentlevel.value),
                       readOnly: true,
                     ),
                   ),
@@ -147,8 +148,7 @@ class _OrderScreenState extends State<OrderScreen> {
                       decoration: const InputDecoration(
                         labelText: 'Order Level',
                       ),
-                      controller: TextEditingController(
-                          text: controller.futurelevel.value),
+                      controller: TextEditingController(text: controller.futurelevel.value),
                       readOnly: true,
                     ),
                   ),
@@ -163,30 +163,28 @@ class _OrderScreenState extends State<OrderScreen> {
                     ),
                   ),
                   Obx(() {
-                    if(controller.isChecked.value){
+                    if (controller.isChecked.value) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: controller.BookList.map((book) {
                           // Use CheckboxListTile to create each checkbox item
                           return CheckboxListTile(
                             title: Text(book),
-                            value:
-                            true, // Set this to true for default checked state
+                            value: true, // Set this to true for default checked state
                             onChanged: (bool? newValue) {
                               // Handle checkbox state change if needed
                             },
                           );
                         }).toList(),
                       );
-                    }else{
-                     return Column(
+                    } else {
+                      return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: controller.BookList.map((book) {
                           // Use CheckboxListTile to create each checkbox item
                           return CheckboxListTile(
                             title: Text(book),
-                            value:
-                            true, // Set this to true for default checked state
+                            value: true, // Set this to true for default checked state
                             onChanged: (bool? newValue) {
                               // Handle checkbox state change if needed
                             },
@@ -225,11 +223,9 @@ class _OrderScreenState extends State<OrderScreen> {
                                 color: primaryColor,
                                 child: ElevatedButton(
                                   style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty
-                                        .resolveWith<Color>(
+                                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
                                       (Set<MaterialState> states) {
-                                        if (states
-                                            .contains(MaterialState.pressed)) {
+                                        if (states.contains(MaterialState.pressed)) {
                                           // Change the button color when pressed
                                           return Colors.green;
                                         }
@@ -240,14 +236,9 @@ class _OrderScreenState extends State<OrderScreen> {
                                   ),
                                   onPressed: () {
                                     //controller.backendformat();
-                                   // controller.updateOrder("test", 1300);
-                                    payment(
-                                        controller.data.studentName!,
-                                        controller.data.mobileNumber!,
-                                        Prefs.getString(USERNAME),
-                                        franchiseState,
-                                        controller.transferBool.value
-                                    );
+                                    // controller.updateOrder("test", 1300);
+                                    payment(controller.data.studentName!, controller.data.mobileNumber!, Prefs.getString(USERNAME), franchiseState,
+                                        controller.transferBool.value);
                                   },
                                   child: const SizedBox(
                                     height: 50,
@@ -273,17 +264,14 @@ class _OrderScreenState extends State<OrderScreen> {
                             width: 175,
                             child: ElevatedButton(
                               style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.resolveWith<Color>(
+                                backgroundColor: MaterialStateProperty.resolveWith<Color>(
                                   (Set<MaterialState> states) {
-                                    if (states
-                                        .contains(MaterialState.pressed)) {
+                                    if (states.contains(MaterialState.pressed)) {
                                       // Change the button color when pressed
                                       return Colors.green;
                                     }
                                     // Return the default button color
-                                    return Colors
-                                        .red; // or any other color you want
+                                    return Colors.red; // or any other color you want
                                   },
                                 ),
                               ),

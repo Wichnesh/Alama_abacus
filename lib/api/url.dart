@@ -7,7 +7,7 @@ const String env = "prod";
 //const String env = "dev";
 
 const String localUrl = "http://localhost:3500/api/v1/";
-const String devUrl = "http://62.72.58.183:3501/api/v2/";
+const String devUrl = "http://185.75.21.53:3504/api/v2/";
 const String prodUrl = "http://185.75.21.53:3500/api/v2/";
 
 const String BaseUrl = env == prod
@@ -45,6 +45,7 @@ class RazorPay {
   //static const key = "rzp_test_edocUhj72yJ1Rm";
   static const key = "rzp_live_AbmoGrxyMh5jnn";
   static const createOrder = "https://api.razorpay.com/v1/orders";
+  static const Tn_Key = "rzp_live_RJv8M17qqJc1zP";
 }
 
 //2 to 3 , 5 to 6 AA

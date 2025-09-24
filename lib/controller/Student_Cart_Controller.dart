@@ -112,6 +112,7 @@ class StudentCardListController extends GetxController {
     isLoading.value = true;
     studentEnroll.add(studentCardList);
     Map<String, dynamic> requestData = {
+      "franchise": Prefs.getString(USERNAME),
       "isSuccessful" : false,
       "data": studentCardList,
       "razorpayOrderObj": {
