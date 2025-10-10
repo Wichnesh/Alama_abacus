@@ -179,15 +179,16 @@ class OrderedItem {
 
   factory OrderedItem.fromJson(Map<String, dynamic> json) {
     return OrderedItem(
-      studentName: json['studentName'] ?? "",
-      studentID: json['studentID'] ?? "",
-      state: json['state'] ?? "",
-      district: json['district'] ?? "",
-      currentLevel: json['currentLevel'] ?? "",
-      futureLevel: json['futureLevel'] ?? "",
-      orderDate: json['createdAt'] ?? "",
+      studentName: json['studentName']?.toString() ?? "",
+      studentID: json['studentID']?.toString() ?? "",
+      state: json['state']?.toString() ?? "",
+      district: json['district']?.toString() ?? "",
+      currentLevel: json['currentLevel']?.toString() ?? "",
+      futureLevel: json['futureLevel']?.toString() ?? "",
+      orderDate: json['createdAt']?.toString() ?? "",
     );
   }
+
 }
 
 
