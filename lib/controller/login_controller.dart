@@ -48,7 +48,7 @@ class loginController extends GetxController {
     }
     RequestDio request = RequestDio(url: loginUrl, body: requestData);
     request.post().then((response) async {
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         var data = response.data;
         loginmodel success = loginmodel.fromJson(jsonDecode(data));
         if (success.status == true) {
@@ -56,43 +56,19 @@ class loginController extends GetxController {
             await Prefs.setBoolen('isLoggedIn', true);
             await Prefs.setBoolen(SHARED_ADMIN, success.isAdmin!);
             await Prefs.setString(TOKEN, success.token!);
-            await Prefs.setString(USERNAME,emailtext.text);
+            await Prefs.setString(USERNAME, emailtext.text);
+            await Prefs.setString(franchiseId, success.franchise!);
             Fluttertoast.showToast(msg: "login-successfully");
+
             Get.offAllNamed(ROUTE_HOME);
           } else {
             Prefs.setBoolen('isLoggedIn', true);
             Prefs.setBoolen(SHARED_ADMIN, success.isAdmin!);
             await Prefs.setString(TOKEN, success.token!);
             await Prefs.setString(FRANCHISESTATE, success.franchiseState!);
+            await Prefs.setString(franchiseId, success.franchise!);
             Fluttertoast.showToast(msg: "login-successfully");
-            await Prefs.setString(USERNAME,emailtext.text);
-            Get.offAllNamed(ROUTE_HOME);
-          }
-        } else {
-          Prefs.setBoolen('isLoggedIn', false);
-          Get.snackbar("Info", "Log-In failed",
-              colorText: Colors.white,
-              backgroundColor: Colors.blue,
-              snackPosition: SnackPosition.TOP);
-        }
-        isLoading.value = false;
-      } else if (response.statusCode == 201) {
-        var data = response.data;
-        loginmodel success = loginmodel.fromJson(jsonDecode(data));
-        if (success.status == true) {
-          if (success.isAdmin == true) {
-            await Prefs.setBoolen('isLoggedIn', true);
-            await Prefs.setBoolen(SHARED_ADMIN, success.isAdmin!);
-            await Prefs.setString(TOKEN, success.token!);
-            Fluttertoast.showToast(msg: "login-successfully");
-            await Prefs.setString(USERNAME,emailtext.text);
-            Get.offAllNamed(ROUTE_HOME);
-          } else {
-            Prefs.setBoolen('isLoggedIn', true);
-            Prefs.setBoolen(SHARED_ADMIN, success.isAdmin!);
-            await Prefs.setString(TOKEN, success.token!);
-            Fluttertoast.showToast(msg: "login-successfully");
-            await Prefs.setString(USERNAME,emailtext.text);
+            await Prefs.setString(USERNAME, emailtext.text);
             Get.offAllNamed(ROUTE_HOME);
           }
         } else {

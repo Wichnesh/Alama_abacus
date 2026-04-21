@@ -5,14 +5,16 @@ class loginmodel {
   bool? isAdmin;
   String? token;
   String? franchiseState;
+  String? franchise;
 
-  loginmodel({this.status, this.isAdmin, this.token,this.franchiseState});
+  loginmodel({this.status, this.isAdmin, this.token,this.franchiseState,this.franchise});
 
   loginmodel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     isAdmin = json['isAdmin'];
     token = json['token'];
     franchiseState = json['franchiseState'];
+    franchise = json['franchise'];
   }
 
   Map<String, dynamic> toJson() {
@@ -21,6 +23,7 @@ class loginmodel {
     data['isAdmin'] = this.isAdmin;
     data['token'] = this.token;
     data['franchiseState'] =this.franchiseState;
+    data['franchise'] = this.franchise;
     return data;
   }
 }

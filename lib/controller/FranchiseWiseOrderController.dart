@@ -161,6 +161,7 @@ class FWOController extends GetxController {
       // Add franchise name to the PDF
       pdf.addPage(
         pw.MultiPage(
+          maxPages: 1000,
           pageFormat: PdfPageFormat.a4,
           build: (context) => [
             pw.Center(

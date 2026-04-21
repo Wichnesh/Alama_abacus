@@ -209,6 +209,7 @@ class FranchiseWiseStudentController extends GetxController {
     // Add franchise name to the PDF
     pdf.addPage(
       pw.MultiPage(
+        maxPages: 1000,
         pageFormat: PdfPageFormat.a4,
         build: (context) => [
           pw.Center(child: pw.Text('Alama Abacus', style: pw.TextStyle(fontSize: 20, font: pw.Font.courierBold()))),

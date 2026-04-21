@@ -1,7 +1,10 @@
 import 'package:alama_eorder_app/binding/FWOBinding.dart';
 import 'package:alama_eorder_app/binding/FWSBinding.dart';
+import 'package:alama_eorder_app/binding/referral_binding.dart';
 import 'package:alama_eorder_app/view/Home/Drawer/Report/FWO_Report.dart';
 import 'package:alama_eorder_app/view/Home/Drawer/Report/FranchiseWise_Report.dart';
+import 'package:alama_eorder_app/view/Home/Drawer/referral/add_referral_screen.dart';
+import 'package:alama_eorder_app/view/Home/Drawer/referral/referral_list_screen.dart';
 import 'package:alama_eorder_app/view/Home/HomeScreen.dart';
 import 'package:get/get.dart';
 
@@ -63,6 +66,14 @@ class AppPages {
     GetPage(
         name: ROUTE_FWO,
         page: () => FranchiseWiseOrderReport(),
-        binding: FWOBinding())
+        binding: FWOBinding()),
+    GetPage(
+        name: ROUTE_REFERRAL,
+        page: () => const ReferralListScreen(),
+        binding: ReferralBinding()),
+    GetPage(
+        name: ROUTE_ADDREFERRAL,
+        page: () => AddReferralScreen(),
+        binding: ReferralBinding()),
   ];
 }

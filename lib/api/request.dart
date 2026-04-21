@@ -36,4 +36,23 @@ class RequestDio {
       }
     }
   }
+
+  Future<Response<dynamic>> get() async {
+    if (kDebugMode) {
+      print('REQUEST DATA :-   URL IS = ${url} || Bearer ${Prefs.getString(TOKEN)} || Params ${parameters}');
+    }
+    try {
+      final response = await dio.get(url!, queryParameters: parameters);
+      return response;
+    } catch (e) {
+      if (e is SocketException) {
+        throw TimeoutException('Connection timeout. Please try again.');
+      } else {
+        if (kDebugMode) {
+          print(e.toString());
+        }
+        throw Exception('Error occurred while making a request.');
+      }
+    }
+  }
 }

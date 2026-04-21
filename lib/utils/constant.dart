@@ -13,12 +13,16 @@ const ROUTE_ORDERREPORTS = "${slash}orderreport";
 const ROUTE_REPORTDASHBOARD = '${slash}reportDashBoard';
 const ROUTE_FWS = "${slash}franchiseWiseStudent";
 const ROUTE_FWO = "${slash}franchiseWiseOrder";
+const ROUTE_REFERRAL = "${slash}referral";
+const ROUTE_ADDREFERRAL = "${slash}addreferral";
+
 ////////////
 const String TOKEN = "token";
 const SHARED_ADMIN = 'Admin';
 const USERNAME = 'username';
 const FRANCHISESTATE = 'franchiseState';
 const TNADMIN = "tnAdmin";
+const franchiseId = "franchiseId";
 
 
 

@@ -75,7 +75,13 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () {
                 Get.toNamed(ROUTE_REPORTDASHBOARD);
               },
-            )
+            ),
+            ListTile(
+              title: const Text('Refferal'),
+              onTap: () {
+                Get.toNamed(ROUTE_REFERRAL);
+              },
+            ),
           ],
         ),
       ),
