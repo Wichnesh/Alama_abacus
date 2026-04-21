@@ -10,7 +10,7 @@ const String localUrl = "http://localhost:3500/api/v1/";
 const String devUrl = "http://185.75.21.53:3504/api/v2/";
 const String prodUrl = "http://185.75.21.53:3500/api/v2/";
 const String prodUrlNew ="http://185.75.21.53:3500/api/";
-
+const String prodUrlCreate ="http://185.75.21.53:3000/api/";
 
 const String BaseUrl = env == prod
     ? prodUrl
@@ -44,6 +44,8 @@ const deleteCart = "${BaseUrl}studentcart-delete";
 const tnReport = "${BaseUrl}tamilnadureport";
 const addPhoneUrl = "${prodUrlNew}franchise/add-phone";
 const getFranchiseRefferal = "${prodUrlNew}franchise/{franchiseId}/phone-list";
+const createLinkUrl = "${prodUrlCreate}api/create-links";
+const getRefferalResponseUrl = "${prodUrlNew}franchise/{franchiseId}/responses";
 
 
 class RazorPay {

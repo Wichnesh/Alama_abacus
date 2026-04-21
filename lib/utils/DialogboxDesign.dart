@@ -85,6 +85,7 @@ class BeautifulAlertDialog extends StatelessWidget {
                               await Prefs.setString(FRANCHISESTATE,"");
                               await Prefs.setBoolen(SHARED_ADMIN, false);
                               await Prefs.setBoolen('isLoggedIn', false);
+                              await Prefs.setString(franchiseId, "");
                               if (kDebugMode) {
                                 print(
                                     '${Prefs.getString(TOKEN)} -- ${Prefs.getBoolen(SHARED_ADMIN)} -- ${Prefs.getString('isLoggedIn')}');

@@ -35,6 +35,7 @@ class AddReferralScreen extends GetView<ReferralController> {
                   labelText: 'Phone Number',
                 ),
                 validator: controller.validatePhone,
+                maxLength: 10,
               ),
 
               const SizedBox(height: 16),
