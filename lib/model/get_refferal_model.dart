@@ -50,6 +50,8 @@ class Datum {
     String? name;
     DateTime? createdAt;
     int? v;
+    bool isLinkSent;
+    String? className;
 
     Datum({
         this.id,
@@ -58,6 +60,8 @@ class Datum {
         this.name,
         this.createdAt,
         this.v,
+        this.isLinkSent = false,
+        this.className,
     });
 
     Datum copyWith({
@@ -67,6 +71,8 @@ class Datum {
         String? name,
         DateTime? createdAt,
         int? v,
+        bool? isLinkSent,
+        String? className,
     }) => 
         Datum(
             id: id ?? this.id,
@@ -75,6 +81,8 @@ class Datum {
             name: name ?? this.name,
             createdAt: createdAt ?? this.createdAt,
             v: v ?? this.v,
+            isLinkSent: isLinkSent ?? this.isLinkSent,
+            className: className ?? this.className,
         );
 
     factory Datum.fromJson(Map<String, dynamic> json) => Datum(
@@ -84,6 +92,8 @@ class Datum {
         name: json["name"],
         createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
         v: json["__v"],
+        isLinkSent: json["isLinkSent"] ?? false,
+        className: json["classs"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -93,5 +103,7 @@ class Datum {
         "name": name,
         "createdAt": createdAt?.toIso8601String(),
         "__v": v,
+        "isLinkSent": isLinkSent,
+        "classs": className,
     };
 }

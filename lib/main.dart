@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:alama_eorder_app/pages/app_route.dart';
 import 'package:alama_eorder_app/utils/colorUtils.dart';
 import 'package:alama_eorder_app/utils/pref_manager.dart';
@@ -6,10 +8,19 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'View/Splash_Screen.dart';
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Prefs.init();
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 }

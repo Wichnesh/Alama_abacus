@@ -10,7 +10,7 @@ const String localUrl = "http://localhost:3500/api/v1/";
 const String devUrl = "http://185.75.21.53:3504/api/v2/";
 const String prodUrl = "http://185.75.21.53:3500/api/v2/";
 const String prodUrlNew ="http://185.75.21.53:3500/api/";
-const String prodUrlCreate ="http://185.75.21.53:3000/api/";
+const String prodUrlWeb ="http://185.75.21.53:3000/api/";
 
 const String BaseUrl = env == prod
     ? prodUrl
@@ -44,9 +44,12 @@ const deleteCart = "${BaseUrl}studentcart-delete";
 const tnReport = "${BaseUrl}tamilnadureport";
 const addPhoneUrl = "${prodUrlNew}franchise/add-phone";
 const getFranchiseRefferal = "${prodUrlNew}franchise/{franchiseId}/phone-list";
-const createLinkUrl = "${prodUrlCreate}api/create-links";
+const createLinkUrl = "${prodUrlWeb}create-links";
 const getRefferalResponseUrl = "${prodUrlNew}franchise/{franchiseId}/responses";
-
+const enrollStudentUrl = "${prodUrlWeb}franchise/enroll-leads";
+const assignToFranchiseUrl = "${prodUrlNew}admin/assign-lead";
+const franschiseWebLinkUrl = "${prodUrlWeb}franchise-unique-link";
+const enrollToPaidUrl = "${prodUrlWeb}franchise/enroll-to-paid";
 
 class RazorPay {
   //static const key = "rzp_test_edocUhj72yJ1Rm";

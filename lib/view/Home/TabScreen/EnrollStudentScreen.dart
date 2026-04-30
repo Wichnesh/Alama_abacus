@@ -39,19 +39,22 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
 
   void payment() async {
     int totalCost = 0;
-    if (studentController.admission.value == true && studentController.levelCost.value == false) {
+    if (studentController.admission.value == true &&
+        studentController.levelCost.value == false) {
       if (Prefs.getString(USERNAME) == "padma@gmail.com") {
         totalCost = 1 * 100;
       } else {
         totalCost = 1300 * 100;
       }
-    } else if (studentController.admission.value == false && studentController.levelCost.value == true) {
+    } else if (studentController.admission.value == false &&
+        studentController.levelCost.value == true) {
       if (Prefs.getString(USERNAME) == "padma@gmail.com") {
         totalCost = 1 * 100;
       } else {
         totalCost = 500 * 100;
       }
-    } else if (studentController.admission.value == true && studentController.levelCost.value == true) {
+    } else if (studentController.admission.value == true &&
+        studentController.levelCost.value == true) {
       if (Prefs.getString(USERNAME) == "padma@gmail.com") {
         totalCost = 1 * 100;
       } else {
@@ -63,7 +66,10 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
       'amount': totalCost,
       'name': studentController.nameText.text,
       'description': 'Payment',
-      'prefill': {'contact': studentController.mobileNoText.text, 'email': studentController.emailText.text},
+      'prefill': {
+        'contact': studentController.mobileNoText.text,
+        'email': studentController.emailText.text
+      },
       'external': {
         'wallets': ['paytm']
       }
@@ -77,7 +83,8 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    Fluttertoast.showToast(msg: "SUCCESS PAYMENT: ${response.paymentId}", timeInSecForIosWeb: 4);
+    Fluttertoast.showToast(
+        msg: "SUCCESS PAYMENT: ${response.paymentId}", timeInSecForIosWeb: 4);
     if (response.orderId == null) {
       studentController.paymentID.value = response.paymentId!;
       studentController.submit();
@@ -89,11 +96,15 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    Fluttertoast.showToast(msg: "ERROR HERE: ${response.code} - ${response.message}", timeInSecForIosWeb: 4);
+    Fluttertoast.showToast(
+        msg: "ERROR HERE: ${response.code} - ${response.message}",
+        timeInSecForIosWeb: 4);
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    Fluttertoast.showToast(msg: "EXTERNAL_WALLET IS : ${response.walletName}", timeInSecForIosWeb: 4);
+    Fluttertoast.showToast(
+        msg: "EXTERNAL_WALLET IS : ${response.walletName}",
+        timeInSecForIosWeb: 4);
   }
 
   // Helper method for name validation
@@ -141,7 +152,10 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                _generateIdInput(text: studentController.Id.value, hint: "Student ID", icon: Icons.numbers),
+                _generateIdInput(
+                    text: studentController.Id.value,
+                    hint: "Student ID",
+                    icon: Icons.numbers),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: SizedBox(
@@ -152,16 +166,22 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
                       onTap: () async {
                         FocusScope.of(context).requestFocus(FocusNode());
                         DateTime? date = DateTime.now();
-                        date =
-                            await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(1900), lastDate: DateTime.now());
+                        date = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime.now());
                         if (date != null) {
                           studentController.enrollDate = date;
                           studentController.update();
                         }
                       },
                       controller: studentController.enrollDateText
-                        ..text = DateFormat("yyyy-MM-dd")
-                            .format(studentController.enrollDate == null ? DateTime.now() : studentController.enrollDate ?? DateTime.now()),
+                        ..text = DateFormat("yyyy-MM-dd").format(
+                            studentController.enrollDate == null
+                                ? DateTime.now()
+                                : studentController.enrollDate ??
+                                    DateTime.now()),
                       style: const TextStyle(fontSize: 18),
                       decoration: const InputDecoration(
                         suffixIcon: Icon(
@@ -238,7 +258,9 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
                             labelStyle: TextStyle(fontSize: 14),
                             border: OutlineInputBorder(),
                           ),
-                          items: studentController.districtData[studentController.selectedState.value]!.map(
+                          items: studentController.districtData[
+                                  studentController.selectedState.value]!
+                              .map(
                             (val) {
                               return DropdownMenuItem<String>(
                                 value: val,
@@ -397,7 +419,8 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
                           children: [
                             CheckboxListTile(
                               enabled: false,
-                              title: Text('${studentController.programValue.value} CB 1 Book'),
+                              title: Text(
+                                  '${studentController.programValue.value} CB 1 Book'),
                               value: studentController.cb1Book.value,
                               onChanged: (value) {
                                 studentController.setCb1Book(value!);
@@ -405,7 +428,8 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
                             ),
                             CheckboxListTile(
                               enabled: false,
-                              title: Text('${studentController.programValue.value} PB 1 Book'),
+                              title: Text(
+                                  '${studentController.programValue.value} PB 1 Book'),
                               value: studentController.pb1Book.value,
                               onChanged: (value) {
                                 studentController.setPd1Book(value!);
@@ -449,7 +473,8 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
                       onChanged: (newValue) {
                         studentController.toggleCheckbox(newValue!);
                         setState(() {});
-                        debugPrint('value -- > ${studentController.selectedShirt.value}');
+                        debugPrint(
+                            'value -- > ${studentController.selectedShirt.value}');
                       },
                     ),
                     studentController.isChecked.value
@@ -459,7 +484,8 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
                               height: 55,
                               width: double.infinity,
                               child: DropdownButtonFormField(
-                                hint: studentController.selectedShirt.value.isEmpty
+                                hint: studentController
+                                        .selectedShirt.value.isEmpty
                                     ? const Text(
                                         'Select',
                                       )
@@ -486,7 +512,8 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
                                 onChanged: (val) {
                                   studentController.updateTShirt(val!);
                                   if (kDebugMode) {
-                                    print("val:    ${studentController.selectedShirt.value}");
+                                    print(
+                                        "val:    ${studentController.selectedShirt.value}");
                                   }
                                 },
                               ),
@@ -510,7 +537,8 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
                       if (studentController.costBool.value) {
                         return CheckboxListTile(
                           enabled: false,
-                          title: Text('Admission : ${studentController.enrollValue.value}'),
+                          title: Text(
+                              'Admission : ${studentController.enrollValue.value}'),
                           value: studentController.admission.value,
                           onChanged: (value) {
                             studentController.setAdmission(value!);
@@ -520,7 +548,8 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
                       } else {
                         return CheckboxListTile(
                           enabled: false,
-                          title: Text('Admission : ${studentController.enrollValue.value}'),
+                          title: Text(
+                              'Admission : ${studentController.enrollValue.value}'),
                           value: studentController.admission.value,
                           onChanged: (value) {
                             studentController.setAdmission(value!);
@@ -533,44 +562,67 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    if (kDebugMode) {
-                      print("Trying to added Student");
+                    studentController.syncFormFields();
+                    List<String> errors = [];
+                    final name = studentController.nameText.text.trim();
+                    final phone = studentController.mobileNoText.text.trim();
+
+                    print("DEBUG NAME: '$name'");
+                    print("DEBUG PHONE: '$phone'");
+
+                    if (studentController.nameText.text.isEmpty) {
+                      errors.add("Name");
                     }
-                    if (studentController.nameText.text.isEmpty ||
-                        studentController.emailText.text.isEmpty ||
-                        studentController.mobileNoText.text.isEmpty ||
-                        studentController.level.value == 'Select' ||
-                        studentController.isChecked.value == false ||
-                        studentController.program.value == 'Select' ||
-                        studentController.selectedShirt.value == 'Select' ||
-                        studentController.selectedShirt.value == '') {
+                    if (studentController.emailText.text.isEmpty) {
+                      errors.add("Email");
+                    }
+                    if (studentController.mobileNoText.text.isEmpty) {
+                      print("BUTTON Controller: ${studentController.hashCode}");
+                      errors.add("Mobile Number");
+                    }
+                    if (studentController.level.value == 'Select') {
+                      errors.add("Level");
+                    }
+                    if (studentController.program.value == 'Select') {
+                      errors.add("Program");
+                    }
+                    if (studentController.selectedShirt.value == 'Select' ||
+                        studentController.selectedShirt.value.isEmpty) {
+                      errors.add("T-Shirt Size");
+                    }
+                    if (studentController.isChecked.value == false) {
+                      errors.add("Terms & Conditions");
+                    }
+
+                    if (errors.isNotEmpty) {
                       Get.dialog(
                         AlertDialog(
-                          title: const Text('Fill mandatory data'),
-                          content: const Text('marked *'),
+                          title: const Text('Missing Required Fields'),
+                          content: Text(
+                            "Please fill:\n\n• ${errors.join("\n• ")}",
+                          ),
                           actions: [
                             TextButton(
-                              child: const Text('OK'),
-                              onPressed: () {
-                                Get.back();
-                              },
+                              onPressed: () => Get.back(),
+                              child: const Text("OK"),
                             ),
                           ],
                         ),
                       );
                     } else {
                       studentController.addUnpaidStudent();
-                      // print('Data Filled');
                     }
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    padding: const EdgeInsets.all(0), // Use zero padding to let the Container control padding
+                    padding: const EdgeInsets.all(
+                        0), // Use zero padding to let the Container control padding
                   ),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15, horizontal: 30),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -619,6 +671,8 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
   }
 
   Widget _nameInput({hint, icon}) {
+    final studentController = Get.find<StudentController>();
+
     return Container(
       margin: const EdgeInsets.only(top: 10),
       decoration: const BoxDecoration(
@@ -645,10 +699,29 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: hint,
-          prefixIcon: Icon(
-            icon,
-            color: primaryColor,
-          ),
+          prefixIcon: Icon(icon, color: primaryColor),
+        ),
+      ),
+    );
+  }
+
+  Widget _contactnoInput({hint, icon}) {
+    final studentController = Get.find<StudentController>();
+
+    return Container(
+      margin: const EdgeInsets.only(top: 10),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        color: Colors.white,
+      ),
+      padding: const EdgeInsets.only(left: 10),
+      child: TextFormField(
+        keyboardType: TextInputType.number,
+        controller: studentController.mobileNoText,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: hint,
+          prefixIcon: Icon(icon, color: primaryColor),
         ),
       ),
     );
@@ -676,29 +749,6 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
           }
           return null;
         },
-      ),
-    );
-  }
-
-  Widget _contactnoInput({hint, icon}) {
-    return Container(
-      margin: const EdgeInsets.only(top: 10),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
-        color: Colors.white,
-      ),
-      padding: const EdgeInsets.only(left: 10),
-      child: TextFormField(
-        keyboardType: TextInputType.number,
-        controller: studentController.mobileNoText,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: hint,
-          prefixIcon: Icon(
-            icon,
-            color: primaryColor,
-          ),
-        ),
       ),
     );
   }

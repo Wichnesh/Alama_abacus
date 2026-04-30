@@ -1,14 +1,13 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:alama_eorder_app/utils/constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
 import '../api/request.dart';
 import '../api/url.dart';
 import '../model/registermodel.dart';
-import '../model/studentmodel.dart';
 import '../utils/pref_manager.dart';
 import 'Home_controller.dart';
 
@@ -30,16 +29,29 @@ class StudentController extends GetxController {
   var orderID = ''.obs;
   var selectedState = "Telangana".obs;
   var selectedDistrict = "HYDERABAD".obs;
-  var levelList = ['Enroll','Pre Level'].obs;
+  var levelList = ['Enroll', 'Pre Level'].obs;
   var costBool = true.obs;
   var enrollValue = '1300'.obs;
   var programValue = ''.obs;
+  String? referralId;
+  String? name;
+  String? phone;
+  Map<String, String> updateStudentData = {};
 
-  Map<String,String> updateStudentData = {};
-
+  @override
   void onInit() {
     super.onInit();
+
     generateStudentId();
+
+    final args = Get.arguments as Map<String, dynamic>?;
+
+    nameText.text = args?["name"] ?? '';
+    mobileNoText.text = args?["phone"] ?? '';
+    referralId = args?["referralId"];
+    debugPrint("Student Controller Name: ${nameText.text}");
+    debugPrint("Student Controller Phone: ${mobileNoText.text}");
+    debugPrint("Student Controller Referral ID: $referralId");
   }
 
   final stateData = [
@@ -161,7 +173,7 @@ class StudentController extends GetxController {
       "Vijaywada",
       "Vishakapatnam"
     ],
-    "West Bengal":["Kolkata"],
+    "West Bengal": ["Kolkata"],
     "Chandigarh": ["chandigarh"],
     "USA": ["Columbia", "Michigan", "New jersey"],
     "Abu Dhabi": ["Abu Dhabi"],
@@ -174,11 +186,11 @@ class StudentController extends GetxController {
     "Netherlands": ["Netherlands"],
     "Oman": ["Oman"],
     "Scotland": ["Scotland"],
-    "Uk": ["london","Belfast"],
-    "Goa" : ["Goa"],
-    "South Korea" : ["South Korea"],
-    "Singapore" :["Singapore"],
-    "Hong Kong":["Hong Kong"]
+    "Uk": ["london", "Belfast"],
+    "Goa": ["Goa"],
+    "South Korea": ["South Korea"],
+    "Singapore": ["Singapore"],
+    "Hong Kong": ["Hong Kong"]
   };
 
   void updateSelectedState(newValue) {
@@ -193,56 +205,56 @@ class StudentController extends GetxController {
     update();
   }
 
-  void costBoolUpdate(String state){
-    if(costBool.value == true){
-     if(level.value == 'Pre Level' && state == 'Tamil Nadu'){
-       enrollValue.value = (1200+600).toString();
-     }else if(level.value == 'Enroll' && state == 'Tamil Nadu'){
-       enrollValue.value = '1200';
-     }else if(level.value=='Select' && state == 'Tamil Nadu'){
-       enrollValue.value = '1200';
-     }
-     else if(level.value =='Pre Level' ){
-       if(Prefs.getString(USERNAME) == "padma@gmail.com"){
-         enrollValue.value = '1';
-       }else{
-         enrollValue.value = '2000';
-       }
-     } else {
-       if(Prefs.getString(USERNAME) == "padma@gmail.com"){
-         enrollValue.value = '1';
-       }else{
-         enrollValue.value = '1300';
-       }
-     }
-    }else{
-      if(level.value == 'Pre Level'){
-        if(Prefs.getString(USERNAME) == "padma@gmail.com"){
+  void costBoolUpdate(String state) {
+    if (costBool.value == true) {
+      if (level.value == 'Pre Level' && state == 'Tamil Nadu') {
+        enrollValue.value = (1200 + 600).toString();
+      } else if (level.value == 'Enroll' && state == 'Tamil Nadu') {
+        enrollValue.value = '1200';
+      } else if (level.value == 'Select' && state == 'Tamil Nadu') {
+        enrollValue.value = '1200';
+      } else if (level.value == 'Pre Level') {
+        if (Prefs.getString(USERNAME) == "padma@gmail.com") {
           enrollValue.value = '1';
-        }else{
+        } else {
           enrollValue.value = '2000';
         }
-      }else{
-        if(Prefs.getString(USERNAME) == "padma@gmail.com"){
+      } else {
+        if (Prefs.getString(USERNAME) == "padma@gmail.com") {
           enrollValue.value = '1';
-        }else {
+        } else {
+          enrollValue.value = '1300';
+        }
+      }
+    } else {
+      if (level.value == 'Pre Level') {
+        if (Prefs.getString(USERNAME) == "padma@gmail.com") {
+          enrollValue.value = '1';
+        } else {
+          enrollValue.value = '2000';
+        }
+      } else {
+        if (Prefs.getString(USERNAME) == "padma@gmail.com") {
+          enrollValue.value = '1';
+        } else {
           enrollValue.value = '1300';
         }
       }
     }
   }
+
   var programBool = false.obs;
-  void programBoolUpdate(){
-    if(program.value == 'MA'){
+  void programBoolUpdate() {
+    if (program.value == 'MA') {
       programValue.value = program.value;
-    }else{
+    } else {
       programValue.value = program.value;
     }
     update();
   }
 
   var program = "Select".obs;
-  String? selectedProgram ;
+  String? selectedProgram;
   var programList = [].obs;
 
   void updateProgramList(String value) {
@@ -263,16 +275,16 @@ class StudentController extends GetxController {
   var preLevel2 = false.obs;
   var enablePreLevelCheckBox = false.obs;
 
-  void preLevelCheckBox(){
+  void preLevelCheckBox() {
     programList.clear();
     selectedProgram = null;
-    if(level.value == 'Pre Level'){
+    if (level.value == 'Pre Level') {
       enablePreLevelCheckBox.value = true;
       preLevel1.value = true;
       preLevel2.value = true;
       program.value = 'Select';
       programList.value = ['AA'];
-    }else{
+    } else {
       enablePreLevelCheckBox.value = false;
       preLevel1.value = false;
       preLevel2.value = false;
@@ -282,7 +294,7 @@ class StudentController extends GetxController {
     update();
   }
 
-  void setPreLevel(bool value){
+  void setPreLevel(bool value) {
     preLevel1.value = value;
     preLevel2.value = value;
   }
@@ -307,15 +319,15 @@ class StudentController extends GetxController {
     progressCard.value = value;
   }
 
-  void setSpeedWritingBook(bool value){
+  void setSpeedWritingBook(bool value) {
     speedWritingBook.value = value;
   }
 
-  void setCb1Book(bool value){
+  void setCb1Book(bool value) {
     cb1Book.value = value;
   }
 
-  void setPd1Book(bool value){
+  void setPd1Book(bool value) {
     pb1Book.value = value;
   }
 
@@ -336,19 +348,19 @@ class StudentController extends GetxController {
     if (progressCard.value) {
       selectedItems.add('progressCard');
     }
-    if (speedWritingBook.value){
+    if (speedWritingBook.value) {
       selectedItems.add('speedWritingBook');
     }
-    if(cb1Book.value){
+    if (cb1Book.value) {
       selectedItems.add('cb1${programValue.value}');
     }
-    if(pb1Book.value){
+    if (pb1Book.value) {
       selectedItems.add('pb1${programValue.value}');
     }
-    if(preLevel1.value){
+    if (preLevel1.value) {
       selectedItems.add('preLevel1');
     }
-    if(preLevel2.value){
+    if (preLevel2.value) {
       selectedItems.add('preLevel2');
     }
     return selectedItems;
@@ -388,7 +400,8 @@ class StudentController extends GetxController {
   void toggleCheckbox(bool newValue) {
     isChecked.value = newValue;
     if (!newValue) {
-      selectedShirt.value = ''; // Clear the selection if the checkbox is unchecked.
+      selectedShirt.value =
+          ''; // Clear the selection if the checkbox is unchecked.
     }
   }
 
@@ -399,13 +412,15 @@ class StudentController extends GetxController {
     Map<String, dynamic> requestData = {
       "username": Prefs.getString(USERNAME),
     };
-    RequestDio request = RequestDio(url: generateStudentIDUrl,body: requestData);
+    RequestDio request =
+        RequestDio(url: generateStudentIDUrl, body: requestData);
     request.post().then((response) async {
       registermodel data = registermodel.fromJson(jsonDecode(response.data));
       try {
         if (data.status == true) {
           Id.value = data.data!;
           Fluttertoast.showToast(msg: "Student Id generated");
+
           isLoading.value = false;
           update();
         } else {
@@ -429,7 +444,6 @@ class StudentController extends GetxController {
   }
 
   var totalAmount = ''.obs;
-
 
   void submit() {
     isLoading.value = true;
@@ -506,8 +520,8 @@ class StudentController extends GetxController {
     print("Update Student");
     print(updateStudentData);
     isLoading.value = true;
-    RequestDio request =
-        RequestDio(url: studentUpdateUrl(studentId), body: jsonEncode(updateStudentData));
+    RequestDio request = RequestDio(
+        url: studentUpdateUrl(studentId), body: jsonEncode(updateStudentData));
     request.post().then((response) async {
       if (kDebugMode) {
         print(response.data);
@@ -538,7 +552,6 @@ class StudentController extends GetxController {
     });
   }
 
-
   void addUnpaidStudent() {
     isLoading.value = true;
     getSelectedItems();
@@ -553,7 +566,7 @@ class StudentController extends GetxController {
       "studentID": Id.value,
       "enrollDate": enrollDateText.text,
       "studentName": nameText.text,
-      "address": addressText.text ?? "NA" ,
+      "address": addressText.text ?? "NA",
       "state": selectedState.value,
       "district": selectedDistrict.value,
       "mobileNumber": mobileNoText.text,
@@ -571,17 +584,19 @@ class StudentController extends GetxController {
     if (kDebugMode) {
       print(requestData);
     }
-    RequestDio request =
-    RequestDio(url: studentcartregUrl, body: requestData);
+    RequestDio request = RequestDio(url: studentcartregUrl, body: requestData);
     request.post().then((response) async {
       if (kDebugMode) {
         print(response.data);
       }
       if (response.statusCode == 200) {
         registrationsuccessmodel success =
-        registrationsuccessmodel.fromJson(response.data);
+            registrationsuccessmodel.fromJson(response.data);
         if (success.status == true) {
           Fluttertoast.showToast(msg: success.message!);
+          if (referralId != null) {
+            enrollToPaid(referralId!);
+          }
           isLoading.value = false;
           update();
           dispose();
@@ -594,7 +609,7 @@ class StudentController extends GetxController {
         }
       } else if (response.statusCode == 201) {
         registrationsuccessmodel success =
-        registrationsuccessmodel.fromJson(response.data);
+            registrationsuccessmodel.fromJson(response.data);
         if (success.status == true) {
           Fluttertoast.showToast(msg: success.message!);
           isLoading.value = false;
@@ -612,5 +627,73 @@ class StudentController extends GetxController {
             snackPosition: SnackPosition.TOP);
       }
     });
+  }
+
+  Future<void> enrollToPaid(String leadId) async {
+    try {
+      isLoading.value = true;
+
+      final data = {
+        "leadIds": [leadId],
+      };
+
+      RequestDio request = RequestDio(url: enrollToPaidUrl, body: data);
+
+      final response = await request.post();
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        log("Enroll to Paid Response: ${response.data}");
+        Fluttertoast.showToast(
+            msg: "Lead enrolled to paid program successfully");
+      } else {
+        Get.snackbar(
+          'Error',
+          'Failed to enroll lead to paid program: ${response.statusMessage}',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        log("Error response: ${response.data}");
+        log("Status code: ${response.statusCode}");
+        log("Status message: ${response.statusMessage}");
+        log("Request data: $data");
+        log("Request URL: ${request.url}");
+      }
+    } catch (e) {
+      log("Exception: $e");
+      Get.snackbar(
+        'Error',
+        'Failed to enroll lead to paid program: $e',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void syncFormFields() {
+    final args = Get.arguments as Map<String, dynamic>?;
+
+    final name = args?["name"] ?? '';
+    final mobile = args?["phone"] ?? '';
+
+    if (name.isEmpty && mobile.isEmpty) {
+      return;
+    }
+
+    // Otherwise set values
+    nameText.text = name;
+    mobileNoText.text = mobile;
+    referralId = args?["referralId"];
+
+    nameText.value = nameText.value.copyWith(
+      text: name,
+      selection: TextSelection.collapsed(offset: name.length),
+    );
+
+    mobileNoText.value = mobileNoText.value.copyWith(
+      text: mobile,
+      selection: TextSelection.collapsed(offset: mobile.length),
+    );
   }
 }

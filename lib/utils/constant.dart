@@ -23,6 +23,7 @@ const USERNAME = 'username';
 const FRANCHISESTATE = 'franchiseState';
 const TNADMIN = "tnAdmin";
 const franchiseId = "franchiseId";
+const webUrl = "webUrl";
 
 
 

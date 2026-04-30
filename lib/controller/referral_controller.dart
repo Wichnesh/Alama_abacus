@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:alama_eorder_app/api/request.dart';
 import 'package:alama_eorder_app/api/url.dart';
+import 'package:alama_eorder_app/model/HomeModel.dart';
 import 'package:alama_eorder_app/model/get_refferal_model.dart';
 import 'package:alama_eorder_app/model/get_refferal_status_model.dart';
 import 'package:alama_eorder_app/utils/constant.dart';
@@ -9,15 +10,19 @@ import 'package:alama_eorder_app/utils/pref_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class ReferralController extends GetxController {
   final franchiseIdController = TextEditingController();
   final phoneController = TextEditingController();
   final nameController = TextEditingController();
   var isLoading = false.obs;
+  RxInt loadingIndex = (-1).obs;
   var referralModel = GetRefferalModel().obs;
   var statusModel = Rxn<StatusModel>();
-  var selectedTab = 0.obs;
+  var selectedStatusTab = 0.obs;
+  Rx<FMData?> selectedFranchise = Rx<FMData?>(null);
 
   List<Datum> get referrals => referralModel.value.data ?? [];
 
@@ -28,19 +33,36 @@ class ReferralController extends GetxController {
   bool get isAllSelected =>
       selectedList.length == referrals.length && referrals.isNotEmpty;
 
-  List get currentList {
-    if (statusModel.value == null) return [];
+  List<All> get filteredStatusList {
+    final list = statusModel.value?.data?.all ?? [];
 
-    switch (selectedTab.value) {
-      case 1:
-        return statusModel.value!.interested;
+    return list.where((e) {
+      final status = (e.status ?? "").toLowerCase().trim();
 
-      case 2:
-        return statusModel.value!.notInterested;
+      switch (selectedStatusTab.value) {
+        case 0: // Link Sent
+          return status.isEmpty || status == "link sent";
 
-      default:
-        return statusModel.value!.all;
-    }
+        case 1: // Interested
+          return status == "interested";
+
+        case 2: // Free Enrolled
+          return status == "enrolledforfreeprogram";
+
+        case 3: // Not Interested
+          return status == "not interested";
+
+        case 4: // ✅ Paid Enrolled
+          return status == "enrolledforpaidprogram";
+
+        default:
+          return true;
+      }
+    }).toList();
+  }
+
+  List<Datum> get pendingReferrals {
+    return referrals.where((e) => e.isLinkSent != true).toList();
   }
 
   @override
@@ -149,6 +171,7 @@ class ReferralController extends GetxController {
 
   Future<void> refreshList() async {
     await fetchReferrals();
+    await refferalResponse();
   }
 
   Future<void> refferalResponse() async {
@@ -184,6 +207,49 @@ class ReferralController extends GetxController {
       Get.snackbar(
         'Error',
         'Failed to fetch referral responses: $e',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> enrollForFreeProgram(All item) async {
+    try {
+      isLoading.value = true;
+
+      final data = {
+        "leadIds": [item.id],
+      };
+
+      RequestDio request = RequestDio(url: enrollStudentUrl, body: data);
+
+      final response = await request.post();
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        log("Enroll Response: ${response.data}");
+        Fluttertoast.showToast(msg: "Leads enrolled successfully");
+        clearSelection();
+        await refreshList();
+      } else {
+        Get.snackbar(
+          'Error',
+          'Failed to enroll leads: ${response.statusMessage}',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        log("Error response: ${response.data}");
+        log("Status code: ${response.statusCode}");
+        log("Status message: ${response.statusMessage}");
+        log("Request data: $data");
+        log("Request URL: ${request.url}");
+      }
+    } catch (e) {
+      log("Exception: $e");
+      Get.snackbar(
+        'Error',
+        'Failed to enroll leads: $e',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.redAccent,
         colorText: Colors.white,
@@ -230,6 +296,136 @@ class ReferralController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  Future<void> createLink(int index) async {
+    try {
+      loadingIndex.value = index;
+
+      final data = [
+        {
+          "name": referrals[index].name ?? "",
+          "phone": referrals[index].phoneNumber ?? "",
+          "franchiseName": referrals[index].franchiseId ?? "",
+        }
+      ];
+
+      RequestDio request = RequestDio(
+        url: createLinkUrl,
+        body: data,
+      );
+
+      final response = await request.post();
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        log("Create Link Response: ${response.data}");
+
+        /// 🔥 RESPONSE LIST
+        final List resList = response.data;
+
+        if (resList.isNotEmpty) {
+          final phone = resList[0]["phone"] ?? "";
+          final link = resList[0]["link"] ?? "";
+
+          await sendWhatsApp(phone, link);
+        }
+
+        clearSelection();
+        await refreshList();
+      } else {
+        Get.snackbar(
+          'Error',
+          'Failed to create links: ${response.statusMessage}',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+
+        log("Error response: ${response.data}");
+        log("Status code: ${response.statusCode}");
+        log("Status message: ${response.statusMessage}");
+        log("Request data: $data");
+        log("Request URL: ${request.url}");
+      }
+    } catch (e) {
+      log("Exception: $e");
+
+      Get.snackbar(
+        'Error',
+        'Failed to create links: $e',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+    } finally {
+      loadingIndex.value = -1;
+    }
+  }
+
+  Future<void> sendWhatsApp(String phone, String link) async {
+    /// Clean number
+    phone = phone.replaceAll(RegExp(r'\D'), '');
+
+    /// Add India code
+    if (!phone.startsWith("91")) {
+      phone = "91$phone";
+    }
+
+    final message = Uri.encodeComponent(
+      "Hi,From alama Abacus please check your link: $link",
+    );
+
+    final url = Uri.parse("https://wa.me/$phone?text=$message");
+
+    try {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      Get.snackbar("Error", "Could not open WhatsApp");
+    }
+  }
+
+  Future assignToFranchise(String leadId, String franchiseId) async {
+    try {
+      isLoading.value = true;
+
+      final data = {
+        "leadId": leadId,
+        "assignToFranchiseID": franchiseId,
+      };
+
+      RequestDio request = RequestDio(url: assignToFranchiseUrl, body: data);
+
+      final response = await request.post();
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        log("Assign Response: ${response.data}");
+        Fluttertoast.showToast(msg: "Lead assigned successfully");
+        clearSelection();
+        await refreshList();
+      } else {
+        Get.snackbar(
+          'Error',
+          'Failed to assign lead: ${response.statusMessage}',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        log("Error response: ${response.data}");
+        log("Status code: ${response.statusCode}");
+        log("Status message: ${response.statusMessage}");
+        log("Request data: $data");
+        log("Request URL: ${request.url}");
+      }
+    } catch (e) {
+      log("Exception: $e");
+      Get.snackbar(
+        'Error',
+        'Failed to assign lead: $e',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  
 
   clearForm() {
     phoneController.clear();

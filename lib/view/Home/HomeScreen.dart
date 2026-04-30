@@ -1,5 +1,8 @@
+import 'package:alama_eorder_app/controller/Home_controller.dart';
 import 'package:alama_eorder_app/utils/colorUtils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../utils/DialogboxDesign.dart';
@@ -21,6 +24,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int? _currentPage;
 
+  final HomeController _homeController = Get.put(HomeController());
   @override
   void initState() {
     _currentPage = 0;
@@ -38,7 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool admin = Prefs.getBoolen(SHARED_ADMIN);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Alama Abacus"),
@@ -63,19 +66,69 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  /// LOGO
                   SizedBox(
-                    height: 80,
+                    height: 60,
                     child: Image.asset(logo),
                   ),
+
+                  const SizedBox(height: 10),
+
+                  /// 🔗 LINK + COPY
+                  Obx(() {
+                    if (_homeController.webUrlRx.value.isEmpty) {
+                      return const SizedBox();
+                    }
+
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 8),
+                      decoration: BoxDecoration(
+                        // ignore: deprecated_member_use
+                        color: Colors.white.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              _homeController.webUrlRx.value,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 12),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.copy,
+                                color: Colors.white, size: 18),
+                            onPressed: () {
+                              Clipboard.setData(
+                                ClipboardData(
+                                    text: _homeController.webUrlRx.value),
+                              );
+
+                             Fluttertoast.showToast(
+                                msg: "Copied",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  })
                 ],
               ),
             ),
-            Prefs.getString(USERNAME) == "tnadmin@gmail.com" ? Container() : ListTile(
-              title: const Text('Report'),
-              onTap: () {
-                Get.toNamed(ROUTE_REPORTDASHBOARD);
-              },
-            ),
+            Prefs.getString(USERNAME) == "tnadmin@gmail.com"
+                ? Container()
+                : ListTile(
+                    title: const Text('Report'),
+                    onTap: () {
+                      Get.toNamed(ROUTE_REPORTDASHBOARD);
+                    },
+                  ),
             ListTile(
               title: const Text('Refferal'),
               onTap: () {
@@ -150,37 +203,49 @@ class AnimatedBottomNav extends StatelessWidget {
             child: InkWell(
               onTap: () => onChange!(0),
               child: BottomNavItem(
-                icon: admin ? tnAdmin ? Icons.admin_panel_settings_sharp : Icons.verified_user : Icons.person,
-                title: admin ? tnAdmin ? "Order Report": "Franchise" : "Student",
+                icon: admin
+                    ? tnAdmin
+                        ? Icons.admin_panel_settings_sharp
+                        : Icons.verified_user
+                    : Icons.person,
+                title: admin
+                    ? tnAdmin
+                        ? "Order Report"
+                        : "Franchise"
+                    : "Student",
                 isActive: currentIndex == 0,
               ),
             ),
           ),
           admin
-              ? tnAdmin ? Container() :Expanded(
-            child: InkWell(
-              onTap: () => onChange!(1),
-              child: BottomNavItem(
-                icon: admin
-                    ? Icons.person
-                    : Icons.local_convenience_store_rounded,
-                title: "Students",
-                isActive: currentIndex == 1,
-              ),
-            ),
-          )
+              ? tnAdmin
+                  ? Container()
+                  : Expanded(
+                      child: InkWell(
+                        onTap: () => onChange!(1),
+                        child: BottomNavItem(
+                          icon: admin
+                              ? Icons.person
+                              : Icons.local_convenience_store_rounded,
+                          title: "Students",
+                          isActive: currentIndex == 1,
+                        ),
+                      ),
+                    )
               : Container(),
           admin
-              ? tnAdmin ? Container() : Expanded(
-            child: InkWell(
-              onTap: () => onChange!(2),
-              child: BottomNavItem(
-                icon: Icons.menu,
-                title: admin ? "Stock" : 'Extra Tab',
-                isActive: currentIndex == 2,
-              ),
-            ),
-          )
+              ? tnAdmin
+                  ? Container()
+                  : Expanded(
+                      child: InkWell(
+                        onTap: () => onChange!(2),
+                        child: BottomNavItem(
+                          icon: Icons.menu,
+                          title: admin ? "Stock" : 'Extra Tab',
+                          isActive: currentIndex == 2,
+                        ),
+                      ),
+                    )
               : Container()
         ],
       ),
@@ -196,11 +261,11 @@ class BottomNavItem extends StatelessWidget {
   final String? title;
   const BottomNavItem(
       {Key? key,
-        this.isActive = false,
-        this.icon,
-        this.activeColor,
-        this.inactiveColor,
-        this.title})
+      this.isActive = false,
+      this.icon,
+      this.activeColor,
+      this.inactiveColor,
+      this.title})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -218,34 +283,34 @@ class BottomNavItem extends StatelessWidget {
       reverseDuration: const Duration(milliseconds: 200),
       child: isActive
           ? Container(
-        color: Colors.white,
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              title!,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: activeColor ?? Theme.of(context).primaryColor,
+              color: Colors.white,
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    title!,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: activeColor ?? Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  const SizedBox(height: 5.0),
+                  Container(
+                    width: 5.0,
+                    height: 5.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: activeColor ?? Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: 5.0),
-            Container(
-              width: 5.0,
-              height: 5.0,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: activeColor ?? Theme.of(context).primaryColor,
-              ),
-            ),
-          ],
-        ),
-      )
+            )
           : Icon(
-        icon,
-        color: inactiveColor ?? Colors.grey,
-      ),
+              icon,
+              color: inactiveColor ?? Colors.grey,
+            ),
     );
   }
 }

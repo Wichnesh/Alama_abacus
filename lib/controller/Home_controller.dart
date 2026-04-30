@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -6,7 +7,6 @@ import 'package:get/get.dart';
 import '../api/request.dart';
 import '../api/url.dart';
 import '../model/HomeModel.dart';
-import '../model/loginmodel.dart';
 import '../model/registermodel.dart';
 import '../model/stockmodel.dart';
 import '../model/studentmodel.dart';
@@ -23,7 +23,7 @@ class HomeController extends GetxController {
   var nonapprovedfranchiselist = List<FMData>.empty(growable: true).obs;
   var studentList = List<SData>.empty(growable: true).obs;
   var stockList = List<StData>.empty(growable: true).obs;
-  var filterStockList =List<STRData>.empty(growable: true).obs;
+  var filterStockList = List<STRData>.empty(growable: true).obs;
   var count = ''.obs;
   TextEditingController fromdateText = TextEditingController();
   TextEditingController todateText = TextEditingController();
@@ -36,10 +36,19 @@ class HomeController extends GetxController {
   DateTime? todate;
   var selectedState = "Select".obs;
   var selectedDistrict = "Select".obs;
-  var selectedFranchise  ="Select".obs;
+  var selectedFranchise = "Select".obs;
   var selectedLevel = "Select".obs;
   var selectedCountry = "".obs;
-  var levelList = ['Enroll','Level 1','Level 2','Level 3','Level 4','Level 5','Level 6'].obs;
+  var levelList = [
+    'Enroll',
+    'Level 1',
+    'Level 2',
+    'Level 3',
+    'Level 4',
+    'Level 5',
+    'Level 6'
+  ].obs;
+  var webUrlRx = "".obs;
 
   final stateData = [
     "Select",
@@ -70,8 +79,9 @@ class HomeController extends GetxController {
     "Singapore",
     "Hong Kong"
   ];
+
   final districtData = {
-    "Select" : ["Select"],
+    "Select": ["Select"],
     "Tamil Nadu": [
       "Select",
       "Ariyalur",
@@ -146,12 +156,12 @@ class HomeController extends GetxController {
       "WARANGAL",
       "YADADRI BHUVANAGIRI",
     ],
-    "Karnataka": ["Select","Bengaluru"],
-    "Madhya pradesh": ["Select","Bhopal", "Shivpuri"],
-    "Maharashtra": ["Select","Mumbai"],
-    "New Delhi": ["Select","New Delhi"],
-    "Pondicherry": ["Select","karaikal"],
-    "Gujarat": ["Select","Surat"],
+    "Karnataka": ["Select", "Bengaluru"],
+    "Madhya pradesh": ["Select", "Bhopal", "Shivpuri"],
+    "Maharashtra": ["Select", "Mumbai"],
+    "New Delhi": ["Select", "New Delhi"],
+    "Pondicherry": ["Select", "karaikal"],
+    "Gujarat": ["Select", "Surat"],
     "Andhra pradesh": [
       "Select",
       "Guntur",
@@ -162,29 +172,29 @@ class HomeController extends GetxController {
       "Vijaywada",
       "Vishakapatnam"
     ],
-    "Chandigarh": ["Select","chandigarh"],
-    "USA": ["Select","Columbia", "Michigan", "New jersey"],
-    "Abu Dhabi": ["Select","Abu Dhabi"],
-    "Australia": ["Select","Australia"],
-    "Canada": ["Select","Canada"],
-    "Dubai": ["Select","Dubai"],
-    "Europe": ["Select","Europe"],
-    "Germany": ["Select","Germany"],
-    "Jubail": ["Select","Jubail"],
-    "Netherlands": ["Select","Netherlands"],
-    "Oman": ["Select","Oman"],
-    "Scotland": ["Select","Scotland"],
-    "Uk": ["Select","london", "Uk"],
-    "Goa" :["Select","Goa"],
-    "South Korea" : ["Select","South Korea"],
-    "Singapore" :["Select","Singapore"],
-    "Hong Kong" : ["Select","Hong Kong"]
+    "Chandigarh": ["Select", "chandigarh"],
+    "USA": ["Select", "Columbia", "Michigan", "New jersey"],
+    "Abu Dhabi": ["Select", "Abu Dhabi"],
+    "Australia": ["Select", "Australia"],
+    "Canada": ["Select", "Canada"],
+    "Dubai": ["Select", "Dubai"],
+    "Europe": ["Select", "Europe"],
+    "Germany": ["Select", "Germany"],
+    "Jubail": ["Select", "Jubail"],
+    "Netherlands": ["Select", "Netherlands"],
+    "Oman": ["Select", "Oman"],
+    "Scotland": ["Select", "Scotland"],
+    "Uk": ["Select", "london", "Uk"],
+    "Goa": ["Select", "Goa"],
+    "South Korea": ["Select", "South Korea"],
+    "Singapore": ["Select", "Singapore"],
+    "Hong Kong": ["Select", "Hong Kong"]
   };
 
   void updateSelectedState(String newValue) {
     selectedState.value = newValue;
     selectedDistrict.value = districtData[newValue]![
-    0]; // Initialize with the first district in the selected state.
+        0]; // Initialize with the first district in the selected state.
     update();
   }
 
@@ -199,27 +209,31 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     bool admin = Prefs.getBoolen(SHARED_ADMIN);
+    webUrlRx.value = Prefs.getString(webUrl) ?? "";
+
     getLoginStatus();
     getFranchiseList();
-    admin ? stockIsLoading.value ? Container() : getStockList() : Container();
+    franschiseWebUrl();
+    admin
+        ? stockIsLoading.value
+            ? Container()
+            : getStockList()
+        : Container();
     admin ? getStudentList() : getFranchiseStudentList();
     super.onInit();
   }
 
-
-  void getLoginStatus() async{
+  void getLoginStatus() async {
     isLoading.value = true;
-    var body = {
-      "username" : Prefs.getString(USERNAME)
-    };
-    RequestDio request = RequestDio(url: getallfranchiseUrl,parameters: body);
+    var body = {"username": Prefs.getString(USERNAME)};
+    RequestDio request = RequestDio(url: getallfranchiseUrl, parameters: body);
     request.post().then((response) async {
       FranchiseModel franchise = FranchiseModel.fromJson(response.data);
-      for(var data in franchise.data!){
-        if(data.approve == false){
+      for (var data in franchise.data!) {
+        if (data.approve == false) {
           await Prefs.setString(TOKEN, "");
           await Prefs.setString(USERNAME, "");
-          await Prefs.setString(FRANCHISESTATE,"");
+          await Prefs.setString(FRANCHISESTATE, "");
           await Prefs.setBoolen(SHARED_ADMIN, false);
           await Prefs.setBoolen('isLoggedIn', false);
           if (kDebugMode) {
@@ -228,7 +242,7 @@ class HomeController extends GetxController {
           }
           Fluttertoast.showToast(msg: "Please Contact Administrator");
           Get.offAllNamed(ROUTE_LOGIN);
-        }else{
+        } else {
           print(data.approve);
         }
       }
@@ -330,7 +344,8 @@ class HomeController extends GetxController {
       "startDate": fromdateText.text,
       "endDate": todateText.text,
     };
-    RequestDio request = RequestDio(url: getFilterTransactionUrl, body: requestData);
+    RequestDio request =
+        RequestDio(url: getFilterTransactionUrl, body: requestData);
     if (kDebugMode) {
       print(requestData);
     }
@@ -433,42 +448,57 @@ class HomeController extends GetxController {
     update();
   }
 
-
   void filterStudentList() async {
     isLoading.value = true;
     Map<String, dynamic>? params;
-    if(selectedState.value == 'Select' && selectedDistrict.value == 'Select' && nametext.text.isEmpty && contactNo.text.isEmpty){
+    if (selectedState.value == 'Select' &&
+        selectedDistrict.value == 'Select' &&
+        nametext.text.isEmpty &&
+        contactNo.text.isEmpty) {
       if (kDebugMode) {
         print('nothing is selected');
       }
-      return ;
-    }else if(nametext.text.isEmpty && contactNo.text.isEmpty &&selectedState.value != 'Select' && selectedDistrict.value != 'Select' ){
+      return;
+    } else if (nametext.text.isEmpty &&
+        contactNo.text.isEmpty &&
+        selectedState.value != 'Select' &&
+        selectedDistrict.value != 'Select') {
       params = {
         'state': selectedState.value,
         'district': selectedDistrict.value,
       };
-    }else if(nametext.text.isNotEmpty && contactNo.text.isNotEmpty && selectedState.value == 'Select' && selectedDistrict.value == 'Select'){
+    } else if (nametext.text.isNotEmpty &&
+        contactNo.text.isNotEmpty &&
+        selectedState.value == 'Select' &&
+        selectedDistrict.value == 'Select') {
       params = {
         'name': nametext.text,
         'phoneNumber': contactNo.text,
       };
-    }else if(selectedState.value != 'Select' && selectedDistrict.value != 'Select'){
+    } else if (selectedState.value != 'Select' &&
+        selectedDistrict.value != 'Select') {
       params = {
         'state': selectedState.value,
         'district': selectedDistrict.value,
       };
-    }else if(nametext.text.isNotEmpty && contactNo.text.isNotEmpty && selectedState.value != 'Select' && selectedDistrict.value != 'Select'){
-       params = {
+    } else if (nametext.text.isNotEmpty &&
+        contactNo.text.isNotEmpty &&
+        selectedState.value != 'Select' &&
+        selectedDistrict.value != 'Select') {
+      params = {
         'name': nametext.text,
         'state': selectedState.value,
         'district': selectedDistrict.value,
         'phoneNumber': contactNo.text,
       };
-    }else if(nametext.text.isNotEmpty && contactNo.text.isEmpty && selectedState.value == 'Select' && selectedDistrict.value == 'Select'){
+    } else if (nametext.text.isNotEmpty &&
+        contactNo.text.isEmpty &&
+        selectedState.value == 'Select' &&
+        selectedDistrict.value == 'Select') {
       params = {
         'name': nametext.text,
       };
-    }else{
+    } else {
       // params = {
       //   'name': '${nametext.text}',
       //   'state': '${selectedState.value}',
@@ -480,7 +510,7 @@ class HomeController extends GetxController {
       print(getallstudentsUrl);
     }
 
-    RequestDio request = RequestDio(url: getallstudentsUrl,parameters: params);
+    RequestDio request = RequestDio(url: getallstudentsUrl, parameters: params);
     request.post().then((response) async {
       print('${response.data}');
       if (response.statusCode == 200) {
@@ -535,7 +565,8 @@ class HomeController extends GetxController {
     // Iterate over the original studentList
     for (var student in studentList) {
       // Check if the studentName contains the input name (case insensitive)
-      if (student.studentName?.toLowerCase().contains(name.toLowerCase()) ?? false) {
+      if (student.studentName?.toLowerCase().contains(name.toLowerCase()) ??
+          false) {
         // If it matches, add it to the filtered list
         filteredList.add(student);
       }
@@ -543,8 +574,8 @@ class HomeController extends GetxController {
     Get.to(() => FilterStudentScreen(filteredList));
   }
 
-  void filterStudentListAll(
-      String name, String phoneNumber,String level ,String state, String district) {
+  void filterStudentListAll(String name, String phoneNumber, String level,
+      String state, String district) {
     // Create a new list to store the filtered results
     List<SData> filteredList = [];
 
@@ -558,85 +589,122 @@ class HomeController extends GetxController {
 
       // Check if the studentName contains the input name (case insensitive)
       if (name.isNotEmpty) {
-        nameMatched = student.studentName?.toLowerCase().contains(name.toLowerCase()) ?? false;
+        nameMatched =
+            student.studentName?.toLowerCase().contains(name.toLowerCase()) ??
+                false;
       }
 
       // Check if the mobileNumber contains the input phoneNumber
       if (phoneNumber.isNotEmpty) {
         phoneMatched = student.mobileNumber?.contains(phoneNumber) ?? false;
       }
-      if(level != "Select"){
+      if (level != "Select") {
         levelMatched = student.level?.contains(level) ?? false;
       }
       // Check if the state contains the input state (case insensitive)
       if (state != 'Select') {
-        stateMatched = student.state?.toLowerCase().contains(state.toLowerCase()) ?? false;
+        stateMatched =
+            student.state?.toLowerCase().contains(state.toLowerCase()) ?? false;
       }
 
       // Check if the district contains the input district (case insensitive)
       if (district != 'Select') {
-        districtMatched = student.district?.toLowerCase().contains(district.toLowerCase()) ?? false;
+        districtMatched =
+            student.district?.toLowerCase().contains(district.toLowerCase()) ??
+                false;
       }
 
       // If any of the conditions are met, add it to the filtered list
-      if(name.isNotEmpty && phoneNumber.isNotEmpty && state !='Select' && district !='Select' && level =="Select"){
+      if (name.isNotEmpty &&
+          phoneNumber.isNotEmpty &&
+          state != 'Select' &&
+          district != 'Select' &&
+          level == "Select") {
         if (kDebugMode) {
           print('State , district , name , phoneNumber, level Only');
         }
-        if (nameMatched && phoneMatched && stateMatched && districtMatched && levelMatched) {
+        if (nameMatched &&
+            phoneMatched &&
+            stateMatched &&
+            districtMatched &&
+            levelMatched) {
           filteredList.add(student);
         }
-      }else if(name.isNotEmpty && phoneNumber.isEmpty && state =='Select' && district =='Select' && level =="Select"){
+      } else if (name.isNotEmpty &&
+          phoneNumber.isEmpty &&
+          state == 'Select' &&
+          district == 'Select' &&
+          level == "Select") {
         if (kDebugMode) {
           print('name Only');
         }
         if (nameMatched) {
           filteredList.add(student);
         }
-      }else if(name.isEmpty && phoneNumber.isEmpty && state !='Select' && district =='Select' && level =="Select"){
+      } else if (name.isEmpty &&
+          phoneNumber.isEmpty &&
+          state != 'Select' &&
+          district == 'Select' &&
+          level == "Select") {
         if (kDebugMode) {
           print('State Only');
         }
         if (stateMatched) {
           filteredList.add(student);
         }
-      }
-      else if(name.isEmpty && phoneNumber.isEmpty && state =='Select' && district =='Select' && level !="Select"){
+      } else if (name.isEmpty &&
+          phoneNumber.isEmpty &&
+          state == 'Select' &&
+          district == 'Select' &&
+          level != "Select") {
         if (kDebugMode) {
           print('level Only');
         }
         if (levelMatched) {
           filteredList.add(student);
         }
-      }
-      else if(name.isEmpty && phoneNumber.isEmpty && state !='Select' && district !='Select' && level =="Select"){
+      } else if (name.isEmpty &&
+          phoneNumber.isEmpty &&
+          state != 'Select' &&
+          district != 'Select' &&
+          level == "Select") {
         if (kDebugMode) {
           print('State , district Only');
         }
         if (stateMatched && districtMatched) {
           filteredList.add(student);
         }
-      }
-      else if(name.isNotEmpty && phoneNumber.isNotEmpty && state =='Select' && district =='Select' && level =="Select"){
+      } else if (name.isNotEmpty &&
+          phoneNumber.isNotEmpty &&
+          state == 'Select' &&
+          district == 'Select' &&
+          level == "Select") {
         if (kDebugMode) {
           print('name , phoneNumber Only');
         }
-        if (nameMatched && phoneMatched){
+        if (nameMatched && phoneMatched) {
           filteredList.add(student);
         }
-      }
-      else if(name.isEmpty && phoneNumber.isNotEmpty && state =='Select' && district =='Select' && level =="Select"){
+      } else if (name.isEmpty &&
+          phoneNumber.isNotEmpty &&
+          state == 'Select' &&
+          district == 'Select' &&
+          level == "Select") {
         if (kDebugMode) {
           print('phoneNumber Only');
         }
         if (phoneMatched) {
           filteredList.add(student);
         }
-      }else{
+      } else {
         if (kDebugMode) {
           print('something');
         }
-        if(nameMatched || phoneMatched || stateMatched || districtMatched || levelMatched){
+        if (nameMatched ||
+            phoneMatched ||
+            stateMatched ||
+            districtMatched ||
+            levelMatched) {
           filteredList.add(student);
         }
       }
@@ -645,12 +713,12 @@ class HomeController extends GetxController {
     Get.to(() => FilterStudentScreen(filteredList));
   }
 
-  void filterStudentListAllAdmin(String id,String state, String district, String franchise ,String level) {
+  void filterStudentListAllAdmin(String id, String state, String district,
+      String franchise, String level) {
     // Create a new list to store the filtered results
     List<SData> filteredList = [];
     // Iterate over the original studentList
     for (var student in studentList) {
-
       bool idMatched = false;
       bool stateMatched = false;
       bool districtMatched = false;
@@ -659,11 +727,16 @@ class HomeController extends GetxController {
 
       // Check if the studentName contains the input name (case insensitive)
       if (id.isNotEmpty) {
-        idMatched = student.studentID?.toLowerCase().contains(id.toLowerCase()) ?? false;
+        idMatched =
+            student.studentID?.toLowerCase().contains(id.toLowerCase()) ??
+                false;
       }
 
       if (franchise.isNotEmpty) {
-        franchiseMatched = student.franchise?.toLowerCase().contains(franchise.toLowerCase()) ?? false;
+        franchiseMatched = student.franchise
+                ?.toLowerCase()
+                .contains(franchise.toLowerCase()) ??
+            false;
       }
 
       // Check if the mobileNumber contains the input phoneNumber
@@ -672,103 +745,152 @@ class HomeController extends GetxController {
       }
 
       if (state != 'Select') {
-        stateMatched = student.state?.toLowerCase().contains(state.toLowerCase()) ?? false;
+        stateMatched =
+            student.state?.toLowerCase().contains(state.toLowerCase()) ?? false;
       }
 
       // Check if the district contains the input district (case insensitive)
       if (district != 'Select') {
-        districtMatched = student.district?.toLowerCase().contains(district.toLowerCase()) ?? false;
+        districtMatched =
+            student.district?.toLowerCase().contains(district.toLowerCase()) ??
+                false;
       }
 
       // If any of the conditions are met, add it to the filtered list
-      if(franchise !='Select' && level !='Select' && state !='Select' && district !='Select' && id !=''){
+      if (franchise != 'Select' &&
+          level != 'Select' &&
+          state != 'Select' &&
+          district != 'Select' &&
+          id != '') {
         if (kDebugMode) {
           print('State , district , franchise , level Only , id');
         }
-        if (franchiseMatched && levelMatched && stateMatched && districtMatched && idMatched) {
+        if (franchiseMatched &&
+            levelMatched &&
+            stateMatched &&
+            districtMatched &&
+            idMatched) {
           filteredList.add(student);
         }
-      }else if(state !='Select' && district == 'Select' && franchise == 'Select' && level == 'Select' && id.isEmpty){
+      } else if (state != 'Select' &&
+          district == 'Select' &&
+          franchise == 'Select' &&
+          level == 'Select' &&
+          id.isEmpty) {
         if (kDebugMode) {
           print('State Only');
         }
-        if(stateMatched){
+        if (stateMatched) {
           filteredList.add(student);
         }
-      }else if(franchise =='Select' && level =='Select' && state !='Select' && district !='Select' && id.isEmpty){
+      } else if (franchise == 'Select' &&
+          level == 'Select' &&
+          state != 'Select' &&
+          district != 'Select' &&
+          id.isEmpty) {
         if (kDebugMode) {
           print('State and District Only');
         }
         if (stateMatched && districtMatched) {
           filteredList.add(student);
         }
-      }else if(franchise !='Select' && level =='Select' && state !='Select' && district !='Select' && id.isEmpty){
+      } else if (franchise != 'Select' &&
+          level == 'Select' &&
+          state != 'Select' &&
+          district != 'Select' &&
+          id.isEmpty) {
         if (kDebugMode) {
           print('State , district , franchise Only');
         }
         if (franchiseMatched && stateMatched && districtMatched) {
           filteredList.add(student);
         }
-      }else if(state =='Select' && district == 'Select' && franchise != 'Select' && level == 'Select' && id.isEmpty){
+      } else if (state == 'Select' &&
+          district == 'Select' &&
+          franchise != 'Select' &&
+          level == 'Select' &&
+          id.isEmpty) {
         if (kDebugMode) {
           print('franchise Only');
         }
-        if(franchiseMatched){
+        if (franchiseMatched) {
           filteredList.add(student);
         }
-      }else if(state !='Select' && district == 'Select' && franchise != 'Select' && level != 'Select' && id.isEmpty){
+      } else if (state != 'Select' &&
+          district == 'Select' &&
+          franchise != 'Select' &&
+          level != 'Select' &&
+          id.isEmpty) {
         if (kDebugMode) {
           print('state,level,franchise Only');
         }
         if (franchiseMatched && stateMatched && levelMatched) {
           filteredList.add(student);
         }
-      }
-      else if(state !='Select' && district == 'Select' && franchise == 'Select' && level != 'Select' && id.isEmpty){
+      } else if (state != 'Select' &&
+          district == 'Select' &&
+          franchise == 'Select' &&
+          level != 'Select' &&
+          id.isEmpty) {
         if (kDebugMode) {
           print('state,level Only');
         }
         if (stateMatched && levelMatched) {
           filteredList.add(student);
         }
-      }else if(state =='Select' && district == 'Select' && franchise != 'Select' && level != 'Select' && id.isEmpty){
+      } else if (state == 'Select' &&
+          district == 'Select' &&
+          franchise != 'Select' &&
+          level != 'Select' &&
+          id.isEmpty) {
         if (kDebugMode) {
           print('franchise,level Only');
         }
         if (franchiseMatched && levelMatched) {
           filteredList.add(student);
         }
-      }
-      else if(state !='Select' && district == 'Select' && franchise != 'Select' && level == 'Select' && id.isEmpty){
+      } else if (state != 'Select' &&
+          district == 'Select' &&
+          franchise != 'Select' &&
+          level == 'Select' &&
+          id.isEmpty) {
         if (kDebugMode) {
           print('state,franchise Only');
         }
         if (stateMatched && franchiseMatched) {
           filteredList.add(student);
         }
-      }
-      else if(state =='Select' && district == 'Select' && franchise == 'Select' && level != 'Select' && id.isEmpty){
+      } else if (state == 'Select' &&
+          district == 'Select' &&
+          franchise == 'Select' &&
+          level != 'Select' &&
+          id.isEmpty) {
         if (kDebugMode) {
           print('level Only');
         }
-        if(levelMatched){
+        if (levelMatched) {
           filteredList.add(student);
         }
-      }
-      else if(state =='Select' && district == 'Select' && franchise == 'Select' && level == 'Select' && id !=''){
+      } else if (state == 'Select' &&
+          district == 'Select' &&
+          franchise == 'Select' &&
+          level == 'Select' &&
+          id != '') {
         if (kDebugMode) {
           print('id Only');
         }
-        if(idMatched){
+        if (idMatched) {
           filteredList.add(student);
         }
-      }
-      else if(state =='Select' && district == 'Select' && franchise == 'Select' && level == 'Select' && id ==''){
+      } else if (state == 'Select' &&
+          district == 'Select' &&
+          franchise == 'Select' &&
+          level == 'Select' &&
+          id == '') {
         if (kDebugMode) {
           print('nothing');
         }
-      }
-      else{
+      } else {
         if (kDebugMode) {
           print('something');
         }
@@ -778,9 +900,8 @@ class HomeController extends GetxController {
     Get.to(() => FilterStudentScreen(filteredList));
   }
 
-
-
-  void filterFranchiseListAllFranchise(String name, String state, String district) {
+  void filterFranchiseListAllFranchise(
+      String name, String state, String district) {
     // Create a new list to store the filtered results
     List<FMData> filteredList = [];
 
@@ -793,58 +914,70 @@ class HomeController extends GetxController {
 
       // Check if the studentName contains the input name (case insensitive)
       if (name.isNotEmpty) {
-        nameMatched = franchise.name?.toLowerCase().contains(name.toLowerCase()) ?? false;
+        nameMatched =
+            franchise.name?.toLowerCase().contains(name.toLowerCase()) ?? false;
       }
 
       // Check if the state contains the input state (case insensitive)
       if (state != 'Select') {
-        stateMatched = franchise.state?.toLowerCase().contains(state.toLowerCase()) ?? false;
+        stateMatched =
+            franchise.state?.toLowerCase().contains(state.toLowerCase()) ??
+                false;
       }
 
       // Check if the district contains the input district (case insensitive)
       if (district != 'Select') {
-        districtMatched = franchise.district?.toLowerCase().contains(district.toLowerCase()) ?? false;
+        districtMatched = franchise.district
+                ?.toLowerCase()
+                .contains(district.toLowerCase()) ??
+            false;
       }
 
       // If any of the conditions are met, add it to the filtered list
-      if(name !='Select' && state !='Select' && district !='Select'){
+      if (name != 'Select' && state != 'Select' && district != 'Select') {
         if (kDebugMode) {
           print('State , district , name Only');
         }
         if (nameMatched && stateMatched && districtMatched) {
           filteredList.add(franchise);
         }
-      }else if(state !='Select' && district == 'Select' && name =='Select'){
+      } else if (state != 'Select' &&
+          district == 'Select' &&
+          name == 'Select') {
         if (kDebugMode) {
           print('State Only');
         }
-        if(stateMatched){
+        if (stateMatched) {
           filteredList.add(franchise);
         }
-      }else if(name =='Select' && state !='Select' && district !='Select'){
+      } else if (name == 'Select' &&
+          state != 'Select' &&
+          district != 'Select') {
         if (kDebugMode) {
           print('State and District Only');
         }
         if (stateMatched && districtMatched) {
           filteredList.add(franchise);
         }
-      }else if(name !='Select' && state !='Select' && district =='Select'){
+      } else if (name != 'Select' &&
+          state != 'Select' &&
+          district == 'Select') {
         if (kDebugMode) {
           print('State and name Only');
         }
         if (stateMatched && nameMatched) {
           filteredList.add(franchise);
         }
-      }
-      else if(state =='Select' && district == 'Select' && name !='Select'){
+      } else if (state == 'Select' &&
+          district == 'Select' &&
+          name != 'Select') {
         if (kDebugMode) {
           print('name Only');
         }
-        if(nameMatched){
+        if (nameMatched) {
           filteredList.add(franchise);
         }
-      }
-      else{
+      } else {
         if (kDebugMode) {
           print('something');
         }
@@ -852,8 +985,6 @@ class HomeController extends GetxController {
     }
     Get.to(() => FilterFranchiseScreen(filteredList));
   }
-
-
 
   void getFranchiseStudentList() async {
     isLoading.value = true;
@@ -913,7 +1044,6 @@ class HomeController extends GetxController {
     });
     update();
   }
-
 
   void getStockList() async {
     isLoading.value = true;
@@ -981,9 +1111,10 @@ class HomeController extends GetxController {
           }
           refresh();
           if (kDebugMode) {
-            print('Inside Stock List Update stock loading value -----> ${stockIsLoading.value}');
+            print(
+                'Inside Stock List Update stock loading value -----> ${stockIsLoading.value}');
           }
-          if(stockIsLoading.value == true){
+          if (stockIsLoading.value == true) {
             stockIsLoading.value = false;
           }
           stockList.addAll(listElement);
@@ -1002,7 +1133,7 @@ class HomeController extends GetxController {
             studentList.add(element);
           }
 
-          if(stockIsLoading.value == false){
+          if (stockIsLoading.value == false) {
             stockIsLoading.value = true;
           }
           update();
@@ -1023,13 +1154,12 @@ class HomeController extends GetxController {
           colorText: Colors.white,
           backgroundColor: Colors.red,
           snackPosition: SnackPosition.TOP);
-      if(stockIsLoading.value == false){
+      if (stockIsLoading.value == false) {
         stockIsLoading.value = true;
       }
     });
     update();
   }
-
 
   Future updateStock(int count, String id) async {
     stockIsLoading.value = true;
@@ -1051,9 +1181,10 @@ class HomeController extends GetxController {
             registrationsuccessmodel.fromJson(jsonDecode(response.data));
         if (stock.status == true) {
           Fluttertoast.showToast(msg: stock.message!);
-         await getStockListUpdate();
+          await getStockListUpdate();
           if (kDebugMode) {
-            print('Inside Update stock loading value -----> ${stockIsLoading.value}');
+            print(
+                'Inside Update stock loading value -----> ${stockIsLoading.value}');
           }
           refresh();
           Get.back();
@@ -1152,5 +1283,35 @@ class HomeController extends GetxController {
       isLoading.value = false;
       update();
     });
+  }
+
+  Future franschiseWebUrl() async {
+    isLoading.value = true;
+    try {
+      final body = {
+        "franchiseID": Prefs.getString(franchiseId),
+      };
+      RequestDio request = RequestDio(url: franschiseWebLinkUrl, body: body);
+
+      request.post().then((response) async {
+        setWebUrl(response.data['uniqueLink']);
+        log("--------------------> ${response.data['uniqueLink']}");
+      }).onError((error, stackTrace) {
+        Get.snackbar("Error", "$error",
+            colorText: Colors.white,
+            backgroundColor: Colors.red,
+            snackPosition: SnackPosition.TOP);
+        isLoading.value = false;
+      });
+    } catch (e) {
+      log('Error in getting franchise web url: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void setWebUrl(String url) {
+    Prefs.setString(webUrl, url);
+    webUrlRx.value = url;
   }
 }
