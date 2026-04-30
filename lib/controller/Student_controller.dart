@@ -670,30 +670,4 @@ class StudentController extends GetxController {
       isLoading.value = false;
     }
   }
-
-  void syncFormFields() {
-    final args = Get.arguments as Map<String, dynamic>?;
-
-    final name = args?["name"] ?? '';
-    final mobile = args?["phone"] ?? '';
-
-    if (name.isEmpty && mobile.isEmpty) {
-      return;
-    }
-
-    // Otherwise set values
-    nameText.text = name;
-    mobileNoText.text = mobile;
-    referralId = args?["referralId"];
-
-    nameText.value = nameText.value.copyWith(
-      text: name,
-      selection: TextSelection.collapsed(offset: name.length),
-    );
-
-    mobileNoText.value = mobileNoText.value.copyWith(
-      text: mobile,
-      selection: TextSelection.collapsed(offset: mobile.length),
-    );
-  }
 }

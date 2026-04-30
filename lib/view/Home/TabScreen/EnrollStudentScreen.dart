@@ -19,12 +19,13 @@ class EnrollStudentScreen extends StatefulWidget {
 }
 
 class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
-  StudentController studentController = StudentController();
+  late StudentController studentController;
   Razorpay? _razorpay;
 
   @override
   void initState() {
     super.initState();
+    studentController = Get.find<StudentController>();
     _razorpay = Razorpay();
     _razorpay?.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay?.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
@@ -562,7 +563,6 @@ class _EnrollStudentScreenState extends State<EnrollStudentScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    studentController.syncFormFields();
                     List<String> errors = [];
                     final name = studentController.nameText.text.trim();
                     final phone = studentController.mobileNoText.text.trim();
