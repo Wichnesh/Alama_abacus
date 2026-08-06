@@ -417,69 +417,103 @@ class OrderController extends GetxController {
     }
   }
 
-  Future<String?> createOrder( String name,Map notes,int cost)async {
-    backendformat();
-    isLoading.value = true;
+  Future<String?> createOrder(String name, Map notes, int cost) async {
+  backendformat();
+  isLoading.value = true;
+
+  try {
     String certificate = '';
     bool enableBtn = isChecked.value;
+
     if (gc.value == true) {
       certificate = "Graduate Certificate";
     } else if (mc.value == true) {
       certificate = "Master Certificate";
-      if(currentlevel.value =='Level 5' && programText.text == 'AA'){
+      if (currentlevel.value == 'Level 5' && programText.text == 'AA') {
         enableBtn = disableBtn.value;
       } else {
         enableBtn = false;
       }
     }
-    Map orderData = {
+
+    Map<String, dynamic> orderData = {
       "franchise": Prefs.getString(USERNAME),
       "studentID": "${data.studentID}",
       "futureLevel": futurelevel.value,
       "currentLevel": currentlevel.value,
-      "cost" : (cost/100).toString(),
+      "cost": (cost / 100).toString(),
       "items": BookList,
       "program": programText.text,
-      'certificate': certificate
+      "certificate": certificate,
     };
 
     if (mc.value == true) {
-      orderData['enableBtn'] = enableBtn;
+      orderData["enableBtn"] = enableBtn;
     }
-    Map<String, dynamic>? requestData = {
-      "isSuccessful" : false,
-      "razorpayOrderObj":{
+
+    Map<String, dynamic> requestData = {
+      "isSuccessful": false,
+      "razorpayOrderObj": {
         "amount": cost,
         "currency": "INR",
         "receipt": name,
-        "notes": notes
+        "notes": notes,
       },
     };
-    requestData['razorpayOrderObj']['notes'].addAll({"orderData":jsonEncode(orderData)});
-    requestData.addAll(orderData.cast<String, dynamic>());
-    print("requestData");
-    print(requestData);
+
+    requestData["razorpayOrderObj"]["notes"]
+        .addAll({"orderData": jsonEncode(orderData)});
+
+    requestData.addAll(orderData);
+
     if (kDebugMode) {
+      print("requestData");
       print(requestData);
     }
-    RequestDio request = RequestDio(url: getallordersUrl, body: requestData);
-    return await request.post().then((response) async {
-      if (kDebugMode) {
-        print(response.data);
-        print(response.statusCode);
-      }
-      if (response.statusCode == 200) {
-        return response.data;
-      } else if (response.statusCode == 201) {
-        return null;
-      } else {
-        Get.snackbar("Error", "Please try later",
-            colorText: Colors.white,
-            backgroundColor: Colors.red,
-            snackPosition: SnackPosition.TOP);
-      }
-      return null;
-    });
-  }
 
+    RequestDio request = RequestDio(
+      url: getallordersUrl,
+      body: requestData,
+    );
+
+    final response = await request.post();
+
+    if (kDebugMode) {
+      print(response.data);
+      print(response.statusCode);
+    }
+
+    if (response.statusCode == 200) {
+      return response.data;
+    } else if (response.statusCode == 201) {
+      return null;
+    } else {
+      Get.snackbar(
+        "Error",
+        "Please try later",
+        colorText: Colors.white,
+        backgroundColor: Colors.red,
+        snackPosition: SnackPosition.TOP,
+      );
+      return null;
+    }
+  } catch (e, stackTrace) {
+    if (kDebugMode) {
+      print("Create Order Error: $e");
+      print(stackTrace);
+    }
+
+    Get.snackbar(
+      "Error",
+      "Something went wrong. Please try again.",
+      colorText: Colors.white,
+      backgroundColor: Colors.red,
+      snackPosition: SnackPosition.TOP,
+    );
+
+    return null;
+  } finally {
+    isLoading.value = false;
+  }
+}
 }

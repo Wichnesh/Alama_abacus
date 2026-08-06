@@ -39,7 +39,9 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   int totalAmount = 0;
-  void payment(String name, String contact, String email, String state, bool extraAmount) async {
+
+  void payment(String name, String contact, String email, String state,
+      bool extraAmount) async {
     int totalCost = 0;
     String key = "";
     if (Prefs.getString(USERNAME) == "padma@gmail.com") {
@@ -65,7 +67,7 @@ class _OrderScreenState extends State<OrderScreen> {
     }
     log("------$key-------");
     var options = {
-      'key': key, //live key
+      'key': key,
       'amount': totalCost,
       'name': name,
       'description': 'Order Payment',
@@ -95,17 +97,22 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    Fluttertoast.showToast(msg: "SUCCESS PAYMENT: ${response.paymentId}", timeInSecForIosWeb: 4);
+    Fluttertoast.showToast(
+        msg: "SUCCESS PAYMENT: ${response.paymentId}", timeInSecForIosWeb: 4);
     // orderController.updateOrder(response.paymentId ?? '',totalAmount);
     orderController.onOrderSuccess();
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    Fluttertoast.showToast(msg: "ERROR HERE: ${response.code} - ${response.message}", timeInSecForIosWeb: 4);
+    Fluttertoast.showToast(
+        msg: "ERROR HERE: ${response.code} - ${response.message}",
+        timeInSecForIosWeb: 4);
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    Fluttertoast.showToast(msg: "EXTERNAL_WALLET IS : ${response.walletName}", timeInSecForIosWeb: 4);
+    Fluttertoast.showToast(
+        msg: "EXTERNAL_WALLET IS : ${response.walletName}",
+        timeInSecForIosWeb: 4);
   }
 
   @override
@@ -128,7 +135,8 @@ class _OrderScreenState extends State<OrderScreen> {
                       decoration: const InputDecoration(
                         labelText: 'Student ID',
                       ),
-                      controller: TextEditingController(text: controller.data.studentID.toString()),
+                      controller: TextEditingController(
+                          text: controller.data.studentID.toString()),
                       readOnly: true,
                     ),
                   ),
@@ -138,7 +146,8 @@ class _OrderScreenState extends State<OrderScreen> {
                       decoration: const InputDecoration(
                         labelText: 'Completed Level',
                       ),
-                      controller: TextEditingController(text: controller.currentlevel.value),
+                      controller: TextEditingController(
+                          text: controller.currentlevel.value),
                       readOnly: true,
                     ),
                   ),
@@ -148,7 +157,8 @@ class _OrderScreenState extends State<OrderScreen> {
                       decoration: const InputDecoration(
                         labelText: 'Order Level',
                       ),
-                      controller: TextEditingController(text: controller.futurelevel.value),
+                      controller: TextEditingController(
+                          text: controller.futurelevel.value),
                       readOnly: true,
                     ),
                   ),
@@ -170,7 +180,8 @@ class _OrderScreenState extends State<OrderScreen> {
                           // Use CheckboxListTile to create each checkbox item
                           return CheckboxListTile(
                             title: Text(book),
-                            value: true, // Set this to true for default checked state
+                            value:
+                                true, // Set this to true for default checked state
                             onChanged: (bool? newValue) {
                               // Handle checkbox state change if needed
                             },
@@ -184,7 +195,8 @@ class _OrderScreenState extends State<OrderScreen> {
                           // Use CheckboxListTile to create each checkbox item
                           return CheckboxListTile(
                             title: Text(book),
-                            value: true, // Set this to true for default checked state
+                            value:
+                                true, // Set this to true for default checked state
                             onChanged: (bool? newValue) {
                               // Handle checkbox state change if needed
                             },
@@ -194,7 +206,8 @@ class _OrderScreenState extends State<OrderScreen> {
                     }
                   }),
                   Obx(() {
-                    if (controller.currentlevel.value == 'Level 5' && controller.programText.text == 'AA') {
+                    if (controller.currentlevel.value == 'Level 5' &&
+                        controller.programText.text == 'AA') {
                       return CheckboxListTile(
                         title: const Text('continue MA Program *'),
                         value: controller.isChecked.value,
@@ -213,42 +226,60 @@ class _OrderScreenState extends State<OrderScreen> {
                     child: Row(
                       children: [
                         Obx(() {
-                          if (controller.enableBtn.value || controller.programText.text == 'Level 8') {
+                          if (controller.enableBtn.value ||
+                              controller.programText.text == 'Level 8') {
                             return Container();
                           } else {
-                            return Expanded(
-                              child: Container(
-                                height: 55,
-                                width: 175,
-                                color: primaryColor,
-                                child: ElevatedButton(
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                      (Set<MaterialState> states) {
-                                        if (states.contains(MaterialState.pressed)) {
-                                          // Change the button color when pressed
-                                          return Colors.green;
-                                        }
-                                        // Return the default button color
-                                        return primaryColor;
-                                      },
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    //controller.backendformat();
-                                    // controller.updateOrder("test", 1300);
-                                    payment(controller.data.studentName!, controller.data.mobileNumber!, Prefs.getString(USERNAME), franchiseState,
-                                        controller.transferBool.value);
-                                  },
-                                  child: const SizedBox(
-                                    height: 50,
-                                    width: 165,
-                                    child: Center(
-                                      child: Text(
-                                        "Order",
-                                        style: TextStyle(color: Colors.white),
+                            return Obx(
+                              () => Expanded(
+                                child: SizedBox(
+                                  height: 55,
+                                  width: 175,
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty
+                                          .resolveWith<Color>(
+                                        (states) {
+                                          if (states.contains(
+                                              MaterialState.disabled)) {
+                                            return Colors
+                                                .grey; // Grey when disabled
+                                          }
+
+                                          if (states.contains(
+                                              MaterialState.pressed)) {
+                                            return Colors.green;
+                                          }
+
+                                          return primaryColor;
+                                        },
                                       ),
                                     ),
+                                    onPressed: controller.isLoading.value
+                                        ? null
+                                        : () {
+                                            payment(
+                                              controller.data.studentName!,
+                                              controller.data.mobileNumber!,
+                                              Prefs.getString(USERNAME),
+                                              franchiseState,
+                                              controller.transferBool.value,
+                                            );
+                                          },
+                                    child: controller.isLoading.value
+                                        ? const SizedBox(
+                                            width: 22,
+                                            height: 22,
+                                            child: CircularProgressIndicator(
+                                              color: Colors.white,
+                                              strokeWidth: 2,
+                                            ),
+                                          )
+                                        : const Text(
+                                            "Order",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
                                   ),
                                 ),
                               ),
@@ -264,14 +295,17 @@ class _OrderScreenState extends State<OrderScreen> {
                             width: 175,
                             child: ElevatedButton(
                               style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                backgroundColor:
+                                    MaterialStateProperty.resolveWith<Color>(
                                   (Set<MaterialState> states) {
-                                    if (states.contains(MaterialState.pressed)) {
+                                    if (states
+                                        .contains(MaterialState.pressed)) {
                                       // Change the button color when pressed
                                       return Colors.green;
                                     }
                                     // Return the default button color
-                                    return Colors.red; // or any other color you want
+                                    return Colors
+                                        .red; // or any other color you want
                                   },
                                 ),
                               ),

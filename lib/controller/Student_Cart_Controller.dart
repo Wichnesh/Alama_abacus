@@ -144,8 +144,6 @@ class StudentCardListController extends GetxController {
             snackPosition: SnackPosition.TOP);
       }
     });
-    isLoading.value = false;
-    update();
   }
 
   void deleteStudent(String studentID)async {

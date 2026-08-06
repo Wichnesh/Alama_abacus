@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:alama_eorder_app/model/Ordermodel.dart';
 import 'package:alama_eorder_app/pages/app_route.dart';
 import 'package:alama_eorder_app/utils/colorUtils.dart';
 import 'package:alama_eorder_app/utils/pref_manager.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'View/Splash_Screen.dart';
+
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
@@ -22,7 +24,8 @@ void main() async {
   await Prefs.init();
   HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+  SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 }
 
 class MyApp extends StatelessWidget {
@@ -40,7 +43,8 @@ class MyApp extends StatelessWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: secondaryColor, // Set elevated button color to blue
+            backgroundColor:
+                secondaryColor, // Set elevated button color to blue
           ),
         ),
         iconTheme: IconThemeData(
@@ -52,7 +56,9 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         final mediaQueryData = MediaQuery.of(context);
         final scale = mediaQueryData.textScaleFactor.clamp(0.9, 0.9);
-        return MediaQuery(data: MediaQuery.of(context).copyWith(textScaleFactor: scale), child: child!);
+        return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(scale)),
+            child: child!);
       },
     );
   }

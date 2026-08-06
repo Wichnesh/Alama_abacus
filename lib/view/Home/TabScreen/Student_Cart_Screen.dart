@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:alama_eorder_app/utils/colorUtils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -19,7 +20,8 @@ class StudentCartListScreen extends StatefulWidget {
 }
 
 class _StudentCartListScreenState extends State<StudentCartListScreen> {
-  StudentCardListController enrollController = Get.find<StudentCardListController>();
+  StudentCardListController enrollController =
+      Get.find<StudentCardListController>();
   Razorpay? _razorpay;
 
   @override
@@ -64,11 +66,16 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
       }
     };
 
-    Map note = {"total_cost": totalCost, "no_of_student": count, "email": email};
+    Map note = {
+      "total_cost": totalCost,
+      "no_of_student": count,
+      "email": email
+    };
     String name = 'Abacus Enrollment';
 
     try {
-      String? id = await enrollController.enrollStudentOrder(name, note, totalCost);
+      String? id =
+          await enrollController.enrollStudentOrder(name, note, totalCost);
       print('order id is $id');
       if (id != null) {
         options['order_id'] = id;
@@ -80,7 +87,8 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    Fluttertoast.showToast(msg: "SUCCESS PAYMENT: ${response.paymentId}", timeInSecForIosWeb: 4);
+    Fluttertoast.showToast(
+        msg: "SUCCESS PAYMENT: ${response.paymentId}", timeInSecForIosWeb: 4);
     if (response.orderId == null) {
       enrollController.updatePaymentId();
     } else {
@@ -89,11 +97,15 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    Fluttertoast.showToast(msg: "ERROR HERE: ${response.code} - ${response.message}", timeInSecForIosWeb: 4);
+    Fluttertoast.showToast(
+        msg: "ERROR HERE: ${response.code} - ${response.message}",
+        timeInSecForIosWeb: 4);
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    Fluttertoast.showToast(msg: "EXTERNAL_WALLET IS : ${response.walletName}", timeInSecForIosWeb: 4);
+    Fluttertoast.showToast(
+        msg: "EXTERNAL_WALLET IS : ${response.walletName}",
+        timeInSecForIosWeb: 4);
   }
 
   @override
@@ -128,7 +140,8 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
                   child: AnimationLimiter(
                     child: ListView.builder(
                       padding: EdgeInsets.all(_w / 30),
-                      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                      physics: const BouncingScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics()),
                       itemCount: controller.studentCardList.length,
                       itemBuilder: (BuildContext c, int i) {
                         var data = controller.studentCardList[i];
@@ -159,7 +172,8 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
                                   child: Column(
                                     children: [
                                       Container(
-                                        margin: EdgeInsets.only(bottom: _w / 20),
+                                        margin:
+                                            EdgeInsets.only(bottom: _w / 20),
                                         height: _w / 5,
                                         decoration: BoxDecoration(
                                           color: Colors.white,
@@ -168,7 +182,8 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
                                           ),
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Colors.black.withOpacity(0.1),
+                                              color:
+                                                  Colors.black.withOpacity(0.1),
                                               blurRadius: 40,
                                               spreadRadius: 10,
                                             ),
@@ -176,10 +191,12 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
                                         ),
                                         child: ListTile(
                                           title: Text(data.studentName ?? ''),
-                                          subtitle: Text(data.mobileNumber ?? ''),
+                                          subtitle:
+                                              Text(data.mobileNumber ?? ''),
                                           trailing: InkWell(
                                               onTap: () {
-                                                controller.deleteStudent(data.studentID ?? '');
+                                                controller.deleteStudent(
+                                                    data.studentID ?? '');
                                               },
                                               child: const Icon(
                                                 Icons.delete,
@@ -198,34 +215,66 @@ class _StudentCartListScreenState extends State<StudentCartListScreen> {
                     ),
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    int total = controller.updateTotalCost();
-                    if (kDebugMode) {
-                      print(total);
-                    }
-                    payment(controller.studentCardList.length, total, Prefs.getString(USERNAME), franchiseState);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    padding: const EdgeInsets.all(0), // Use zero padding to let the Container control padding
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Text(
-                      'Enroll Student',
-                      style: TextStyle(
-                        color: Colors.white, // Text color
-                        fontSize: 16,
+                Obx(
+                  () => ElevatedButton(
+                    onPressed: controller.isLoading.value
+                        ? null
+                        : () {
+                            if (controller.studentCardList.isEmpty) {
+                              debugPrint("No Student Found");
+                              return;
+                            }
+                            int total = controller.updateTotalCost();
+
+                            if (kDebugMode) {
+                              print(total);
+                            }
+
+                            payment(
+                              controller.studentCardList.length,
+                              total,
+                              Prefs.getString(USERNAME),
+                              franchiseState,
+                            );
+                          },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (states) {
+                          if (states.contains(MaterialState.disabled)) {
+                            return Colors.grey;
+                          }
+                          return primaryColor;
+                        },
                       ),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      padding: MaterialStateProperty.all(EdgeInsets.zero),
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 30),
+                      child: controller.isLoading.value
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Text(
+                              'Enroll Student',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                            ),
                     ),
                   ),
-                ),
+                )
               ],
             );
           }
